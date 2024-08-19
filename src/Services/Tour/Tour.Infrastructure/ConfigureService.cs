@@ -31,5 +31,7 @@ public static class ConfigureService
                                     errorNumbersToAdd: sqlServerRetrySettings.ErrorNumbersToAdd))
                             .MigrationsAssembly(typeof(TourDbContext).Assembly.GetName().Name));
         });
+
+        services.AddScoped<TourSeed>();
     }
 }

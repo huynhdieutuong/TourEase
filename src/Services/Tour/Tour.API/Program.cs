@@ -1,6 +1,7 @@
 using BuildingBlocks.Logging;
 using Serilog;
 using Tour.Infrastructure;
+using Tour.Infrastructure.Persistence;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -26,6 +27,14 @@ try
     app.UseAuthorization();
 
     app.MapControllers();
+
+    // Initialize and Seed database
+    using (var scope = app.Services.CreateScope())
+    {
+        var tourSeed = scope.ServiceProvider.GetRequiredService<TourSeed>();
+        await tourSeed.InitializeAsync();
+        await tourSeed.SeedAsync();
+    }
 
     app.Run();
 }
