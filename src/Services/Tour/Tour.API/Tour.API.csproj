@@ -11,7 +11,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Common.Logging\BuildingBlocks.Logging.csproj" />
+    <ProjectReference Include="..\Tour.Infrastructure\Tour.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

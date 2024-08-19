@@ -1,5 +1,6 @@
 using BuildingBlocks.Logging;
 using Serilog;
+using Tour.Infrastructure;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -15,6 +16,8 @@ try
 
     // Add services to the container.
     builder.Services.AddControllers();
+
+    builder.Services.AddInfrastructureServices();
 
     var app = builder.Build();
 

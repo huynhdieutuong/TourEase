@@ -1,0 +1,26 @@
+services:
+    #database section
+
+    #TourDB: sql server
+    tourdb:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        container_name: tourdb
+        environment:
+            SA_PASSWORD: "Passw0rd!"
+            ACCEPT_EULA: "Y"
+        restart: always
+        volumes:
+            - sqlserver_data:/var/opt/mssql
+        ports:
+            - "1435:1433"
+
+#network section
+networks:
+    default:
+        name: tour_ease
+        driver: bridge
+
+#volumes section
+volumes:
+    sqlserver_data:
+        name: sqlserver_data

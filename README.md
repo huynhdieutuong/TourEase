@@ -31,3 +31,12 @@ TourEase is a website specifically designed to connect tour guides with travel a
 - **Database:** PostgreSQL, MongoDB, SQL Server, Redis
 - **Deployment:** Docker, Kubernetes, CI/CD workflows using GitHub Actions
 - **Unit & Integration Testing:** XUnit, Moq
+
+## Useful commands
+- Migration commands for Tour API:
+```
+cd src\Services\Tour
+dotnet ef migrations add "Int_TourDB" -p Tour.Infrastructure --startup-project Tour.API --output-dir Persistence/Migrations
+dotnet ef migrations remove -p Tour.Infrastructure --startup-project Tour.API
+dotnet ef database update -p Tour.Infrastructure --startup-project Tour.API
+```
