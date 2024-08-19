@@ -9,7 +9,11 @@ public class TourDbContext : DbContext
     {
     }
 
+    public DbSet<Destination> Destination { get; set; }
     public DbSet<TourJob> TourJob { get; set; }
+    public DbSet<TourDetail> TourDetail { get; set; }
+    public DbSet<TourDetailDestination> TourDetailDestination { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

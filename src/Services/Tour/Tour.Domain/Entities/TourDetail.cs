@@ -5,7 +5,7 @@ namespace Tour.Domain.Entities;
 public class TourDetail : EntityBase<Guid>
 {
     public string Itinerary { get; set; }
-    public string ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
     public int Participants { get; set; }
     public Language LanguageSpoken { get; set; }
     public DateTimeOffset StartDate { get; set; }
