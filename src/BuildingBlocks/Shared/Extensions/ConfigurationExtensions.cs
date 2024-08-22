@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BuildingBlocks.Infrastructure.Extensions;
+namespace BuildingBlocks.Shared.Extensions;
 public static class ConfigurationExtensions
 {
     /// <summary>

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BuildingBlocks.Contracts.Common.Interfaces;
-public interface IUnitOfWork<TContext> : IDisposable where TContext : DbContext
+public interface IUnitOfWork : IDisposable
 {
     Task<int> SaveChangesAsync();
 
@@ -13,4 +13,9 @@ public interface IUnitOfWork<TContext> : IDisposable where TContext : DbContext
 
     Task RollbackTransactionAsync();
     #endregion
+}
+
+public interface IUnitOfWork<TContext> : IUnitOfWork
+    where TContext : DbContext
+{
 }

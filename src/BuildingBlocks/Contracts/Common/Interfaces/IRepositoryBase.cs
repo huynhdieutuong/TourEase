@@ -3,9 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace BuildingBlocks.Contracts.Common.Interfaces;
-public interface IRepositoryBase<T, K, TContext>
-    where T : EntityBase<K>
-    where TContext : DbContext
+
+public interface IRepositoryBase<T, K> where T : EntityBase<K>
 {
     #region Query
     IQueryable<T> FindAll(Expression<Func<T, bool>>? expression = null,
@@ -28,3 +27,8 @@ public interface IRepositoryBase<T, K, TContext>
     void RemoveMultiple(List<T> entities);
     #endregion
 }
+
+public interface IRepositoryBase<T, K, TContext> : IRepositoryBase<T, K>
+    where T : EntityBase<K>
+    where TContext : DbContext
+{ }

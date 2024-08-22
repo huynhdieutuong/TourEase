@@ -19,5 +19,5 @@ public class TourJob : EntityAuditBase<Guid>
 
     public TourDetail Detail { get; set; }
 
-    public decimal Salary() => SalaryPerDay * Days;
+    public decimal Salary() => Currency == Currency.VND ? Math.Floor(SalaryPerDay * Days) : SalaryPerDay * Days;
 }

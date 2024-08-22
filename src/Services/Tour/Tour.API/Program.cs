@@ -1,5 +1,6 @@
 using BuildingBlocks.Logging;
 using Serilog;
+using Tour.Application;
 using Tour.Infrastructure;
 using Tour.Infrastructure.Persistence;
 
@@ -19,6 +20,7 @@ try
     builder.Services.AddControllers();
 
     builder.Services.AddInfrastructureServices();
+    builder.Services.AddApplicationServices();
 
     var app = builder.Build();
 

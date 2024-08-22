@@ -1,11 +1,13 @@
-﻿using BuildingBlocks.Infrastructure.Extensions;
-using BuildingBlocks.Shared.Configurations;
+﻿using BuildingBlocks.Shared.Configurations;
+using BuildingBlocks.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Tour.Application.Interfaces;
 using Tour.Infrastructure.Persistence;
+using Tour.Infrastructure.Repositories;
 
 namespace Tour.Infrastructure;
-public static class ConfigureService
+public static class ConfigureServices
 {
     public static void AddInfrastructureServices(this IServiceCollection services)
     {
@@ -33,5 +35,10 @@ public static class ConfigureService
         });
 
         services.AddScoped<TourSeed>();
+
+        services.AddScoped<ITourUnitOfWork, TourUnitOfWork>();
+        services.AddScoped<ITourJobRepository, TourJobRepository>();
+        services.AddScoped<IDestinationRepository, DestinationRepository>();
+        services.AddScoped<ITourDetailDestinationRepository, TourDetailDestinationRepository>();
     }
 }
