@@ -1,4 +1,5 @@
 using BuildingBlocks.Logging;
+using Carter;
 using Serilog;
 using Tour.Application;
 using Tour.Infrastructure;
@@ -17,7 +18,8 @@ try
     Log.Information($"Starting {builder.Environment.ApplicationName} up");
 
     // Add services to the container.
-    builder.Services.AddControllers();
+    //builder.Services.AddControllers();
+    builder.Services.AddCarter();
 
     builder.Services.AddInfrastructureServices();
     builder.Services.AddApplicationServices();
@@ -26,9 +28,10 @@ try
 
     // Configure the HTTP request pipeline.
 
-    app.UseAuthorization();
+    //app.UseAuthorization();
 
-    app.MapControllers();
+    //app.MapControllers();
+    app.MapCarter();
 
     // Initialize and Seed database
     using (var scope = app.Services.CreateScope())
