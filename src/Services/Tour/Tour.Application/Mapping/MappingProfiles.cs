@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BuildingBlocks.Shared.Extensions;
 using Tour.Application.DTOs;
+using Tour.Application.UseCases.V1.Destinations;
 using Tour.Application.UseCases.V1.TourJobs;
 using Tour.Domain.Entities;
 
@@ -18,11 +19,12 @@ public class MappingProfiles : Profile
                        opt => opt.MapFrom(src => src.TourDetailDestinations.Select(tdd => tdd.Destination)));
 
         CreateMap<CreateTourJobCommand, TourJob>()
+            .BeforeMap<SlugResolver<CreateTourJobCommand>>()
             .ForMember(dest => dest.Detail, opt => opt.MapFrom(src => src));
         CreateMap<CreateTourJobCommand, TourDetail>();
 
         CreateMap<UpdateTourJobCommand, TourJob>()
-            .BeforeMap<SlugResolver>()
+            .BeforeMap<SlugResolver<UpdateTourJobCommand>>()
             .ForMember(dest => dest.Detail, opt => opt.MapFrom(src => src));
         CreateMap<UpdateTourJobCommand, TourDetail>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
@@ -30,6 +32,12 @@ public class MappingProfiles : Profile
 
         #region Destination
         CreateMap<Destination, DestinationDto>().ReverseMap();
+
+        CreateMap<CreateDestinationCommand, Destination>()
+            .BeforeMap<SlugDestinationResolver<CreateDestinationCommand>>();
+
+        CreateMap<UpdateDestinationCommand, Destination>()
+            .BeforeMap<SlugDestinationResolver<UpdateDestinationCommand>>();
         #endregion
     }
 }

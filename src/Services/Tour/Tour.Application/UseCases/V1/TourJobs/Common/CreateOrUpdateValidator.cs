@@ -14,7 +14,7 @@ public class CreateOrUpdateValidator<T> : AbstractValidator<T> where T : CreateO
 
         RuleFor(p => p.Title)
             .NotEmpty().WithMessage("Title is required.")
-            .Length(5, 255).WithMessage("Title must be between 5 and 100 characters.");
+            .Length(5, 255).WithMessage("Title must be between 5 and 255 characters.");
 
         RuleFor(x => x.Days)
             .GreaterThan(0).WithMessage("Days must be greater than zero.");

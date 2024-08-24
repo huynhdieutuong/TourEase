@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BuildingBlocks.Contracts.Services;
 using BuildingBlocks.Shared.ApiResult;
 using MediatR;
 using Serilog;
@@ -15,7 +14,6 @@ public class CreateTourJobCommandHandler : IRequestHandler<CreateTourJobCommand,
     private readonly ITourJobRepository _tourJobRepository;
     private readonly ITourDetailDestinationRepository _tourDetailDestinationRepository;
     private readonly ITourUnitOfWork _tourUnitOfWork;
-    private readonly ISlugService _slugService;
 
     private const string MethodName = nameof(CreateTourJobCommandHandler);
 
@@ -23,15 +21,13 @@ public class CreateTourJobCommandHandler : IRequestHandler<CreateTourJobCommand,
                                        IMapper mapper,
                                        ITourJobRepository tourJobRepository,
                                        ITourDetailDestinationRepository tourDetailDestinationRepository,
-                                       ITourUnitOfWork tourUnitOfWork,
-                                       ISlugService slugService)
+                                       ITourUnitOfWork tourUnitOfWork)
     {
         _logger = logger;
         _mapper = mapper;
         _tourJobRepository = tourJobRepository;
         _tourDetailDestinationRepository = tourDetailDestinationRepository;
         _tourUnitOfWork = tourUnitOfWork;
-        _slugService = slugService;
     }
 
     public async Task<ApiResult<TourJobDto>> Handle(CreateTourJobCommand request, CancellationToken cancellationToken)
@@ -39,7 +35,6 @@ public class CreateTourJobCommandHandler : IRequestHandler<CreateTourJobCommand,
         _logger.Information($"BEGIN {MethodName} - Tour Job Title: {request.Title}");
 
         var tourJob = _mapper.Map<TourJob>(request);
-        tourJob.Slug = _slugService.GenerateTourJobSlug(tourJob.Title);
         _tourJobRepository.Add(tourJob);
 
         var tourDetailDestinations = request.DestinationIds.Select(destinationId
