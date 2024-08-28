@@ -15,7 +15,7 @@ public class Destination : EntityBase<Guid>
     public Guid? ParentId { get; set; }
     public Destination Parent { get; set; }
 
-    public ICollection<Destination> SubDestinations { get; } = [];
+    public ICollection<Destination> SubDestinations { get; set; } = [];
 
     public ICollection<TourDetailDestination> TourDetailDestinations { get; set; } = [];
 }

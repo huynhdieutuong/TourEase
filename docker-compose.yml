@@ -14,6 +14,14 @@ services:
         ports:
             - "1435:1433"
 
+    #TourCache: Redis
+    tourcache:
+          image: redis:alpine
+          container_name: tourcache
+          restart: always
+          ports: 
+            - "6380:6379"
+
 #network section
 networks:
     default:

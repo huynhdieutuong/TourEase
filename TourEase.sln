@@ -63,6 +63,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TourBid.API", "src\Services
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TourSearch.API", "src\Services\TourSearch\TourSearch.API\TourSearch.API.csproj", "{D7F19AA3-323B-4FE2-9AD0-D0A5E5CC073A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tour.Infrastructure.Redis", "src\Services\Tour\Tour.Infrastructure.Redis\Tour.Infrastructure.Redis\Tour.Infrastructure.Redis.csproj", "{B4B6AE60-5B7D-4367-B3F8-AA2D17F21EDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,10 @@ Global
 		{D7F19AA3-323B-4FE2-9AD0-D0A5E5CC073A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7F19AA3-323B-4FE2-9AD0-D0A5E5CC073A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7F19AA3-323B-4FE2-9AD0-D0A5E5CC073A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4B6AE60-5B7D-4367-B3F8-AA2D17F21EDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4B6AE60-5B7D-4367-B3F8-AA2D17F21EDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4B6AE60-5B7D-4367-B3F8-AA2D17F21EDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4B6AE60-5B7D-4367-B3F8-AA2D17F21EDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -158,6 +164,7 @@ Global
 		{18E8CCD2-FB38-4496-BE37-F4B7C8DB7BBC} = {9F4C157F-A82A-4568-A8BD-75FDBB5B8D24}
 		{EAB0FBE7-5645-4FE0-9B6F-E0D957EF316D} = {9B049D39-1FDE-4523-9406-701D7DD9C723}
 		{D7F19AA3-323B-4FE2-9AD0-D0A5E5CC073A} = {F365B084-7B07-4E2C-8B69-5D541E48107B}
+		{B4B6AE60-5B7D-4367-B3F8-AA2D17F21EDC} = {9F4C157F-A82A-4568-A8BD-75FDBB5B8D24}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B6631CC-48C9-4F30-8A83-668F7D1D24AC}

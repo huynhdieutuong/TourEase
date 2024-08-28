@@ -3,6 +3,7 @@ using Serilog;
 using Tour.Application;
 using Tour.Infrastructure;
 using Tour.Infrastructure.Persistence;
+using Tour.Infrastructure.Redis;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -20,8 +21,9 @@ try
     builder.Services.AddControllers();
     //builder.Services.AddCarter();
 
-    builder.Services.AddInfrastructureServices();
     builder.Services.AddApplicationServices();
+    builder.Services.AddInfrastructureServices();
+    builder.Services.AddInfrastructureRedisServices();
 
     var app = builder.Build();
 

@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Common.Logging\BuildingBlocks.Logging.csproj" />
     <ProjectReference Include="..\Tour.Application\Tour.Application.csproj" />
+    <ProjectReference Include="..\Tour.Infrastructure.Redis\Tour.Infrastructure.Redis\Tour.Infrastructure.Redis.csproj" />
     <ProjectReference Include="..\Tour.Infrastructure\Tour.Infrastructure.csproj" />
   </ItemGroup>
 

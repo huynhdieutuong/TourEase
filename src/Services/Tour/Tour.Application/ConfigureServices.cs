@@ -5,6 +5,8 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Tour.Application.Services;
+using Tour.Application.Services.Interfaces;
 
 namespace Tour.Application;
 public static class ConfigureServices
@@ -20,5 +22,6 @@ public static class ConfigureServices
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         services.AddScoped<ISlugService, SlugService>();
+        services.AddScoped<IDestinationService, DestinationService>();
     }
 }

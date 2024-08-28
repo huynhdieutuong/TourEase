@@ -33,12 +33,10 @@ public class DeleteTourJobCommandHandler : IRequestHandler<DeleteTourJobCommand>
     {
         _logger.Information($"BEGIN {MethodName} - Tour Job Id: {request.Id}");
 
-        var tourJob = await _tourJobRepository.FindByIdAsync(request.Id, tj => tj.Detail.TourDetailDestinations);
+        var tourJob = await _tourJobRepository.FindByIdAsync(request.Id);
         if (tourJob == null) throw new NotFoundException(nameof(TourJob), request.Id);
 
         _tourJobRepository.Remove(tourJob);
-        _tourDetailDestinationRepository.RemoveMultiple(tourJob.Detail.TourDetailDestinations.ToList());
-
         await _tourUnitOfWork.SaveChangesAsync();
 
         _logger.Information($"END {MethodName} - Tour Job Id: {request.Id}");
