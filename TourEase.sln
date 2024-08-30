@@ -63,7 +63,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TourBid.API", "src\Services
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TourSearch.API", "src\Services\TourSearch\TourSearch.API\TourSearch.API.csproj", "{D7F19AA3-323B-4FE2-9AD0-D0A5E5CC073A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tour.Infrastructure.Redis", "src\Services\Tour\Tour.Infrastructure.Redis\Tour.Infrastructure.Redis\Tour.Infrastructure.Redis.csproj", "{B4B6AE60-5B7D-4367-B3F8-AA2D17F21EDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tour.Infrastructure.Redis", "src\Services\Tour\Tour.Infrastructure.Redis\Tour.Infrastructure.Redis\Tour.Infrastructure.Redis.csproj", "{B4B6AE60-5B7D-4367-B3F8-AA2D17F21EDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

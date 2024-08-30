@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace BuildingBlocks.Contracts.Common.Interfaces;
+namespace BuildingBlocks.Contracts.Common;
 public interface IUnitOfWork : IDisposable
 {
     Task<int> SaveChangesAsync();

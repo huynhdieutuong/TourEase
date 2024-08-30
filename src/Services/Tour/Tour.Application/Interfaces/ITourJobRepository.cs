@@ -1,4 +1,4 @@
-﻿using BuildingBlocks.Contracts.Common.Interfaces;
+﻿using BuildingBlocks.Contracts.Common;
 using Tour.Domain.Entities;
 
 namespace Tour.Application.Interfaces;

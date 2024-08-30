@@ -1,0 +1,262 @@
+﻿[
+  {
+    "name": "China",
+    "type": "country",
+    "slug": "china",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "3cda70ac-acc4-41ea-a775-00c087fdf3dc"
+  },
+  {
+    "name": "Quận 3",
+    "type": "city",
+    "slug": "quan-3",
+    "parentId": "137fd6e0-9dd9-4fbf-bf3d-8d8dc64dae46",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "354c05db-42fa-4d4d-e7b1-08dcc455cb7a"
+  },
+  {
+    "name": "Tokyo",
+    "type": "city",
+    "slug": "tokyo",
+    "parentId": "b1fd200c-6943-4aad-b7c5-13455a5600dc",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "616af413-26e2-488c-82ad-0aaade658055"
+  },
+  {
+    "name": "Japan",
+    "type": "country",
+    "slug": "japan",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "b1fd200c-6943-4aad-b7c5-13455a5600dc"
+  },
+  {
+    "name": "Đà Nẵng",
+    "type": "city",
+    "slug": "da-nang",
+    "parentId": "d64e62a1-23f2-414d-9bdf-30e4d40b3528",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "b727b065-f036-47ab-867e-15c5ee4845f5"
+  },
+  {
+    "name": "Philippines",
+    "type": "country",
+    "slug": "philippines",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "3bf435f4-aea8-4cd2-9c66-15d2cb7c258a"
+  },
+  {
+    "name": "Đà Lạt",
+    "type": "city",
+    "slug": "da-lat",
+    "parentId": "d64e62a1-23f2-414d-9bdf-30e4d40b3528",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "86f45a39-22b9-4ccf-8815-15ddd05afae3"
+  },
+  {
+    "name": "Nha Trang",
+    "type": "city",
+    "slug": "nha-trang",
+    "parentId": "d64e62a1-23f2-414d-9bdf-30e4d40b3528",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "880bf6a2-1dba-4a72-b493-216fac38eed8"
+  },
+  {
+    "name": "Yokohama",
+    "type": "city",
+    "slug": "yokohama",
+    "parentId": "b1fd200c-6943-4aad-b7c5-13455a5600dc",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "b085d824-d3fd-4cea-ab9a-22f7b8fdeca4"
+  },
+  {
+    "name": "Viet Nam",
+    "type": "country",
+    "slug": "viet-nam",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "d64e62a1-23f2-414d-9bdf-30e4d40b3528"
+  },
+  {
+    "name": "Phuket",
+    "type": "city",
+    "slug": "phuket",
+    "parentId": "8c17b892-385f-46d6-a6f8-53f86bd95922",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "3d3d8c4d-9803-4db9-a63f-3bf83d3dcda9"
+  },
+  {
+    "name": "Thailand",
+    "type": "country",
+    "slug": "thailand",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "8c17b892-385f-46d6-a6f8-53f86bd95922"
+  },
+  {
+    "name": "Hội An",
+    "type": "city",
+    "slug": "hoi-an",
+    "parentId": "d64e62a1-23f2-414d-9bdf-30e4d40b3528",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "8838408c-d17a-49d4-b129-65182c8da63e"
+  },
+  {
+    "name": "Korea",
+    "type": "country",
+    "slug": "korea",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "9b44e682-2387-4717-a600-66666a607a4e"
+  },
+  {
+    "name": "Beijing",
+    "type": "city",
+    "slug": "beijing",
+    "parentId": "3cda70ac-acc4-41ea-a775-00c087fdf3dc",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "e4fcf035-a8f8-4080-957a-687011731865"
+  },
+  {
+    "name": "Indonesia",
+    "type": "country",
+    "slug": "indonesia",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "267bba70-1fb1-422a-b332-7403357a2f1f"
+  },
+  {
+    "name": "Hồ Chí Minh",
+    "type": "city",
+    "slug": "ho-chi-minh",
+    "parentId": "d64e62a1-23f2-414d-9bdf-30e4d40b3528",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "137fd6e0-9dd9-4fbf-bf3d-8d8dc64dae46"
+  },
+  {
+    "name": "Chiang Mai",
+    "type": "city",
+    "slug": "chiang-mai",
+    "parentId": "8c17b892-385f-46d6-a6f8-53f86bd95922",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "f990bbb2-a3a8-4ed9-85b5-930939b1ad27"
+  },
+  {
+    "name": "Bangkok",
+    "type": "city",
+    "slug": "bangkok",
+    "parentId": "8c17b892-385f-46d6-a6f8-53f86bd95922",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "24eb0c73-a750-43c2-aaff-93990a979fe8"
+  },
+  {
+    "name": "Huế",
+    "type": "city",
+    "slug": "hue",
+    "parentId": "d64e62a1-23f2-414d-9bdf-30e4d40b3528",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "f7c578f0-ab97-4ee3-9ae3-961414bbd1d7"
+  },
+  {
+    "name": "Siem Reap",
+    "type": "city",
+    "slug": "siem-reap",
+    "parentId": "04152885-5685-41c1-9c5d-cee96bd6f27c",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "c041c6e5-7a26-4ca0-bd93-9a348eb84acc"
+  },
+  {
+    "name": "Busan",
+    "type": "city",
+    "slug": "busan",
+    "parentId": "9b44e682-2387-4717-a600-66666a607a4e",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "ac31192e-ffe3-4e2a-b780-9af1b5bdf215"
+  },
+  {
+    "name": "Malaysia",
+    "type": "country",
+    "slug": "malaysia",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "aebd84ac-eff1-439e-8839-bb0235e029d6"
+  },
+  {
+    "name": "Phú Quốc",
+    "type": "city",
+    "slug": "phu-quoc",
+    "parentId": "d64e62a1-23f2-414d-9bdf-30e4d40b3528",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "42f18c44-484e-4473-86be-c55ddb7772f0"
+  },
+  {
+    "name": "Cambodia",
+    "type": "country",
+    "slug": "cambodia",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "04152885-5685-41c1-9c5d-cee96bd6f27c"
+  },
+  {
+    "name": "Seoul",
+    "type": "city",
+    "slug": "seoul",
+    "parentId": "9b44e682-2387-4717-a600-66666a607a4e",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "3b621bd7-7914-4d72-80f7-e10b68ae0236"
+  },
+  {
+    "name": "Pattaya",
+    "type": "city",
+    "slug": "pattaya",
+    "parentId": "8c17b892-385f-46d6-a6f8-53f86bd95922",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "f781bde3-c37c-4f9e-bbdf-e9bf79323013"
+  },
+  {
+    "name": "Phnom Penh",
+    "type": "city",
+    "slug": "phnom-penh",
+    "parentId": "04152885-5685-41c1-9c5d-cee96bd6f27c",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "1fbe1634-53d2-4f29-8f3c-f7eac80014ba"
+  },
+  {
+    "name": "Singapore",
+    "type": "country",
+    "slug": "singapore",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "70d2f410-01cd-4d73-a867-fd088f55772a"
+  },
+  {
+    "name": "Hà Nội",
+    "type": "city",
+    "slug": "ha-noi",
+    "parentId": "d64e62a1-23f2-414d-9bdf-30e4d40b3528",
+    "subDestinations": [],
+    "tourDetailDestinations": [],
+    "id": "a898703b-3cb6-43a3-a3ad-fe68bb47adff"
+  }
+]

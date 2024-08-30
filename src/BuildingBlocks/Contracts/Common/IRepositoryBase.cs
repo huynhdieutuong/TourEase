@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace BuildingBlocks.Contracts.Common.Interfaces;
+namespace BuildingBlocks.Contracts.Common;
 
 public interface IRepositoryBase<T, K> where T : EntityBase<K>
 {

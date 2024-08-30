@@ -1,4 +1,4 @@
-﻿using BuildingBlocks.Contracts.Common.Interfaces;
+﻿using BuildingBlocks.Contracts.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 

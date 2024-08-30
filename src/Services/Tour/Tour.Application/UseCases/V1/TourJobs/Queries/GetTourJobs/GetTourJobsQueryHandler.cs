@@ -27,7 +27,8 @@ public class GetTourJobsQueryHandler : IRequestHandler<GetTourJobsQuery, ApiResu
         _logger.Information($"BEGIN {MethodName} - UserName: {request.UserName}");
 
         var tourJobs = await _tourJobRepository
-                                .FindAll(tj => tj.CreatedBy == request.UserName)
+                                .FindAll(tj => tj.CreatedBy == request.UserName,
+                                         tj => tj.Detail.TourDetailDestinations)
                                 .OrderByDescending(tj => tj.CreatedDate)
                                 .ToListAsync();
         var tourJobsDto = _mapper.Map<List<TourJobDto>>(tourJobs);

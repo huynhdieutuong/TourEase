@@ -15,8 +15,8 @@ public class MappingProfiles : Profile
             .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Currency.GetEnumDescription()))
             .IncludeMembers(x => x.Detail);
         CreateMap<TourDetail, TourJobDto>()
-            .ForMember(dest => dest.Destinations,
-                       opt => opt.MapFrom(src => src.TourDetailDestinations.Select(tdd => tdd.Destination)));
+            .ForMember(dest => dest.DestinationIds,
+                       opt => opt.MapFrom(src => src.TourDetailDestinations.Select(tdd => tdd.DestinationId)));
 
         CreateMap<CreateTourJobCommand, TourJob>()
             .BeforeMap<SlugResolver<CreateTourJobCommand>>()

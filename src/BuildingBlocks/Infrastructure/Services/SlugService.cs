@@ -22,4 +22,9 @@ public class SlugService : ISlugService
     {
         return _slugHelper.GenerateSlug(title);
     }
+
+    public string GenerateSlug(string text)
+    {
+        return _slugHelper.GenerateSlug(text);
+    }
 }

@@ -20,5 +20,14 @@ public class TourJobDto
     public DateTimeOffset StartDate { get; set; }
     public DateTimeOffset EndDate { get; set; }
 
-    public List<DestinationDto> Destinations { get; set; }
+    public List<Guid> DestinationIds { get; set; }
+
+    public DateTimeOffset CreatedDate { get; set; }
+    public DateTimeOffset UpdatedDate { get; set; }
+
+    public string CreatedBy { get; set; }
+    public string? UpdatedBy { get; set; }
+
+    public bool IsDeleted { get; set; } = false;
+    public DateTimeOffset? DeletedDate { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿using BuildingBlocks.Contracts.Common.Interfaces;
+﻿using BuildingBlocks.Contracts.Common;
 using BuildingBlocks.Contracts.Domains;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
