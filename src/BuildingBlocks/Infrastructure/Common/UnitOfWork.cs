@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BuildingBlocks.Infrastructure.Common;
-public class UnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : DbContext
+public abstract class UnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : DbContext
 {
-    private readonly TContext _context;
+    protected readonly TContext _context;
 
     public UnitOfWork(TContext context)
     {

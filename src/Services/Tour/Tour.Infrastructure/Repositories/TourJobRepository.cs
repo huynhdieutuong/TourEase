@@ -7,11 +7,8 @@ using Tour.Infrastructure.Persistence;
 namespace Tour.Infrastructure.Repositories;
 public class TourJobRepository : RepositoryBase<TourJob, Guid, TourDbContext>, ITourJobRepository
 {
-    private readonly TourDbContext _context;
-
     public TourJobRepository(TourDbContext context) : base(context)
     {
-        _context = context;
     }
 
     public async Task<TourJob> GetTourJobByIdAsync(Guid id)

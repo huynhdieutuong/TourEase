@@ -9,3 +9,13 @@ public class ApiSuccessResult<T> : ApiResult<T>
     {
     }
 }
+
+public class ApiSuccessResult<T, M> : ApiSuccessResult<T>
+{
+    public M MetaData { get; set; }
+
+    public ApiSuccessResult(T data, M metaData) : base(data)
+    {
+        MetaData = metaData;
+    }
+}

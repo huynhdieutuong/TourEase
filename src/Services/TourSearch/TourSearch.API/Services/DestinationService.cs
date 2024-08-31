@@ -17,13 +17,13 @@ public class DestinationService : IDestinationService
 
     public async Task<ApiResult<List<Destination>>> GetDestinationsAsync()
     {
-        var destinations = await _destinationRepository.GetAllAsync();
+        var destinations = await _destinationRepository.FindAllAsync();
         return new ApiSuccessResult<List<Destination>>(destinations);
     }
 
     public async Task<ApiResult<Destination>> GetDestinationBySlugAsync(string slug)
     {
-        var destination = await _destinationRepository.GetBySlugAsync(slug);
+        var destination = await _destinationRepository.FindSingleAsync(x => x.Slug == slug);
         if (destination == null) throw new NotFoundException(nameof(Destination), slug);
         return new ApiSuccessResult<Destination>(destination);
     }

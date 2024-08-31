@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace BuildingBlocks.Infrastructure.Common;
-public class RepositoryBase<T, K, TContext> : IRepositoryBase<T, K, TContext>
+public abstract class RepositoryBase<T, K, TContext> : IRepositoryBase<T, K, TContext>
     where T : EntityBase<K>
     where TContext : DbContext
 {
-    private readonly TContext _context;
+    protected readonly TContext _context;
 
     public RepositoryBase(TContext context)
     {

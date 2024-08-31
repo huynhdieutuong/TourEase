@@ -1,6 +1,6 @@
 ﻿using BuildingBlocks.Shared.ApiResult;
 using BuildingBlocks.Shared.Exceptions;
-using System.Linq.Expressions;
+using BuildingBlocks.Shared.Paging;
 using TourSearch.API.Entities;
 using TourSearch.API.Repositories.Interfaces;
 using TourSearch.API.Requests;
@@ -19,22 +19,15 @@ public class TourJobService : ITourJobService
 
     public async Task<ApiResult<List<TourJob>>> SearchTourJobsAsync(SearchParams searchParams)
     {
-        Expression<Func<TourJob, bool>>? filter = null;
+        var pagedTourJobs = await _tourJobRepository.SearchTourJobsAsync(searchParams);
 
-        if (!string.IsNullOrEmpty(searchParams.SearchTerm))
-        {
-            var comparisonType = StringComparison.CurrentCultureIgnoreCase;
-            filter = x => x.Title.Contains(searchParams.SearchTerm, comparisonType)
-                       || x.Itinerary.Contains(searchParams.SearchTerm, comparisonType);
-        }
-
-        var tourJobs = await _tourJobRepository.GetAllAsync(filter);
-        return new ApiSuccessResult<List<TourJob>>(tourJobs);
+        return new ApiSuccessResult<List<TourJob>, MetaData>(pagedTourJobs,
+                                                             pagedTourJobs.GetMetaData());
     }
 
     public async Task<ApiResult<TourJob>> GetTourJobBySlugAsync(string slug)
     {
-        var tourJob = await _tourJobRepository.GetBySlugAsync(slug);
+        var tourJob = await _tourJobRepository.FindSingleAsync(x => x.Slug == slug);
         if (tourJob == null) throw new NotFoundException(nameof(TourJob), slug);
         return new ApiSuccessResult<TourJob>(tourJob);
     }

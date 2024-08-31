@@ -8,7 +8,4 @@ public abstract class MongoEntityBase
     [BsonElement("_id")]
     [BsonRepresentation(BsonType.String)]
     public Guid Id { get; set; }
-
-    [BsonElement("slug")]
-    public string Slug { get; set; }
 }

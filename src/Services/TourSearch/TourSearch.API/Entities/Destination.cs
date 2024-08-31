@@ -9,6 +9,9 @@ public class Destination : MongoEntityBase
     [BsonElement("name")]
     public string Name { get; set; }
 
+    [BsonElement("slug")]
+    public string Slug { get; set; }
+
     [BsonElement("type")]
     public string Type { get; set; }
 

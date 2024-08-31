@@ -9,6 +9,9 @@ public class TourJob : MongoEntityAuditBase
     [BsonElement("title")]
     public string Title { get; set; }
 
+    [BsonElement("slug")]
+    public string Slug { get; set; }
+
     [BsonElement("days")]
     public int Days { get; set; }
 
