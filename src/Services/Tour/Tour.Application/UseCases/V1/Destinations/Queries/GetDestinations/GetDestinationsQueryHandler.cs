@@ -39,9 +39,9 @@ public class GetDestinationsQueryHandler : IRequestHandler<GetDestinationsQuery,
                 async () => await _destinationRepository.FindAll().ToListAsync()
             );
 
-        var children = _destinationService.BuildTree(destinations);
+        //var children = _destinationService.BuildTree(destinations);
 
-        var destinationsDto = _mapper.Map<List<DestinationDto>>(children);
+        var destinationsDto = _mapper.Map<List<DestinationDto>>(destinations);
 
         _logger.Information($"END {MethodName}");
 

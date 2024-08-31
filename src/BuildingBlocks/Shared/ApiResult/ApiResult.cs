@@ -1,4 +1,6 @@
-﻿namespace BuildingBlocks.Shared.ApiResult;
+﻿using System.Text.Json.Serialization;
+
+namespace BuildingBlocks.Shared.ApiResult;
 public class ApiResult<T>
 {
     public T Data { get; set; }
@@ -11,6 +13,7 @@ public class ApiResult<T>
         IsSucceeded = isSucceeded;
     }
 
+    [JsonConstructor]
     public ApiResult(bool isSucceeded, T data, string message = null)
     {
         Data = data;

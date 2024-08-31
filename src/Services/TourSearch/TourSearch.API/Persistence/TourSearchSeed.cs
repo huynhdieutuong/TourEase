@@ -3,6 +3,7 @@ using BuildingBlocks.Shared.Configurations;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using TourSearch.API.Entities;
+using TourSearch.API.HttpClients.Interfaces;
 using ILogger = Serilog.ILogger;
 
 namespace TourSearch.API.Persistence;
@@ -12,50 +13,58 @@ public class TourSearchSeed
     private readonly ISerializerService _serializerService;
     private readonly ILogger _logger;
     private readonly IMongoDatabase Database;
+    private readonly ITourHttpClient _tourHttpClient;
 
     public TourSearchSeed(ISerializerService serializerService,
                           ILogger logger,
                           IMongoClient client,
-                          MongoDbSettings settings)
+                          MongoDbSettings settings,
+                          ITourHttpClient tourHttpClient)
     {
         _serializerService = serializerService;
         _logger = logger;
         Database = client.GetDatabase(settings.DatabaseName);
+        _tourHttpClient = tourHttpClient;
     }
 
     public async Task SeedDataAsync()
     {
-        try
+        while (true) // Retry until SeedData successful
         {
-            var tourJobCollection = Database.GetCollection<TourJob>(CollectionNames.TourJobs);
-            var destinationCollection = Database.GetCollection<Destination>(CollectionNames.Destinations);
-
-            // Create indexes
-            await EnsureIndexesAsync(tourJobCollection, destinationCollection);
-
-            // Seed data
-            if (await destinationCollection.EstimatedDocumentCountAsync() == 0)
+            try
             {
-                _logger.Information("No destinations data - will attempt to seed");
-                var destinationsJson = await File.ReadAllTextAsync("Persistence/destinations.json");
-                var destinations = _serializerService.Deserialize<List<Destination>>(destinationsJson);
+                var tourJobCollection = Database.GetCollection<TourJob>(CollectionNames.TourJobs);
+                var destinationCollection = Database.GetCollection<Destination>(CollectionNames.Destinations);
 
-                await destinationCollection.InsertManyAsync(destinations);
+                // Create indexes
+                await EnsureIndexesAsync(tourJobCollection, destinationCollection);
+
+                // Seed data
+                if (await destinationCollection.EstimatedDocumentCountAsync() == 0)
+                {
+                    _logger.Information("No destinations data - will attempt to seed");
+                    //var destinationsJson = await File.ReadAllTextAsync("Persistence/destinations.json");
+                    //var destinations = _serializerService.Deserialize<List<Destination>>(destinationsJson);
+                    var destinations = await _tourHttpClient.GetDestinationsFromTourService();
+                    await destinationCollection.InsertManyAsync(destinations);
+                }
+
+                if (await tourJobCollection.EstimatedDocumentCountAsync() == 0)
+                {
+                    _logger.Information("No tour jobs data - will attempt to seed");
+                    //var tourJobsJson = await File.ReadAllTextAsync("Persistence/tourJobs.json");
+                    //var tourJobs = _serializerService.Deserialize<List<TourJob>>(tourJobsJson);
+                    var tourJobs = await _tourHttpClient.GetTourJobsFromTourService();
+                    await tourJobCollection.InsertManyAsync(tourJobs);
+                }
+
+                break;
             }
-
-            if (await tourJobCollection.EstimatedDocumentCountAsync() == 0)
+            catch (Exception ex)
             {
-                _logger.Information("No tour jobs data - will attempt to seed");
-                var tourJobsJson = await File.ReadAllTextAsync("Persistence/tourJobs.json");
-                var tourJobs = _serializerService.Deserialize<List<TourJob>>(tourJobsJson);
-
-                await tourJobCollection.InsertManyAsync(tourJobs);
+                _logger.Error(ex, "An error occurred while seeding the TourSearch database. Retrying...");
+                await Task.Delay(5000);
             }
-        }
-        catch (Exception ex)
-        {
-            _logger.Error(ex, "An error occurred while seeding the TourSearch database.");
-            throw;
         }
     }
 

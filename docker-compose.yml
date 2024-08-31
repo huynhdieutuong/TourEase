@@ -10,7 +10,7 @@ services:
             ACCEPT_EULA: "Y"
         restart: always
         volumes:
-            - sqlserver_data:/var/opt/mssql
+            - /var/lib/mssql/data
         ports:
             - "1435:1433"
 
@@ -33,7 +33,7 @@ services:
         ports:
             - "27018:27017"
         volumes:
-            - mongo_data:/data/db
+            - /var/lib/mongodb/data
 
 #network section
 networks:
@@ -42,8 +42,8 @@ networks:
         driver: bridge
 
 #volumes section
-volumes:
-    sqlserver_data:
-        name: sqlserver_data
-    mongo_data:
-        name: mongo_data
+# volumes:
+#     sqlserver_data:
+#         name: sqlserver_data
+#     mongo_data:
+#         name: mongo_data

@@ -20,6 +20,7 @@ try
 
     builder.Services.AddApplicationServices();
     builder.Services.AddInfrastructureServices();
+    builder.Services.ConfigureHttpClients(builder.Configuration);
 
     var app = builder.Build();
 
@@ -45,4 +46,3 @@ finally
 {
     Log.CloseAndFlush();
 }
-
