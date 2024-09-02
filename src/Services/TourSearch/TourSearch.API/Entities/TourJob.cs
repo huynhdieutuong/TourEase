@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace TourSearch.API.Entities;
 
-public class TourJob : MongoEntityAuditBase
+public class TourJob : MongoEntityAuditBase<Guid>
 {
     [BsonElement("title")]
     public string Title { get; set; }

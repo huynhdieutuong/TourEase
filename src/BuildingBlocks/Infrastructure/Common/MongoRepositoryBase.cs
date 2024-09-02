@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace BuildingBlocks.Infrastructure.Common;
 
-public abstract class MongoRepositoryBase<T> : IMongoRepositoryBase<T> where T : MongoEntityBase
+public abstract class MongoRepositoryBase<T, K> : IMongoRepositoryBase<T, K> where T : MongoEntityBase<K>
 {
     protected readonly IMongoCollection<T> _collection;
 
@@ -25,7 +25,7 @@ public abstract class MongoRepositoryBase<T> : IMongoRepositoryBase<T> where T :
         return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public async Task<T> FindByIdAsync(Guid id)
+    public async Task<T> FindByIdAsync(K id)
     {
         var filter = Builders<T>.Filter.Eq(doc => doc.Id, id);
         return await _collection.Find(filter).FirstOrDefaultAsync();
@@ -49,7 +49,7 @@ public abstract class MongoRepositoryBase<T> : IMongoRepositoryBase<T> where T :
         await _collection.ReplaceOneAsync(filter, entity);
     }
 
-    public async Task DeleteByIdAsync(Guid id)
+    public async Task DeleteByIdAsync(K id)
     {
         var filter = Builders<T>.Filter.Eq(doc => doc.Id, id);
         await _collection.DeleteOneAsync(filter);

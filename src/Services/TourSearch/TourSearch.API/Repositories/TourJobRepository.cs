@@ -9,7 +9,7 @@ using TourSearch.API.Requests;
 
 namespace TourSearch.API.Repositories;
 
-public class TourJobRepository : MongoRepositoryBase<TourJob>, ITourJobRepository
+public class TourJobRepository : MongoRepositoryBase<TourJob, Guid>, ITourJobRepository
 {
     public TourJobRepository(IMongoDatabase database) : base(database, CollectionNames.TourJobs)
     {

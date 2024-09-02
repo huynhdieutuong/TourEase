@@ -18,9 +18,8 @@ try
     // Add services to the container.
     builder.Services.AddControllers();
 
-    builder.Services.AddApplicationServices();
+    builder.Services.AddApplicationServices(builder.Configuration);
     builder.Services.AddInfrastructureServices();
-    builder.Services.ConfigureHttpClients(builder.Configuration);
 
     var app = builder.Build();
 

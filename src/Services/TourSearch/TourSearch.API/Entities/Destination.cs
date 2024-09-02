@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace TourSearch.API.Entities;
 
-public class Destination : MongoEntityBase
+public class Destination : MongoEntityBase<Guid>
 {
     [BsonElement("name")]
     public string Name { get; set; }

@@ -3,7 +3,10 @@ using BuildingBlocks.Infrastructure.Services;
 using BuildingBlocks.Logging;
 using BuildingBlocks.Shared.Configurations;
 using BuildingBlocks.Shared.Extensions;
+using MassTransit;
 using MongoDB.Driver;
+using System.Reflection;
+using TourSearch.API.Consumers;
 using TourSearch.API.HttpClients;
 using TourSearch.API.HttpClients.Interfaces;
 using TourSearch.API.Persistence;
@@ -38,13 +41,39 @@ public static class ServiceExtensions
         services.AddScoped<IDestinationRepository, DestinationRepository>();
     }
 
-    public static void AddApplicationServices(this IServiceCollection services)
+    public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<ISerializerService, SerializerService>();
         services.AddTransient<LoggingDelegatingHandler>();
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         services.AddScoped<ITourJobService, TourJobService>();
         services.AddScoped<IDestinationService, DestinationService>();
+
+        services.ConfigureMassTransit();
+        services.ConfigureHttpClients(configuration);
+    }
+
+    public static void ConfigureMassTransit(this IServiceCollection services)
+    {
+        var settings = services.GetOptions<EventBusSettings>(nameof(EventBusSettings));
+        if (settings == null || string.IsNullOrEmpty(settings.HostAddress))
+        {
+            throw new ArgumentException("EventBusSetting is not configured");
+        }
+
+        services.AddMassTransit(x =>
+        {
+            x.AddConsumersFromNamespaceContaining<TourJobCreatedConsumer>();
+
+            x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("search"));
+
+            x.UsingRabbitMq((ctx, cfg) =>
+            {
+                cfg.Host(new Uri(settings.HostAddress));
+                cfg.ConfigureEndpoints(ctx);
+            });
+        });
     }
 
     public static void ConfigureHttpClients(this IServiceCollection services, IConfiguration configuration)

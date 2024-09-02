@@ -5,7 +5,7 @@ using TourSearch.API.Requests;
 
 namespace TourSearch.API.Repositories.Interfaces;
 
-public interface ITourJobRepository : IMongoRepositoryBase<TourJob>
+public interface ITourJobRepository : IMongoRepositoryBase<TourJob, Guid>
 {
     Task<PagedList<TourJob>> SearchTourJobsAsync(SearchParams searchParams);
 }

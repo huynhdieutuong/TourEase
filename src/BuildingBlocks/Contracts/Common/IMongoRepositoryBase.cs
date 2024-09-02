@@ -2,19 +2,19 @@
 using System.Linq.Expressions;
 
 namespace BuildingBlocks.Contracts.Common;
-public interface IMongoRepositoryBase<T> where T : MongoEntityBase
+public interface IMongoRepositoryBase<T, K> where T : MongoEntityBase<K>
 {
     #region Query
     Task<List<T>> FindAllAsync(Expression<Func<T, bool>>? filter = null);
     Task<T> FindSingleAsync(Expression<Func<T, bool>> filter);
-    Task<T> FindByIdAsync(Guid id);
+    Task<T> FindByIdAsync(K id);
     #endregion
 
     #region Command
     Task InsertAsync(T entity);
     Task InsertManyAsync(IEnumerable<T> entities);
     Task UpdateAsync(T entity);
-    Task DeleteByIdAsync(Guid id);
+    Task DeleteByIdAsync(K id);
     Task DeleteManyAsync(Expression<Func<T, bool>> filter);
     #endregion
 }

@@ -1,5 +1,5 @@
 services:
-    #database section
+#database section
 
     #TourDB: sql server
     tourdb:
@@ -35,6 +35,18 @@ services:
         volumes:
             - /var/lib/mongodb/data
 
+#infrastructure section
+    rabbitmq:
+        image: rabbitmq:3-management-alpine
+        container_name: rabbitmq
+        restart: always
+        ports:
+            - 5672:5672
+            - 15672:15672
+        volumes:
+            - /var/lib/rabbitmq/data
+        hostname: rabbitmq
+
 #network section
 networks:
     default:
@@ -47,3 +59,5 @@ networks:
 #         name: sqlserver_data
 #     mongo_data:
 #         name: mongo_data
+#     rabbitmq_data:
+#         name: rabbitmq_data

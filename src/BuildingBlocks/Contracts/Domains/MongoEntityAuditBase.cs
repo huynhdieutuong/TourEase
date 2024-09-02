@@ -1,7 +1,8 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using BuildingBlocks.Contracts.Domains.Interfaces;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace BuildingBlocks.Contracts.Domains;
-public abstract class MongoEntityAuditBase : MongoEntityBase
+public abstract class MongoEntityAuditBase<T> : MongoEntityBase<T>, IAuditable
 {
     [BsonElement("createdDate")]
     public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.UtcNow;
