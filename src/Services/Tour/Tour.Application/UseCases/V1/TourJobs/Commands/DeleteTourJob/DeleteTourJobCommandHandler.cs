@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using BuildingBlocks.Messaging.TourJob;
 using BuildingBlocks.Shared.Exceptions;
+using MassTransit;
 using MediatR;
 using Serilog;
 using Tour.Application.Interfaces;
@@ -13,6 +15,7 @@ public class DeleteTourJobCommandHandler : IRequestHandler<DeleteTourJobCommand>
     private readonly ITourUnitOfWork _tourUnitOfWork;
     private readonly ITourJobRepository _tourJobRepository;
     private readonly ITourDetailDestinationRepository _tourDetailDestinationRepository;
+    private readonly IPublishEndpoint _publishEndpoint;
 
     private const string MethodName = nameof(DeleteTourJobCommandHandler);
 
@@ -20,13 +23,15 @@ public class DeleteTourJobCommandHandler : IRequestHandler<DeleteTourJobCommand>
                                        IMapper mapper,
                                        ITourUnitOfWork tourUnitOfWork,
                                        ITourJobRepository tourJobRepository,
-                                       ITourDetailDestinationRepository tourDetailDestinationRepository)
+                                       ITourDetailDestinationRepository tourDetailDestinationRepository,
+                                       IPublishEndpoint publishEndpoint)
     {
         _logger = logger;
         _mapper = mapper;
         _tourUnitOfWork = tourUnitOfWork;
         _tourJobRepository = tourJobRepository;
         _tourDetailDestinationRepository = tourDetailDestinationRepository;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task Handle(DeleteTourJobCommand request, CancellationToken cancellationToken)
@@ -37,6 +42,9 @@ public class DeleteTourJobCommandHandler : IRequestHandler<DeleteTourJobCommand>
         if (tourJob == null) throw new NotFoundException(nameof(TourJob), request.Id);
 
         _tourJobRepository.Remove(tourJob);
+
+        await _publishEndpoint.Publish<TourJobDeleted>(new { tourJob.Id });
+
         await _tourUnitOfWork.SaveChangesAsync();
 
         _logger.Information($"END {MethodName} - Tour Job Id: {request.Id}");

@@ -10,7 +10,9 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<TourJobCreated, TourJob>();
+        CreateMap<TourJobUpdated, TourJob>();
 
         CreateMap<DestinationCreated, Destination>();
+        CreateMap<DestinationUpdated, Destination>();
     }
 }

@@ -6,6 +6,7 @@ using BuildingBlocks.Shared.Extensions;
 using MassTransit;
 using MongoDB.Driver;
 using System.Reflection;
+using TourSearch.API.Consumers.Destinations;
 using TourSearch.API.Consumers.TourJobs;
 using TourSearch.API.HttpClients;
 using TourSearch.API.HttpClients.Interfaces;
@@ -65,6 +66,7 @@ public static class ServiceExtensions
         services.AddMassTransit(x =>
         {
             x.AddConsumersFromNamespaceContaining<TourJobCreatedConsumer>();
+            x.AddConsumersFromNamespaceContaining<DestinationCreatedConsumer>();
 
             x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("search"));
 

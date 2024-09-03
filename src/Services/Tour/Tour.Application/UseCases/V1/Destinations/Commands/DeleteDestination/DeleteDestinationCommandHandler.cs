@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using BuildingBlocks.Messaging.Destination;
 using BuildingBlocks.Shared.Exceptions;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -16,6 +18,7 @@ public class DeleteDestinationCommandHandler : IRequestHandler<DeleteDestination
     private readonly IDestinationRepository _destinationRepository;
     private readonly ITourCacheService _tourCacheService;
     private readonly IDestinationService _destinationService;
+    private readonly IPublishEndpoint _publishEndpoint;
 
     private const string MethodName = nameof(DeleteDestinationCommandHandler);
 
@@ -24,7 +27,8 @@ public class DeleteDestinationCommandHandler : IRequestHandler<DeleteDestination
                                            ITourUnitOfWork tourUnitOfWork,
                                            IDestinationRepository destinationRepository,
                                            ITourCacheService tourCacheService,
-                                           IDestinationService destinationService)
+                                           IDestinationService destinationService,
+                                           IPublishEndpoint publishEndpoint)
     {
         _mapper = mapper;
         _logger = logger;
@@ -32,6 +36,7 @@ public class DeleteDestinationCommandHandler : IRequestHandler<DeleteDestination
         _destinationRepository = destinationRepository;
         _tourCacheService = tourCacheService;
         _destinationService = destinationService;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task Handle(DeleteDestinationCommand request, CancellationToken cancellationToken)
@@ -49,6 +54,8 @@ public class DeleteDestinationCommandHandler : IRequestHandler<DeleteDestination
         RecursiveRemoveChildren(lookup, destination.Id);
 
         _destinationRepository.Remove(destination);
+
+        await _publishEndpoint.Publish<DestinationDeleted>(new { destination.Id });
 
         await _tourUnitOfWork.SaveChangesAsync();
 

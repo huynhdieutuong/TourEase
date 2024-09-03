@@ -32,6 +32,7 @@ public class MappingProfiles : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         CreateMap<TourJobDto, TourJobCreated>();
+        CreateMap<TourJobDto, TourJobUpdated>();
         #endregion
 
         #region Destination
@@ -44,6 +45,7 @@ public class MappingProfiles : Profile
             .BeforeMap<SlugDestinationResolver<UpdateDestinationCommand>>();
 
         CreateMap<DestinationDto, DestinationCreated>();
+        CreateMap<DestinationDto, DestinationUpdated>();
         #endregion
     }
 }

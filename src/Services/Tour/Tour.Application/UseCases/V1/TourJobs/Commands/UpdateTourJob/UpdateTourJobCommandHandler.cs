@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using BuildingBlocks.Messaging.TourJob;
 using BuildingBlocks.Shared.ApiResult;
 using BuildingBlocks.Shared.Exceptions;
+using MassTransit;
 using MediatR;
 using Serilog;
 using Tour.Application.DTOs;
@@ -15,6 +17,7 @@ public class UpdateTourJobCommandHandler : IRequestHandler<UpdateTourJobCommand,
     private readonly ITourUnitOfWork _tourUnitOfWork;
     private readonly ITourJobRepository _tourJobRepository;
     private readonly ITourDetailDestinationRepository _tourDetailDestinationRepository;
+    private readonly IPublishEndpoint _publishEndpoint;
 
     private const string MethodName = nameof(UpdateTourJobCommandHandler);
 
@@ -22,13 +25,15 @@ public class UpdateTourJobCommandHandler : IRequestHandler<UpdateTourJobCommand,
                                        IMapper mapper,
                                        ITourUnitOfWork tourUnitOfWork,
                                        ITourJobRepository tourJobRepository,
-                                       ITourDetailDestinationRepository tourDetailDestinationRepository)
+                                       ITourDetailDestinationRepository tourDetailDestinationRepository,
+                                       IPublishEndpoint publishEndpoint)
     {
         _logger = logger;
         _mapper = mapper;
         _tourUnitOfWork = tourUnitOfWork;
         _tourJobRepository = tourJobRepository;
         _tourDetailDestinationRepository = tourDetailDestinationRepository;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<ApiResult<TourJobDto>> Handle(UpdateTourJobCommand request, CancellationToken cancellationToken)
@@ -43,10 +48,13 @@ public class UpdateTourJobCommandHandler : IRequestHandler<UpdateTourJobCommand,
 
         UpdateTourDetailDestinations(tourJob.Detail, request.DestinationIds);
 
+        var tourJobDto = _mapper.Map<TourJobDto>(tourJob);
+        await _publishEndpoint.Publish(_mapper.Map<TourJobUpdated>(tourJobDto));
+
         await _tourUnitOfWork.SaveChangesAsync();
 
         _logger.Information($"END {MethodName} - Tour Job Title: {request.Title}");
-        return new ApiSuccessResult<TourJobDto>(_mapper.Map<TourJobDto>(tourJob));
+        return new ApiSuccessResult<TourJobDto>(tourJobDto);
     }
 
     private void UpdateTourDetailDestinations(TourDetail tourDetail, List<Guid> requestDestinationIds)

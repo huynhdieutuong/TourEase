@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using BuildingBlocks.Messaging.Destination;
 using BuildingBlocks.Shared.ApiResult;
+using MassTransit;
 using MediatR;
 using Serilog;
 using Tour.Application.DTOs;
@@ -14,6 +16,7 @@ public class CreateDestinationCommandHandler : IRequestHandler<CreateDestination
     private readonly ITourUnitOfWork _tourUnitOfWork;
     private readonly IDestinationRepository _destinationRepository;
     private readonly ITourCacheService _tourCacheService;
+    private readonly IPublishEndpoint _publishEndpoint;
 
     private const string MethodName = nameof(CreateDestinationCommandHandler);
 
@@ -21,13 +24,15 @@ public class CreateDestinationCommandHandler : IRequestHandler<CreateDestination
                                            ILogger logger,
                                            ITourUnitOfWork tourUnitOfWork,
                                            IDestinationRepository destinationRepository,
-                                           ITourCacheService tourCacheService)
+                                           ITourCacheService tourCacheService,
+                                           IPublishEndpoint publishEndpoint)
     {
         _mapper = mapper;
         _logger = logger;
         _tourUnitOfWork = tourUnitOfWork;
         _destinationRepository = destinationRepository;
         _tourCacheService = tourCacheService;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<ApiResult<DestinationDto>> Handle(CreateDestinationCommand request, CancellationToken cancellationToken)
@@ -37,12 +42,16 @@ public class CreateDestinationCommandHandler : IRequestHandler<CreateDestination
         var destination = _mapper.Map<Destination>(request);
 
         _destinationRepository.Add(destination);
+
+        var destinationDto = _mapper.Map<DestinationDto>(destination);
+        await _publishEndpoint.Publish(_mapper.Map<DestinationCreated>(destinationDto));
+
         await _tourUnitOfWork.SaveChangesAsync();
 
         await _tourCacheService.InvalidDestinationsCacheAsync();
 
         _logger.Information($"END {MethodName} Name: {request.Name}");
 
-        return new ApiSuccessResult<DestinationDto>(_mapper.Map<DestinationDto>(destination));
+        return new ApiSuccessResult<DestinationDto>(destinationDto);
     }
 }
