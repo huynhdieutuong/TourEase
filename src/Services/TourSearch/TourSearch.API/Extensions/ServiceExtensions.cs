@@ -70,6 +70,12 @@ public static class ServiceExtensions
 
             x.UsingRabbitMq((ctx, cfg) =>
             {
+                cfg.ReceiveEndpoint("search-tour-job-created", e =>
+                {
+                    e.UseMessageRetry(r => r.Interval(5, 5));
+                    e.ConfigureConsumer<TourJobCreatedConsumer>(ctx);
+                });
+
                 cfg.Host(new Uri(settings.HostAddress));
                 cfg.ConfigureEndpoints(ctx);
             });
