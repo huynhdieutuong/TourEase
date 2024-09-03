@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Contracts.Domains.Interfaces;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Tour.Domain.Entities;
 
@@ -18,6 +19,10 @@ public class TourDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.AddInboxStateEntity();
+        modelBuilder.AddOutboxMessageEntity();
+        modelBuilder.AddOutboxStateEntity();
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -43,7 +48,11 @@ public class TourDbContext : DbContext
                     item.State = EntityState.Added;
                     break;
                 case EntityState.Modified:
-                    Entry(item.Entity).Property("Id").IsModified = false;
+                    var primaryKeyName = item.Metadata.FindPrimaryKey()?.Properties[0].Name;
+                    if (primaryKeyName != null)
+                    {
+                        Entry(item.Entity).Property(primaryKeyName).IsModified = false;
+                    }
                     if (item.Entity is IDateTracking modifiedDateEntity)
                     {
                         modifiedDateEntity.UpdatedDate = DateTimeOffset.UtcNow;

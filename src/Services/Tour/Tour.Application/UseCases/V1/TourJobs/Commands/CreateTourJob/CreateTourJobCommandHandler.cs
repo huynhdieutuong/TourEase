@@ -50,10 +50,10 @@ public class CreateTourJobCommandHandler : IRequestHandler<CreateTourJobCommand,
                                                 }).ToList();
         _tourDetailDestinationRepository.AddMultiple(tourDetailDestinations);
 
-        await _tourUnitOfWork.SaveChangesAsync();
-
         var tourJobDto = _mapper.Map<TourJobDto>(tourJob);
         await _publishEndpoint.Publish(_mapper.Map<TourJobCreated>(tourJobDto));
+
+        await _tourUnitOfWork.SaveChangesAsync();
 
         _logger.Information($"END {MethodName} - Tour Job Title: {request.Title}");
         return new ApiSuccessResult<TourJobDto>(tourJobDto);

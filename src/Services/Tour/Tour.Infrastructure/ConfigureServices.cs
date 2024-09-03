@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.Shared.Configurations;
 using BuildingBlocks.Shared.Extensions;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Tour.Application.Interfaces;
@@ -33,12 +34,40 @@ public static class ConfigureServices
                                     errorNumbersToAdd: sqlServerRetrySettings.ErrorNumbersToAdd))
                             .MigrationsAssembly(typeof(TourDbContext).Assembly.GetName().Name));
         });
-
+        services.ConfigureMassTransit();
         services.AddScoped<TourSeed>();
 
         services.AddScoped<ITourUnitOfWork, TourUnitOfWork>();
         services.AddScoped<ITourJobRepository, TourJobRepository>();
         services.AddScoped<IDestinationRepository, DestinationRepository>();
         services.AddScoped<ITourDetailDestinationRepository, TourDetailDestinationRepository>();
+    }
+
+    public static void ConfigureMassTransit(this IServiceCollection services)
+    {
+        var settings = services.GetOptions<EventBusSettings>(nameof(EventBusSettings));
+        if (settings == null || string.IsNullOrEmpty(settings.HostAddress))
+        {
+            throw new ArgumentException("EventBusSetting is not configured");
+        }
+
+        services.AddMassTransit(x =>
+        {
+            //x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("tour"));
+
+            x.AddEntityFrameworkOutbox<TourDbContext>(o =>
+            {
+                o.QueryDelay = TimeSpan.FromSeconds(10);
+
+                o.UseSqlServer();
+                o.UseBusOutbox();
+            });
+
+            x.UsingRabbitMq((ctx, cfg) =>
+            {
+                cfg.Host(new Uri(settings.HostAddress));
+                //cfg.ConfigureEndpoints(ctx);
+            });
+        });
     }
 }
