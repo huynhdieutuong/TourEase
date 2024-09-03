@@ -3,6 +3,7 @@ using BuildingBlocks.Shared.Extensions;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Tour.Application.Consumers.TourJobs;
 using Tour.Application.Interfaces;
 using Tour.Infrastructure.Persistence;
 using Tour.Infrastructure.Repositories;
@@ -53,7 +54,8 @@ public static class ConfigureServices
 
         services.AddMassTransit(x =>
         {
-            //x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("tour"));
+            x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("tour"));
+            x.AddConsumersFromNamespaceContaining<TourJobCreatedFaultConsumer>();
 
             x.AddEntityFrameworkOutbox<TourDbContext>(o =>
             {
@@ -66,7 +68,7 @@ public static class ConfigureServices
             x.UsingRabbitMq((ctx, cfg) =>
             {
                 cfg.Host(new Uri(settings.HostAddress));
-                //cfg.ConfigureEndpoints(ctx);
+                cfg.ConfigureEndpoints(ctx);
             });
         });
     }

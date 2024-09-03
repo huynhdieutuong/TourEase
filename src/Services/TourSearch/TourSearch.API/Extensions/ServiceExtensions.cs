@@ -6,7 +6,7 @@ using BuildingBlocks.Shared.Extensions;
 using MassTransit;
 using MongoDB.Driver;
 using System.Reflection;
-using TourSearch.API.Consumers;
+using TourSearch.API.Consumers.TourJobs;
 using TourSearch.API.HttpClients;
 using TourSearch.API.HttpClients.Interfaces;
 using TourSearch.API.Persistence;

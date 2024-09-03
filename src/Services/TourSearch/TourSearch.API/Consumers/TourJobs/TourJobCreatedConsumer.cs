@@ -5,7 +5,7 @@ using TourSearch.API.Entities;
 using TourSearch.API.Repositories.Interfaces;
 using ILogger = Serilog.ILogger;
 
-namespace TourSearch.API.Consumers;
+namespace TourSearch.API.Consumers.TourJobs;
 
 public class TourJobCreatedConsumer : IConsumer<TourJobCreated>
 {
@@ -25,6 +25,9 @@ public class TourJobCreatedConsumer : IConsumer<TourJobCreated>
         _logger.Information("--> Consuming tour job created: " + context.Message.Id);
 
         var tourJob = _mapper.Map<TourJob>(context.Message);
+
+        if (tourJob.Title == "Tour job demo") throw new ArgumentException("Cannot add tourjob with title of Tour job demo");
+
         await _tourJobRepository.InsertAsync(tourJob);
     }
 }
