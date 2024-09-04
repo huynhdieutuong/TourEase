@@ -63,4 +63,31 @@ public class TourJobRepository : MongoRepositoryBase<TourJob, Guid>, ITourJobRep
                                                     searchParams.PageIndex,
                                                     searchParams.PageSize);
     }
+
+    public Task<List<TourJob>> GetTourJobsByDestinationIds(List<Guid> destinationIds)
+    {
+        var filter = Builders<TourJob>.Filter.AnyIn(t => t.DestinationIds, destinationIds);
+        var tourJobs = _collection.Find(filter).ToListAsync();
+        return tourJobs;
+    }
+
+    public async Task<int> UpdateDeletedDestinationsInTourJobs(List<TourJob> tourJobs, List<Guid> deletedDestinationIds)
+    {
+        var bulkOps = new List<WriteModel<TourJob>>();
+
+        foreach (var tourJob in tourJobs)
+        {
+            tourJob.DestinationIds = tourJob.DestinationIds.Except(deletedDestinationIds).ToList();
+
+            var update = Builders<TourJob>.Update.Set(t => t.DestinationIds, tourJob.DestinationIds);
+            var upsertOne = new UpdateOneModel<TourJob>(
+                Builders<TourJob>.Filter.Eq(t => t.Id, tourJob.Id),
+                update
+            );
+            bulkOps.Add(upsertOne);
+        }
+
+        var result = await _collection.BulkWriteAsync(bulkOps);
+        return (int)result.ModifiedCount;
+    }
 }
