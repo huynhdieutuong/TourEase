@@ -35,6 +35,18 @@ services:
         volumes:
             - /var/lib/mongodb/data
 
+    #IdentityServerDB: postgres
+    identitydb:
+        image: postgres
+        environment:
+            - POSTGRES_PASSWORD=postgrespw
+        container_name: identitydb
+        restart: always
+        ports:
+            - 5432:5432
+        volumes:
+            - /var/lib/postresql/data
+
 #infrastructure section
     rabbitmq:
         image: rabbitmq:3-management-alpine
