@@ -24,11 +24,12 @@ try
     builder.Services.AddApplicationServices();
     builder.Services.AddInfrastructureServices();
     builder.Services.AddInfrastructureRedisServices();
+    builder.Services.AddIdentityService();
 
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
-
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();

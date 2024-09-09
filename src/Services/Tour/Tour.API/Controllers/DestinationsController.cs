@@ -1,5 +1,7 @@
 ﻿using BuildingBlocks.Shared.ApiResult;
+using BuildingBlocks.Shared.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tour.Application.DTOs;
 using Tour.Application.UseCases.V1.Destinations;
@@ -7,6 +9,7 @@ using Tour.Application.UseCases.V1.Destinations;
 namespace Tour.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = Roles.Admin)]
 public class DestinationsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -21,6 +24,7 @@ public class DestinationsController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<ApiResult<List<DestinationDto>>>> GetDestinations()
     {
         var query = new GetDestinationsQuery();

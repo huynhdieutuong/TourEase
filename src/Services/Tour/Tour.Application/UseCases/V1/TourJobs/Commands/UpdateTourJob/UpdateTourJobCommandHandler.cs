@@ -43,6 +43,8 @@ public class UpdateTourJobCommandHandler : IRequestHandler<UpdateTourJobCommand,
         var tourJob = await _tourJobRepository.FindByIdAsync(request.Id, tj => tj.Detail.TourDetailDestinations);
         if (tourJob == null) throw new NotFoundException(nameof(TourJob), request.Id);
 
+        if (tourJob.CreatedBy != request.UpdatedBy) throw new ForBidException();
+
         _mapper.Map(request, tourJob);
         _tourJobRepository.Update(tourJob);
 

@@ -41,10 +41,10 @@ public class TourDbContext : DbContext
                     {
                         addedDateEntity.CreatedDate = DateTimeOffset.UtcNow;
                     }
-                    if (item.Entity is IUserTracking addedUserEntity)
-                    {
-                        addedUserEntity.CreatedBy = "test";
-                    }
+                    //if (item.Entity is IUserTracking addedUserEntity)
+                    //{
+                    //    addedUserEntity.CreatedBy = "test";
+                    //}
                     item.State = EntityState.Added;
                     break;
                 case EntityState.Modified:
@@ -57,10 +57,10 @@ public class TourDbContext : DbContext
                     {
                         modifiedDateEntity.UpdatedDate = DateTimeOffset.UtcNow;
                     }
-                    if (item.Entity is IUserTracking modifiedUserEntity)
-                    {
-                        modifiedUserEntity.UpdatedBy = "test1";
-                    }
+                    //if (item.Entity is IUserTracking modifiedUserEntity)
+                    //{
+                    //    modifiedUserEntity.UpdatedBy = "test1";
+                    //}
                     item.State = EntityState.Modified;
                     break;
             }

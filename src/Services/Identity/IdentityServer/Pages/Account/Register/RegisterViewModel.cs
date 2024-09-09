@@ -14,7 +14,7 @@ public class RegisterViewModel
     public string Username { get; set; }
 
     [Required]
-    public string FullName { get; set; }
+    public string Role { get; set; }
     public string ReturnUrl { get; set; }
     public string Button { get; set; }
 }

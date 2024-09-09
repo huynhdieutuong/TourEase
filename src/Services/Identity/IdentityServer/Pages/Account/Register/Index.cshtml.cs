@@ -1,10 +1,10 @@
-using IdentityModel;
+using BuildingBlocks.Shared.Constants;
 using IdentityServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace IdentityServer.Pages.Account.Register
 {
@@ -24,6 +24,12 @@ namespace IdentityServer.Pages.Account.Register
 
         [BindProperty]
         public bool RegisterSuccess { get; set; }
+
+        public List<SelectListItem> RoleOptions =
+            [
+                new SelectListItem("Travel Agency", Roles.TravelAgency),
+                new SelectListItem("Tour Guide", Roles.TourGuide),
+            ];
 
         public IActionResult OnGet(string returnUrl)
         {
@@ -49,10 +55,7 @@ namespace IdentityServer.Pages.Account.Register
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddClaimsAsync(user, new Claim[]
-                    {
-                        new Claim(JwtClaimTypes.Name, Input.FullName)
-                    });
+                    await _userManager.AddToRoleAsync(user, Input.Role);
 
                     RegisterSuccess = true;
                 }

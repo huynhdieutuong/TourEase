@@ -41,6 +41,8 @@ public class DeleteTourJobCommandHandler : IRequestHandler<DeleteTourJobCommand>
         var tourJob = await _tourJobRepository.FindByIdAsync(request.Id);
         if (tourJob == null) throw new NotFoundException(nameof(TourJob), request.Id);
 
+        if (tourJob.CreatedBy != request.DeletedBy) throw new ForBidException();
+
         _tourJobRepository.Remove(tourJob);
 
         await _publishEndpoint.Publish<TourJobDeleted>(new { tourJob.Id });

@@ -1,5 +1,7 @@
 ﻿using BuildingBlocks.Shared.ApiResult;
+using BuildingBlocks.Shared.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tour.Application.DTOs;
 using Tour.Application.UseCases.V1.TourJobs;
@@ -7,6 +9,7 @@ using Tour.Application.UseCases.V1.TourJobs;
 namespace Tour.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = Roles.TravelAgency)]
 public class TourJobsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -21,9 +24,10 @@ public class TourJobsController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<ApiResult<List<TourJobDto>>>> GetTourJobs()
     {
-        var userName = "test";
+        var userName = User.Identity.Name ?? "test";
         var query = new GetTourJobsQuery(userName);
         var result = await _mediator.Send(query);
         return Ok(result);
@@ -50,6 +54,7 @@ public class TourJobsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ApiResult<TourJobDto>>> CreateTourJob(CreateTourJobCommand command)
     {
+        command.CreatedBy = User.Identity.Name;
         var result = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetTourJobsById), new { result.Data.Id }, result);
     }
@@ -62,6 +67,7 @@ public class TourJobsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<ApiResult<TourJobDto>>> UpdateTourJob(Guid id, UpdateTourJobCommand command)
     {
+        command.UpdatedBy = User.Identity.Name;
         command.SetId(id);
         var result = await _mediator.Send(command);
         return Ok(result);
@@ -75,7 +81,7 @@ public class TourJobsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTourJobsById(Guid id)
     {
-        var command = new DeleteTourJobCommand(id);
+        var command = new DeleteTourJobCommand(id, User.Identity.Name);
         await _mediator.Send(command);
         return NoContent();
     }
