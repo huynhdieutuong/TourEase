@@ -5,4 +5,5 @@ using Tour.Application.DTOs;
 namespace Tour.Application.UseCases.V1.TourJobs;
 public class CreateTourJobCommand : CreateOrUpdateCommand, IRequest<ApiResult<TourJobDto>>
 {
+    public string? CreatedBy { get; set; }
 }

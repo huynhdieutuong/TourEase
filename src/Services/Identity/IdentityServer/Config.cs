@@ -27,7 +27,9 @@ public static class Config
                 ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
                 AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                 RedirectUris = { "https://www.getpostman.com/oauth2/callback" },
-                AllowedScopes = { "openid", "profile", "tourEaseApp" }
+                AllowedScopes = { "openid", "profile", "tourEaseApp" },
+                AccessTokenLifetime = 60 * 60 * 2,
+                AllowOfflineAccess = true,
             },
         };
 }

@@ -4,7 +4,8 @@ TourEase is a website specifically designed to connect tour guides with travel a
 ## Features
 
 ### Phase 1:
-- **Authentication & Authorization:** Login, Logout
+- **Authentication & Authorization:** Login, Logout, Register
+- **Admin:** CRUD Destinations
 - **Travel Agency:** Add, update, and delete tours; select tour guides
 - **Tour Guide:** Search for and bid on tours
 - **Notifications:** When a tour guide bids on a tour, the travel agency receives a notification. The agency can then select the tour guide who best matches their qualifications.

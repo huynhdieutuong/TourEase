@@ -22,12 +22,15 @@ public class CustomProfileService : IProfileService
 
         var claims = new List<Claim>
         {
-            new Claim("username", user.UserName),
-            new Claim("roles", string.Join(",", roles))
+            new Claim("username", user.UserName)
         };
 
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim("roles", role));
+        }
+
         context.IssuedClaims.AddRange(claims);
-        //context.IssuedClaims.Add(existingClaims.FirstOrDefault(x => x.Type == JwtClaimTypes.Name));
     }
 
     public Task IsActiveAsync(IsActiveContext context)
