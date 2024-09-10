@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Yarp.ReverseProxy" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\Common.Logging\BuildingBlocks.Logging.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\Shared\BuildingBlocks.Shared.csproj" />
   </ItemGroup>
 
 </Project>

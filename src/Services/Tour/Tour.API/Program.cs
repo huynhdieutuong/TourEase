@@ -1,4 +1,5 @@
 using BuildingBlocks.Logging;
+using BuildingBlocks.Shared.Extensions;
 using Serilog;
 using Tour.Application;
 using Tour.Infrastructure;
