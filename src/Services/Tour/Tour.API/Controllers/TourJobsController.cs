@@ -27,7 +27,7 @@ public class TourJobsController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult<ApiResult<List<TourJobDto>>>> GetTourJobs()
     {
-        var userName = User.Identity.Name ?? "test";
+        var userName = User.Identity.Name ?? "tuongadmin";
         var query = new GetTourJobsQuery(userName);
         var result = await _mediator.Send(query);
         return Ok(result);

@@ -1,3 +1,4 @@
+version: '3.7'
 services:
 #database section
 
@@ -59,7 +60,78 @@ services:
             - /var/lib/rabbitmq/data
         hostname: rabbitmq
 
-#network section
+#api section
+    # Tour API
+    tourapi:
+        image: tuonghuynh/tourapi:latest
+        container_name: svc-tour.api
+        build:
+            context: .
+            dockerfile: src/Services/Tour/Tour.API/Dockerfile
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:80
+            - DatabaseSettings:ConnectionString=Server=tourdb;Database=TourDb;User Id=sa;Password=Passw0rd!;TrustServerCertificate=True
+            - CacheSettings:ConnectionString=tourcache,abortConnect=false
+            - EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq
+            - IdentitySettings:IdentityServiceUrl=http://identityserver
+        ports:
+            - 7001:80
+        depends_on:
+            - tourdb
+            - tourcache
+            - rabbitmq
+
+    # TourSearch API
+    toursearchapi:
+        image: tuonghuynh/toursearchapi:latest
+        container_name: svc-toursearch.api
+        build:
+            context: .
+            dockerfile: src/Services/TourSearch/TourSearch.API/Dockerfile
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:80
+            - MongoDbSettings:ConnectionString=mongodb://root:mongopw@toursearchdb
+            - MongoDbSettings:DatabaseName=TourSearch
+            - ServiceUrls:TourUrl=http://tourapi
+            - EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq
+        ports:
+            - 7002:80
+        depends_on:
+            - toursearchdb
+            - rabbitmq
+
+    # IdentityServer
+    identityserver:
+        image: tuonghuynh/identityserver:latest
+        container_name: svc-identityserver
+        build:
+            context: .
+            dockerfile: src/Services/Identity/IdentityServer/Dockerfile
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Docker
+            - ASPNETCORE_URLS=http://+:80
+            - ConnectionStrings:DefaultConnection=Server=identitydb;User Id=postgres;Password=postgrespw;Database=identity
+        ports:
+            - 5001:80
+        depends_on:
+            - identitydb
+
+    # Api Gateway
+    apigateway:
+        image: tuonghuynh/apigateway:latest
+        container_name: svc-apigateway
+        build:
+            context: .
+            dockerfile: src/ApiGateways/YarpApiGw/Dockerfile
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Docker
+            - ASPNETCORE_URLS=http://+:80
+        ports:
+            - 6001:80
+
+# network section
 networks:
     default:
         name: tour_ease
