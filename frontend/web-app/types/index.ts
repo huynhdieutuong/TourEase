@@ -12,11 +12,6 @@ export type MetaData = {
   currentPage: number
   totalPages: number
   pageSize: number
-  totalItems: number
-  hasPrevious: boolean
-  hasNext: boolean
-  firstRowOnPage: number
-  lastRowOnPage: number
 }
 
 export type TourJob = {
