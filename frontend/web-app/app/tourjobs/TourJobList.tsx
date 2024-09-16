@@ -7,15 +7,21 @@ import { useEffect, useState } from 'react'
 import { getData } from '../actions/tourJobActions'
 import AppPagination from '../components/AppPagination'
 import TourJobCard from './TourJobCard'
+import { useParamsStore } from '@/hooks/useParamsStore'
+import { useShallow } from 'zustand/shallow'
 
 export default function TourJobList() {
   const [tourJobs, setTourJobs] = useState<TourJob[]>([])
   const [metaData, setMetaData] = useState<MetaData>()
 
-  const [params, setParams] = useState({
-    pageIndex: 1,
-    pageSize: 4,
-  })
+  const params = useParamsStore(
+    useShallow((state) => ({
+      pageIndex: state.pageIndex,
+      pageSize: state.pageSize,
+    }))
+  )
+  const setParams = useParamsStore((state) => state.setParams)
+
   const query = queryString.stringify(params)
 
   useEffect(() => {
@@ -47,9 +53,9 @@ export default function TourJobList() {
         <AppPagination
           currentPage={params.pageIndex}
           totalPages={metaData?.totalPages}
-          pageChange={(page) => setParams({ ...params, pageIndex: page })}
+          pageChange={(pageIndex) => setParams({ pageIndex })}
           pageSize={params.pageSize}
-          sizeChange={(size) => setParams({ pageIndex: 1, pageSize: size })}
+          sizeChange={(pageSize) => setParams({ pageSize })}
           showPageSize
         />
       )}
