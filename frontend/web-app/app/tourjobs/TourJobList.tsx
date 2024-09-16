@@ -9,15 +9,17 @@ import AppPagination from '../components/AppPagination'
 import TourJobCard from './TourJobCard'
 import { useParamsStore } from '@/hooks/useParamsStore'
 import { useShallow } from 'zustand/shallow'
+import EmptyFilter from './EmptyFilter'
 
 export default function TourJobList() {
-  const [tourJobs, setTourJobs] = useState<TourJob[]>([])
+  const [tourJobs, setTourJobs] = useState<TourJob[]>()
   const [metaData, setMetaData] = useState<MetaData>()
 
   const params = useParamsStore(
     useShallow((state) => ({
       pageIndex: state.pageIndex,
       pageSize: state.pageSize,
+      searchTerm: state.searchTerm,
     }))
   )
   const setParams = useParamsStore((state) => state.setParams)
@@ -35,12 +37,14 @@ export default function TourJobList() {
     fetchData()
   }, [query])
 
-  if (tourJobs.length === 0)
+  if (!tourJobs)
     return (
       <div className='text-center mt-5'>
         <Spinner size='xl' />
       </div>
     )
+
+  if (tourJobs.length === 0) return <EmptyFilter />
 
   return (
     <>

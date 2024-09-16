@@ -1,20 +1,12 @@
-import Image from 'next/image'
-import logo from '../logo.png'
+import Logo from './Logo'
+import Search from './Search'
 
 export default function Navbar() {
   return (
-    <header className='sticky top-0 z-50 bg-yellow-600 flex justify-between items-center p-5 shadow-md text-2xl'>
-      <div>Search</div>
-      <div>
-        <Image
-          className='cursor-pointer'
-          src={logo}
-          alt='logo'
-          width={80}
-          sizes='100vw'
-          priority
-        />
-      </div>
+    <header className='sticky top-0 z-50 bg-yellow-600 flex justify-between items-center py-5 px-20 shadow-md text-2xl'>
+      <Logo />
+      <Search />
+
       <div>Login</div>
     </header>
   )
