@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Infrastructure.Common;
+using BuildingBlocks.Shared.Exceptions;
 using BuildingBlocks.Shared.Paging;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -31,28 +32,61 @@ public class TourJobRepository : MongoRepositoryBase<TourJob, Guid>, ITourJobRep
             filters.Add(searchFilter);
         }
 
-        switch (searchParams.Filter?.ToLower())
+        if (!string.IsNullOrEmpty(searchParams.DestinationIds))
         {
-            case "finished":
-                filters.Add(filterBuilder.Lt(t => t.ExpiredDate, DateTimeOffset.UtcNow));
-                break;
-            case "endingsoon":
+            var destinationIdStrings = searchParams.DestinationIds.Split(',');
+            var destinationIds = new List<Guid>();
+
+            foreach (var idStr in destinationIdStrings)
+            {
+                if (Guid.TryParse(idStr, out Guid guid))
+                {
+                    destinationIds.Add(guid);
+                }
+                else
+                {
+                    throw new ValidationException();
+                }
+            }
+            filters.Add(filterBuilder.AnyIn(t => t.DestinationIds, destinationIds));
+        }
+
+        if (!string.IsNullOrEmpty(searchParams.Duration))
+        {
+            var rangeDays = searchParams.Duration.Split('-');
+            if (rangeDays.Length > 1)
+            {
                 filters.Add(filterBuilder.And(
-                    filterBuilder.Lt(t => t.ExpiredDate, DateTimeOffset.UtcNow.AddHours(6)),
-                    filterBuilder.Gt(t => t.ExpiredDate, DateTimeOffset.UtcNow)
-                ));
-                break;
-            default:
-                filters.Add(filterBuilder.Gt(t => t.ExpiredDate, DateTimeOffset.UtcNow));
-                break;
+                        filterBuilder.Gte(t => t.Days, int.Parse(rangeDays[0])),
+                        filterBuilder.Lte(t => t.Days, int.Parse(rangeDays[1]))
+                    ));
+            }
+            else
+            {
+                filters.Add(filterBuilder.Gt(t => t.Days, int.Parse(rangeDays[0])));
+            }
+        }
+
+        if (!string.IsNullOrEmpty(searchParams.Currency))
+        {
+            filters.Add(filterBuilder.Eq(t => t.Currency, searchParams.Currency));
+        }
+
+        if (!searchParams.IncludeFinished)
+        {
+            filters.Add(filterBuilder.Gt(t => t.ExpiredDate, DateTimeOffset.UtcNow));
         }
 
         var combinedFilter = filterBuilder.And(filters);
-
-        var sort = searchParams.OrderBy?.ToLower() switch
+        if (filters.Count == 0)
         {
-            "day" => sortBuilder.Ascending(t => t.Days),
-            "salary" => sortBuilder.Descending(t => t.Salary),
+            combinedFilter = filterBuilder.Empty;
+        }
+
+        var sort = searchParams.OrderBy switch
+        {
+            "ascSalary" => sortBuilder.Ascending(t => t.Salary),
+            "dscSalary" => sortBuilder.Descending(t => t.Salary),
             "new" => sortBuilder.Descending(t => t.CreatedDate),
             _ => sortBuilder.Ascending(t => t.ExpiredDate)
         };

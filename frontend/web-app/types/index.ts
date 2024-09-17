@@ -1,3 +1,6 @@
+import { IconType } from 'react-icons'
+import { DestinationType } from './enums'
+
 export type ApiResult<T> = {
   data: T[]
   message: string
@@ -39,4 +42,19 @@ export type TourJob = {
   updatedBy?: string
   isDeleted: boolean
   deletedDate?: string
+}
+
+export type Destination = {
+  id: string
+  name: string
+  slug: string
+  type: DestinationType
+  imageUrl?: string
+  parentId?: string
+}
+
+export type FilterOption = {
+  icon?: IconType
+  label: string
+  value: string
 }

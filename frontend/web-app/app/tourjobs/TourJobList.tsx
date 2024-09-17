@@ -4,12 +4,15 @@ import { MetaData, TourJob } from '@/types'
 import { Spinner } from 'flowbite-react'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
-import { getData } from '../actions/tourJobActions'
+import { getTourJobs } from '../actions/tourJobActions'
 import AppPagination from '../components/AppPagination'
 import TourJobCard from './TourJobCard'
 import { useParamsStore } from '@/hooks/useParamsStore'
 import { useShallow } from 'zustand/shallow'
 import EmptyFilter from './EmptyFilter'
+import Filters from './Filters'
+import { useDestinationStore } from '@/hooks/useDestinationStore'
+import { getDestinations } from '../actions/destinationActions'
 
 export default function TourJobList() {
   const [tourJobs, setTourJobs] = useState<TourJob[]>()
@@ -20,24 +23,33 @@ export default function TourJobList() {
       pageIndex: state.pageIndex,
       pageSize: state.pageSize,
       searchTerm: state.searchTerm,
+      orderBy: state.orderBy,
+      destinationIds: state.destinationIds,
+      duration: state.duration,
+      currency: state.currency,
+      includeFinished: state.includeFinished,
     }))
   )
   const setParams = useParamsStore((state) => state.setParams)
+  const setDestinations = useDestinationStore((state) => state.setDestinations)
+  const destinationsLoading = useDestinationStore((state) => state.loading)
 
   const query = queryString.stringify(params)
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await getData(query)
-        setTourJobs(res.data)
-        setMetaData(res.metaData)
-      } catch (error) {}
-    }
-    fetchData()
+    getTourJobs(query).then((res) => {
+      setTourJobs(res.data)
+      setMetaData(res.metaData)
+    })
   }, [query])
 
-  if (!tourJobs)
+  useEffect(() => {
+    getDestinations().then((res) => {
+      setDestinations(res.data)
+    })
+  }, [])
+
+  if (!tourJobs || destinationsLoading)
     return (
       <div className='text-center mt-5'>
         <Spinner size='xl' />
@@ -48,6 +60,7 @@ export default function TourJobList() {
 
   return (
     <>
+      <Filters />
       <div className='grid grid-cols-4 gap-6'>
         {tourJobs.map((tourjob) => (
           <TourJobCard tourJob={tourjob} key={tourjob.id} />

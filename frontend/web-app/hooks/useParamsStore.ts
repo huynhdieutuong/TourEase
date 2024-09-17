@@ -5,6 +5,11 @@ type State = {
   pageSize: number
   searchTerm: string
   searchValue: string
+  orderBy: string
+  destinationIds: string
+  duration: string
+  currency: string
+  includeFinished: boolean
 }
 
 type Actions = {
@@ -15,9 +20,14 @@ type Actions = {
 
 const initialState: State = {
   pageIndex: 1,
-  pageSize: 4,
+  pageSize: 12,
   searchTerm: '',
   searchValue: '',
+  orderBy: '',
+  destinationIds: '',
+  duration: '',
+  currency: '',
+  includeFinished: false,
 }
 
 export const useParamsStore = create<State & Actions>((set) => ({
@@ -31,7 +41,5 @@ export const useParamsStore = create<State & Actions>((set) => ({
     })
   },
   reset: () => set(initialState),
-  setSearchValue: (value: string) => {
-    set({ searchValue: value })
-  },
+  setSearchValue: (value: string) => set({ searchValue: value }),
 }))
