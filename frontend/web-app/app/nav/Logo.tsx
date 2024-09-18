@@ -3,9 +3,16 @@
 import Image from 'next/image'
 import logo from '../logo.png'
 import { useParamsStore } from '@/hooks/useParamsStore'
+import { useFiltersStore } from '@/hooks/useFiltersStore'
 
 export default function Logo() {
-  const reset = useParamsStore((state) => state.reset)
+  const resetParams = useParamsStore((state) => state.resetParams)
+  const resetFilters = useFiltersStore((state) => state.resetFilters)
+
+  function handleRemoveFilters() {
+    resetFilters()
+    resetParams()
+  }
 
   return (
     <div>
@@ -16,7 +23,7 @@ export default function Logo() {
         width={80}
         sizes='100vw'
         priority
-        onClick={reset}
+        onClick={handleRemoveFilters}
       />
     </div>
   )

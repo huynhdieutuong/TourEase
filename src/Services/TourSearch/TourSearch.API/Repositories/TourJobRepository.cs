@@ -20,9 +20,9 @@ public class TourJobRepository : MongoRepositoryBase<TourJob, Guid>, ITourJobRep
     {
         var filterBuilder = Builders<TourJob>.Filter;
         var sortBuilder = Builders<TourJob>.Sort;
-
         var filters = new List<FilterDefinition<TourJob>>();
 
+        // Search Term
         if (!string.IsNullOrEmpty(searchParams.SearchTerm))
         {
             var searchFilter = filterBuilder.Or(
@@ -32,57 +32,49 @@ public class TourJobRepository : MongoRepositoryBase<TourJob, Guid>, ITourJobRep
             filters.Add(searchFilter);
         }
 
+        // Destinations
         if (!string.IsNullOrEmpty(searchParams.DestinationIds))
         {
-            var destinationIdStrings = searchParams.DestinationIds.Split(',');
-            var destinationIds = new List<Guid>();
+            var destinationIds = searchParams.DestinationIds
+                .Split(',')
+                .Select(idStr => Guid.TryParse(idStr, out var guid) ? guid : throw new ValidationException())
+                .ToList();
 
-            foreach (var idStr in destinationIdStrings)
-            {
-                if (Guid.TryParse(idStr, out Guid guid))
-                {
-                    destinationIds.Add(guid);
-                }
-                else
-                {
-                    throw new ValidationException();
-                }
-            }
             filters.Add(filterBuilder.AnyIn(t => t.DestinationIds, destinationIds));
         }
 
+        // Duration
         if (!string.IsNullOrEmpty(searchParams.Duration))
         {
-            var rangeDays = searchParams.Duration.Split('-');
+            var rangeDays = searchParams.Duration.Split('-').Select(int.Parse).ToArray();
             if (rangeDays.Length > 1)
             {
                 filters.Add(filterBuilder.And(
-                        filterBuilder.Gte(t => t.Days, int.Parse(rangeDays[0])),
-                        filterBuilder.Lte(t => t.Days, int.Parse(rangeDays[1]))
+                        filterBuilder.Gte(t => t.Days, rangeDays[0]),
+                        filterBuilder.Lte(t => t.Days, rangeDays[1])
                     ));
             }
             else
             {
-                filters.Add(filterBuilder.Gt(t => t.Days, int.Parse(rangeDays[0])));
+                filters.Add(filterBuilder.Gt(t => t.Days, rangeDays[0]));
             }
         }
 
+        // Currency
         if (!string.IsNullOrEmpty(searchParams.Currency))
         {
             filters.Add(filterBuilder.Eq(t => t.Currency, searchParams.Currency));
         }
 
+        // IncludeFinished
         if (!searchParams.IncludeFinished)
         {
-            filters.Add(filterBuilder.Gt(t => t.ExpiredDate, DateTimeOffset.UtcNow));
+            filters.Add(filterBuilder.Gt(t => t.ExpiredDate, DateTime.UtcNow));
         }
 
-        var combinedFilter = filterBuilder.And(filters);
-        if (filters.Count == 0)
-        {
-            combinedFilter = filterBuilder.Empty;
-        }
+        var combinedFilter = filters.Count > 0 ? filterBuilder.And(filters) : filterBuilder.Empty;
 
+        // Sorting
         var sort = searchParams.OrderBy switch
         {
             "ascSalary" => sortBuilder.Ascending(t => t.Salary),

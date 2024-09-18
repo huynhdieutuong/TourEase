@@ -1,18 +1,19 @@
 'use client'
 
+import { useDestinationStore } from '@/hooks/useDestinationStore'
+import { useParamsStore } from '@/hooks/useParamsStore'
 import { MetaData, TourJob } from '@/types'
 import { Spinner } from 'flowbite-react'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
+import { useShallow } from 'zustand/shallow'
+import { getDestinations } from '../actions/destinationActions'
 import { getTourJobs } from '../actions/tourJobActions'
 import AppPagination from '../components/AppPagination'
-import TourJobCard from './TourJobCard'
-import { useParamsStore } from '@/hooks/useParamsStore'
-import { useShallow } from 'zustand/shallow'
 import EmptyFilter from './EmptyFilter'
-import Filters from './Filters'
-import { useDestinationStore } from '@/hooks/useDestinationStore'
-import { getDestinations } from '../actions/destinationActions'
+import TourJobCard from './TourJobCard'
+import TourJobFilter from './TourJobFilter'
+import TourJobOrder from './TourJobOrder'
 
 export default function TourJobList() {
   const [tourJobs, setTourJobs] = useState<TourJob[]>()
@@ -60,7 +61,10 @@ export default function TourJobList() {
 
   return (
     <>
-      <Filters />
+      <div className='flex justify-between mb-6'>
+        <TourJobFilter />
+        <TourJobOrder />
+      </div>
       <div className='grid grid-cols-4 gap-6'>
         {tourJobs.map((tourjob) => (
           <TourJobCard tourJob={tourjob} key={tourjob.id} />

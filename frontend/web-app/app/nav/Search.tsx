@@ -1,24 +1,29 @@
 'use client'
 
+import { useFiltersStore } from '@/hooks/useFiltersStore'
 import { useParamsStore } from '@/hooks/useParamsStore'
+import { useEffect } from 'react'
 import { FaSearch } from 'react-icons/fa'
 
 export default function Search() {
   const setParams = useParamsStore((state) => state.setParams)
-  const value = useParamsStore((state) => state.searchValue)
-  const setValue = useParamsStore((state) => state.setSearchValue)
+  const searchValue = useParamsStore((state) => state.searchValue)
+  const setSearchValue = useParamsStore((state) => state.setSearchValue)
+  const resetParams = useParamsStore((state) => state.resetParams)
+  const resetFilters = useFiltersStore((state) => state.resetFilters)
 
   function handleChange(e: any) {
-    setValue(e.target.value)
+    setSearchValue(e.target.value)
   }
 
   function handleSearch() {
-    setParams({ searchTerm: value })
+    resetFilters()
+    setParams({ searchTerm: searchValue })
   }
 
   function handleEnter(e: any) {
     if (e.key === 'Enter') {
-      setParams({ searchTerm: value })
+      handleSearch()
     }
   }
 
@@ -30,7 +35,7 @@ export default function Search() {
         text-white placeholder:text-white placeholder:opacity-80'
         placeholder='Search for tour jobs by title or itinerary'
         type='text'
-        value={value}
+        value={searchValue}
         onChange={handleChange}
         onKeyDown={handleEnter}
       />

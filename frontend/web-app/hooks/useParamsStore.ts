@@ -14,8 +14,9 @@ type State = {
 
 type Actions = {
   setParams: (params: Partial<State>) => void
-  reset: () => void
+  resetParams: () => void
   setSearchValue: (value: string) => void
+  resetSearch: () => void
 }
 
 const initialState: State = {
@@ -34,12 +35,22 @@ export const useParamsStore = create<State & Actions>((set) => ({
   ...initialState,
   setParams: (newParams: Partial<State>) => {
     set((state) => {
+      if (newParams.searchTerm)
+        return {
+          ...initialState,
+          searchValue: state.searchValue,
+          searchTerm: newParams.searchTerm,
+        }
       if (newParams.pageIndex)
         return { ...state, pageIndex: newParams.pageIndex }
 
       return { ...state, ...newParams, pageIndex: 1 }
     })
   },
-  reset: () => set(initialState),
+  resetParams: () => set(initialState),
   setSearchValue: (value: string) => set({ searchValue: value }),
+  resetSearch: () =>
+    set((state) => {
+      return { ...state, searchTerm: '', searchValue: '' }
+    }),
 }))
