@@ -71,14 +71,13 @@ public class TourSearchSeed
     private async Task EnsureIndexesAsync(IMongoCollection<TourJob> tourJobCollection,
                                           IMongoCollection<Destination> destinationCollection)
     {
-        // Fetch the list of indexes
         var tourJobIndexes = await tourJobCollection.Indexes.ListAsync();
         var destinationIndexes = await destinationCollection.Indexes.ListAsync();
 
         var tourJobIndexNames = await tourJobIndexes.ToListAsync();
         var destinationIndexNames = await destinationIndexes.ToListAsync();
 
-        // Create index on Slug for TourJob collection
+        // TourJob
         if (!IndexExists(tourJobIndexNames, "slug_1"))
         {
             var tourJobSlugIndex = Builders<TourJob>.IndexKeys.Ascending(t => t.Slug);
@@ -87,16 +86,40 @@ public class TourSearchSeed
             _logger.Information("Created unique index on Slug for TourJob collection.");
         }
 
-        // Create index on Title for TourJob collection
-        if (!IndexExists(tourJobIndexNames, "title_1"))
+        if (!IndexExists(tourJobIndexNames, "text_search_title_itinerary"))
         {
-            var tourJobTitleIndex = Builders<TourJob>.IndexKeys.Ascending(t => t.Title);
-            var tourJobTitleIndexModel = new CreateIndexModel<TourJob>(tourJobTitleIndex);
-            await tourJobCollection.Indexes.CreateOneAsync(tourJobTitleIndexModel);
-            _logger.Information("Created index on Title for TourJob collection.");
+            var textIndex = Builders<TourJob>.IndexKeys
+                .Text(t => t.Title)
+                .Text(t => t.Itinerary);
+
+            var indexModel = new CreateIndexModel<TourJob>(textIndex);
+            await tourJobCollection.Indexes.CreateOneAsync(indexModel);
+            _logger.Information("Created text index on Title and Itinerary.");
         }
 
-        // Create index on Slug for Destination collection if it does not exist
+        if (!IndexExists(tourJobIndexNames, "expireddate_salary_createddate"))
+        {
+            var compoundIndex = Builders<TourJob>.IndexKeys
+                .Ascending(t => t.ExpiredDate)
+                .Ascending(t => t.Salary)
+                .Descending(t => t.CreatedDate);
+
+            var indexModel = new CreateIndexModel<TourJob>(compoundIndex);
+            await tourJobCollection.Indexes.CreateOneAsync(indexModel);
+            _logger.Information("Created compound index on ExpiredDate, Salary, and CreatedDate.");
+        }
+
+        if (!IndexExists(tourJobIndexNames, "destinationids_1"))
+        {
+            var destinationIdsIndex = Builders<TourJob>.IndexKeys
+                .Ascending(t => t.DestinationIds);
+
+            var indexModel = new CreateIndexModel<TourJob>(destinationIdsIndex);
+            await tourJobCollection.Indexes.CreateOneAsync(indexModel);
+            _logger.Information("Created index on DestinationIds.");
+        }
+
+        // Destination
         if (!IndexExists(destinationIndexNames, "slug_1"))
         {
             var destinationSlugIndex = Builders<Destination>.IndexKeys.Ascending(d => d.Slug);

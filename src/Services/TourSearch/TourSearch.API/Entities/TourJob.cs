@@ -31,7 +31,7 @@ public class TourJob : MongoEntityAuditBase<Guid>
     public int? TotalApplicants { get; set; }
 
     [BsonElement("expiredDate")]
-    public DateTimeOffset ExpiredDate { get; set; }
+    public DateTime ExpiredDate { get; set; }
 
     [BsonElement("status")]
     public string Status { get; set; }
@@ -49,10 +49,10 @@ public class TourJob : MongoEntityAuditBase<Guid>
     public string LanguageSpoken { get; set; }
 
     [BsonElement("startDate")]
-    public DateTimeOffset StartDate { get; set; }
+    public DateTime StartDate { get; set; }
 
     [BsonElement("endDate")]
-    public DateTimeOffset EndDate { get; set; }
+    public DateTime EndDate { get; set; }
 
     [BsonElement("destinationIds")]
     [BsonRepresentation(BsonType.String)]

@@ -1,14 +1,13 @@
-﻿using BuildingBlocks.Contracts.Domains.Interfaces;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
 namespace BuildingBlocks.Contracts.Domains;
-public abstract class MongoEntityAuditBase<T> : MongoEntityBase<T>, IAuditable
+public abstract class MongoEntityAuditBase<T> : MongoEntityBase<T>
 {
     [BsonElement("createdDate")]
-    public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.UtcNow;
+    public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
     [BsonElement("updatedDate")]
-    public DateTimeOffset UpdatedDate { get; set; }
+    public DateTime UpdatedDate { get; set; }
 
     [BsonElement("createdBy")]
     public string CreatedBy { get; set; }
@@ -20,5 +19,5 @@ public abstract class MongoEntityAuditBase<T> : MongoEntityBase<T>, IAuditable
     public bool IsDeleted { get; set; } = false;
 
     [BsonElement("deletedDate")]
-    public DateTimeOffset? DeletedDate { get; set; }
+    public DateTime? DeletedDate { get; set; }
 }

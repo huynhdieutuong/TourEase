@@ -28,10 +28,29 @@ TourEase is a website specifically designed to connect tour guides with travel a
 
 ### Phase 1:
 - **Backend:** Microservices with .NET 8, Identity Server, Entity Framework, RabbitMQ, gRPC, SignalR, YARP, Serilog, Elasticsearch, AutoMapper
-- **Frontend:** ReactJS, Next.js, Redux Toolkit, Tailwind CSS
+- **Frontend:** ReactJS, Next.js, Zustand, Tailwind CSS
 - **Database:** PostgreSQL, MongoDB, SQL Server, Redis
 - **Deployment:** Docker, Kubernetes, CI/CD workflows using GitHub Actions
 - **Unit & Integration Testing:** XUnit, Moq
+
+#### 1. Sync Data Between Tour Service (SQL Server) and TourSearch Service (MongoDB):
+- Seeding:
+	- During seeding, all data first be seeded in SQL Server. The TourSearch Service will then call the Tour Service to retrieve data and insert it into MongoDB
+	- If the Tour Service is unavailable, the TourSearch Service will retry until the data is successfully retrieved
+- Create, Update, Delete:
+	- Data synchronization is handled via RabbitMQ, with the Outbox Pattern implemented to manage scenarios when RabbitMQ is down
+	- The TourJobCreatedConsumer will retry 5 times if MongoDB is down
+	- When a Destination is Deleted, all its child destinations will also be Deleted. Any TourJobs containing these Destinations will be Updated in both SQL Server and MongoDB
+
+#### 2. Search TourJobs Behaviors:
+- Search by Title or Itinerary
+- Filter by Country, City, Duration, Currency, and Include Finished
+- Order by End date (default), Recently added, Ascending salary, or Descending salary
+- Pagination with the option to select Page Size
+- If User wants to select a City, they must select a Country first (all Cities of that Country will be available in the City Options)
+- When User inputs a Search Term, Filters will be reset
+- When User selects a Country, Search Term will be reset
+- Clicking the Logo will reset all Search Term and Filters
 
 ## Useful commands
 - Migration commands for Tour API:
