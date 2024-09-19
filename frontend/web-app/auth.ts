@@ -26,12 +26,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const decoded = jwtDecode(account.access_token)
         token.username = decoded.username
         token.roles = decoded.roles
+        token.accessToken = account.access_token
       }
       return token
     },
     async session({ session, token }) {
-      session.user.username = token.username
-      session.user.roles = token.roles
+      if (token) {
+        session.user.username = token.username
+        session.user.roles = token.roles
+        session.accessToken = token.accessToken
+      }
       return session
     },
   },
