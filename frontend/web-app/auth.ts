@@ -18,6 +18,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     } as OIDCConfig<Profile>),
   ],
   callbacks: {
+    async authorized({ auth }) {
+      return !!auth
+    },
     async jwt({ token, account }) {
       if (account && account.access_token) {
         const decoded = jwtDecode(account.access_token)

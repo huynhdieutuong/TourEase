@@ -10,7 +10,7 @@ export default function LoginButton() {
       outline
       color='warning'
       onClick={() =>
-        signIn('id-server', { callbackUrl: '/' }, { prompt: 'login' })
+        signIn('id-server', { redirectTo: '/' }, { prompt: 'login' })
       }
     >
       Login
