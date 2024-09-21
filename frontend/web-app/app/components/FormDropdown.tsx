@@ -3,10 +3,9 @@ import { Label, Select } from 'flowbite-react'
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 
 type Props<T extends FieldValues> = {
-  label?: string
-  required?: boolean
   options: SelectOption[]
-  fullwidth?: boolean
+  label?: string
+  placeholder?: string
 } & UseControllerProps<T>
 
 export default function FormDropdown<T extends FieldValues>(props: Props<T>) {
@@ -20,13 +19,15 @@ export default function FormDropdown<T extends FieldValues>(props: Props<T>) {
   }
 
   return (
-    <div className={`${props.fullwidth ? 'col-span-full' : ''}`}>
+    <div>
       {props.label && (
         <div className='mb-2 block'>
           <Label htmlFor={field.name} value={props.label} />
         </div>
       )}
       <Select
+        {...props}
+        {...field}
         color={
           fieldState.error
             ? 'failure'
@@ -34,11 +35,9 @@ export default function FormDropdown<T extends FieldValues>(props: Props<T>) {
             ? 'yellow'
             : 'success'
         }
-        {...field}
-        required={props.required}
         onChange={(e) => handleValueChange(e.target.value)}
       >
-        <option value=''>Choose an option</option>
+        <option value=''>{props.placeholder || 'Choose an option'}</option>
         {props.options.map((opt) => (
           <option key={opt.value} value={opt.value}>
             {opt.label}

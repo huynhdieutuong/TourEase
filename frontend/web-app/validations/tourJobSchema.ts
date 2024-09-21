@@ -15,7 +15,7 @@ export const tourJobSchema = yup.object({
     })
     .required('Currency is required.'),
 
-  salary: yup
+  salaryPerDay: yup
     .number()
     .required('Salary per day is required.')
     .positive('Salary per day must be greater than zero.')
@@ -72,24 +72,6 @@ export const tourJobSchema = yup.object({
         ? schema.min(startDate, 'End date must be after the start date.')
         : schema
     ),
-  // destinationIds: yup
-  //   .array()
-  //   .of(yup.string().uuid('Invalid destination ID format.'))
-  //   .required('Destination IDs are required.')
-  //   .test(
-  //     'all-exist',
-  //     'One or more destination IDs are invalid.',
-  //     async (destinationIds: string[] | undefined) => {
-  //       if (!destinationIds) return false
-  //       return await checkAllDestinationsExist(destinationIds)
-  //     }
-  //   ),
+  countries: yup.array().required('Country are required.'),
+  cities: yup.array().required('City are required.'),
 })
-
-// Mock async validation for destination IDs
-async function checkAllDestinationsExist(
-  destinationIds: string[]
-): Promise<boolean> {
-  // Simulate API call to check destination IDs existence
-  return true // Assume all destinations exist for now
-}

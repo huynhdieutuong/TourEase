@@ -24,3 +24,12 @@ select:focus {
 .react-datepicker-wrapper {
   width: 100%;
 }
+
+.react-datepicker__input-container .react-datepicker__calendar-icon {
+  right: 5px;
+  top: 3px;
+}
+
+.react-datepicker__view-calendar-icon input {
+  padding: 6px 10px !important;
+}

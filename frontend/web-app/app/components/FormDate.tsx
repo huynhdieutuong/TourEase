@@ -1,31 +1,31 @@
 import { Label } from 'flowbite-react'
-import DatePicker, { DatePickerProps } from 'react-datepicker'
+import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { FieldValues, UseControllerProps, useController } from 'react-hook-form'
 
 type Props<T extends FieldValues> = {
   label?: string
-  fullwidth?: boolean
   placeholder?: string
-} & UseControllerProps<T> &
-  Partial<DatePickerProps>
+  dateFormat?: string
+  showTimeSelect?: boolean
+  showIcon?: boolean
+} & UseControllerProps<T>
 
 export default function FormDate<T extends FieldValues>(props: Props<T>) {
   const { fieldState, field } = useController({ ...props })
 
   return (
-    <div className={`block ${props.fullwidth ? 'col-span-full' : ''}`}>
+    <div>
       {props.label && (
         <div className='mb-2 block'>
           <Label htmlFor={field.name} value={props.label} />
         </div>
       )}
       <DatePicker
+        {...props}
         {...field}
         onChange={(value) => field.onChange(value)}
         selected={field.value}
-        placeholderText={props.placeholder || ''}
-        showTimeSelect={props.showTimeSelect}
         className={`
                         rounded-lg w-[100%] flex flex-col
                         ${

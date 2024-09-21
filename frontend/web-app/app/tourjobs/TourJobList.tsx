@@ -1,13 +1,11 @@
 'use client'
 
-import { useDestinationStore } from '@/hooks/useDestinationStore'
 import { useParamsStore } from '@/hooks/useParamsStore'
 import { MetaData, TourJob } from '@/types'
 import { Spinner } from 'flowbite-react'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/shallow'
-import { getDestinations } from '../actions/destinationActions'
 import { getTourJobs } from '../actions/tourJobActions'
 import AppPagination from '../components/AppPagination'
 import EmptyFilter from './EmptyFilter'
@@ -32,9 +30,6 @@ export default function TourJobList() {
     }))
   )
   const setParams = useParamsStore((state) => state.setParams)
-  const setDestinations = useDestinationStore((state) => state.setDestinations)
-  const destinationsLoading = useDestinationStore((state) => state.loading)
-
   const query = queryString.stringify(params)
 
   useEffect(() => {
@@ -44,13 +39,7 @@ export default function TourJobList() {
     })
   }, [query])
 
-  useEffect(() => {
-    getDestinations().then((res) => {
-      setDestinations(res.data)
-    })
-  }, [])
-
-  if (!tourJobs || destinationsLoading)
+  if (!tourJobs)
     return (
       <div className='text-center mt-5'>
         <Spinner size='xl' color='yellow' />
