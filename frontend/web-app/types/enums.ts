@@ -8,3 +8,13 @@ export enum Role {
   TRAVELAGENCY = 'TravelAgency',
   TOURGUIDE = 'TourGuide',
 }
+
+export enum Currency {
+  USD = 0,
+  VND = 1,
+}
+
+export enum LanguageSpoken {
+  English = 0,
+  Vietnamese = 1,
+}

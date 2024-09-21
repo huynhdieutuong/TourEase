@@ -2,7 +2,6 @@
 public class CreateOrUpdateCommand
 {
     public string Title { get; set; }
-    public int Days { get; set; }
     public decimal SalaryPerDay { get; set; }
     public int Currency { get; set; }
     public DateTimeOffset ExpiredDate { get; set; }

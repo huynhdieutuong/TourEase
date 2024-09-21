@@ -1,4 +1,5 @@
 import React from 'react'
+import { Color } from '../components/CustomTheme'
 
 type Currency = {
   locale: string
@@ -22,6 +23,8 @@ export default function CardSalary({ salary, currency }: Props) {
   }).format(salary)
 
   return (
-    <div className='text-yellow-600 bg-white rounded-xl px-2 py-1'>{value}</div>
+    <div className={`text-${Color.TEXT} bg-white rounded-xl px-2 py-1`}>
+      {value}
+    </div>
   )
 }

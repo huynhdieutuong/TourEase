@@ -106,7 +106,7 @@ export default function Filters() {
             onChange={() =>
               setFilters({ includeFinished: !filters.includeFinished })
             }
-            color='warning'
+            color='yellow'
           />
           <Label htmlFor='finished'>Include Finished</Label>
         </div>

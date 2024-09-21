@@ -18,7 +18,7 @@ export default function FilterDropdown({
 }: Props) {
   return (
     <Dropdown
-      color='warning'
+      color='yellow'
       label={
         !selectedValue
           ? label

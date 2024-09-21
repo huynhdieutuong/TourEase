@@ -58,3 +58,8 @@ export type FilterOption = {
   label: string
   value: string
 }
+
+export type SelectOption = {
+  value: string | number
+  label: string
+}

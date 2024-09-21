@@ -53,11 +53,33 @@ export default function TourJobList() {
   if (!tourJobs || destinationsLoading)
     return (
       <div className='text-center mt-5'>
-        <Spinner size='xl' />
+        <Spinner size='xl' color='yellow' />
       </div>
     )
 
-  if (tourJobs.length === 0) return <EmptyFilter />
+  function renderTourJobs() {
+    if (!tourJobs || tourJobs.length === 0) return <EmptyFilter />
+
+    return (
+      <>
+        <div className='grid grid-cols-4 gap-6'>
+          {tourJobs.map((tourjob) => (
+            <TourJobCard tourJob={tourjob} key={tourjob.id} />
+          ))}
+        </div>
+        {metaData && (
+          <AppPagination
+            currentPage={params.pageIndex}
+            totalPages={metaData?.totalPages}
+            pageChange={(pageIndex) => setParams({ pageIndex })}
+            pageSize={params.pageSize}
+            sizeChange={(pageSize) => setParams({ pageSize })}
+            showPageSize
+          />
+        )}
+      </>
+    )
+  }
 
   return (
     <>
@@ -65,21 +87,7 @@ export default function TourJobList() {
         <TourJobFilter />
         <TourJobOrder />
       </div>
-      <div className='grid grid-cols-4 gap-6'>
-        {tourJobs.map((tourjob) => (
-          <TourJobCard tourJob={tourjob} key={tourjob.id} />
-        ))}
-      </div>
-      {metaData && (
-        <AppPagination
-          currentPage={params.pageIndex}
-          totalPages={metaData?.totalPages}
-          pageChange={(pageIndex) => setParams({ pageIndex })}
-          pageSize={params.pageSize}
-          sizeChange={(pageSize) => setParams({ pageSize })}
-          showPageSize
-        />
-      )}
+      {renderTourJobs()}
     </>
   )
 }

@@ -8,7 +8,7 @@ export default function LoginButton() {
   return (
     <Button
       outline
-      color='warning'
+      color='yellow'
       onClick={() =>
         signIn('id-server', { redirectTo: '/' }, { prompt: 'login' })
       }
