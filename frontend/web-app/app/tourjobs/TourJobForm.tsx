@@ -1,7 +1,7 @@
 'use client'
 
 import { useDestinationStore } from '@/hooks/useDestinationStore'
-import { SelectOption } from '@/types'
+import { SelectOption, TourJob } from '@/types'
 import { Currency, DestinationType, LanguageSpoken } from '@/types/enums'
 import { tourJobSchema } from '@/validations/tourJobSchema'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -14,12 +14,19 @@ import FormDropdown from '../components/FormDropdown'
 import FormEnhancedDropdown from '../components/FormEnhancedDropdown'
 import FormInput from '../components/FormInput'
 import FormTextarea from '../components/FormTextarea'
-import { createTourJob } from '../actions/tourJobActions'
+import { createTourJob, updateTourJob } from '../actions/tourJobActions'
 import toast from 'react-hot-toast'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { currencies, languages } from '@/types/constants'
+import { AiOutlineLoading } from 'react-icons/ai'
 
-export default function TourJobForm() {
+type Props = {
+  tourJob: TourJob
+}
+
+export default function TourJobForm({ tourJob }: Props) {
   const router = useRouter()
+  const pathname = usePathname()
   const destinations = useDestinationStore((state) => state.destinations)
   const countryOptions: SelectOption[] = destinations
     .filter((d) => d.type === DestinationType.COUNTRY)
@@ -35,6 +42,7 @@ export default function TourJobForm() {
     formState: { isSubmitting, isValid },
     watch,
     setValue,
+    reset,
   } = useForm({
     mode: 'onTouched',
     resolver: yupResolver(tourJobSchema),
@@ -66,6 +74,46 @@ export default function TourJobForm() {
     setValue('cities', filteredCities)
   }, [selectedCountryIds?.length])
 
+  useEffect(() => {
+    if (tourJob) {
+      const {
+        title,
+        currency,
+        salaryPerDay,
+        languageSpoken,
+        itinerary,
+        participants,
+        expiredDate,
+        startDate,
+        endDate,
+        destinationIds,
+      } = tourJob
+      const selectedDestinations = destinations.filter((des) =>
+        destinationIds.includes(des.id)
+      )
+      const selectedCountries = selectedDestinations
+        .filter((des) => des.type === DestinationType.COUNTRY)
+        .map((des) => ({ value: des.id, label: des.name }))
+      const selectedCities = selectedDestinations
+        .filter((des) => des.type === DestinationType.CITY)
+        .map((des) => ({ value: des.id, label: des.name }))
+
+      reset({
+        title,
+        currency: currencies[currency].value,
+        salaryPerDay,
+        languageSpoken: languages[languageSpoken],
+        itinerary,
+        participants,
+        expiredDate: new Date(expiredDate),
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+        countries: selectedCountries,
+        cities: selectedCities,
+      })
+    }
+  }, [tourJob])
+
   async function onSubmit(data: FieldValues) {
     const { countries, cities, ...restData } = data
     const body = {
@@ -76,7 +124,12 @@ export default function TourJobForm() {
       ...restData,
     }
     try {
-      const res = await createTourJob(body)
+      let res
+      if (pathname === '/tourjobs/create') {
+        res = await createTourJob(body)
+      } else {
+        res = await updateTourJob(tourJob.id, body)
+      }
       if (res.error) {
         throw res.error
       }
@@ -170,6 +223,9 @@ export default function TourJobForm() {
       <div className='flex justify-end items-end col-span-full'>
         <Button
           isProcessing={isSubmitting}
+          processingSpinner={
+            <AiOutlineLoading className='h-6 w-6 animate-spin' />
+          }
           disabled={!isValid}
           type='submit'
           color='warning'

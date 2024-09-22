@@ -19,35 +19,35 @@ export default function UserActions({ user }: Props) {
     <Dropdown inline label={`Welcome ${user.username}`}>
       {user.roles.includes(Role.ADMIN) && (
         <>
-          <Dropdown.Item icon={FaMapMarked}>
-            <Link href='/destinations/list'>Destinations</Link>
-          </Dropdown.Item>
-          <Dropdown.Item icon={FaMapMarker}>
-            <Link href='/destinations/create'>Create Destination</Link>
-          </Dropdown.Item>
+          <Link href='/destinations/list'>
+            <Dropdown.Item icon={FaMapMarked}>Destinations</Dropdown.Item>
+          </Link>
+          <Link href='/destinations/create'>
+            <Dropdown.Item icon={FaMapMarker}>Create Destination</Dropdown.Item>
+          </Link>
         </>
       )}
 
       {user.roles.includes(Role.TRAVELAGENCY) && (
         <>
-          <Dropdown.Item icon={MdWork}>
-            <Link href='/tourjobs/list'>My TourJobs</Link>
-          </Dropdown.Item>
-          <Dropdown.Item icon={MdWorkOutline}>
-            <Link href='/tourjobs/create'>Create TourJob</Link>
-          </Dropdown.Item>
+          <Link href='/tourjobs/list'>
+            <Dropdown.Item icon={MdWork}>My TourJobs</Dropdown.Item>
+          </Link>
+          <Link href='/tourjobs/create'>
+            <Dropdown.Item icon={MdWorkOutline}>Create TourJob</Dropdown.Item>
+          </Link>
         </>
       )}
 
       {user.roles.includes(Role.TOURGUIDE) && (
-        <Dropdown.Item icon={MdTour}>
-          <Link href='/'>Applied TourJobs</Link>
-        </Dropdown.Item>
+        <Link href='/'>
+          <Dropdown.Item icon={MdTour}>Applied TourJobs</Dropdown.Item>
+        </Link>
       )}
 
-      <Dropdown.Item icon={HiCog}>
-        <Link href='/session'>Session (dev only!)</Link>
-      </Dropdown.Item>
+      <Link href='/session'>
+        <Dropdown.Item icon={HiCog}>Session (dev only!)</Dropdown.Item>
+      </Link>
       <DropdownDivider />
       <Dropdown.Item
         icon={AiOutlineLogout}

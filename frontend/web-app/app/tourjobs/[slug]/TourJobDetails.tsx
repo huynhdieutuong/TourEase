@@ -9,7 +9,7 @@ import {
   FaUsers,
 } from 'react-icons/fa'
 import CardImage from '../CardImage'
-import Destinations from './Destinations'
+import DestinationBadges from '../../components/DestinationBadges'
 import Itineray from './Itineray'
 import CountdownTimer from '../CountdownTimer'
 
@@ -62,7 +62,7 @@ const TourJobDetails = ({ tourJob }: Props) => {
             <span>{tourJob.languageSpoken}</span>
           </div>
 
-          <Destinations destinationIds={tourJob.destinationIds} />
+          <DestinationBadges destinationIds={tourJob.destinationIds} showIcon />
 
           <div className='flex items-center'>
             <FaClock className='text-orange-500 mr-2' />

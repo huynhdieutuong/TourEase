@@ -7,14 +7,15 @@ import { FaMapMarkerAlt } from 'react-icons/fa'
 
 type Props = {
   destinationIds: string[]
+  showIcon?: boolean
 }
 
-export default function Destinations({ destinationIds }: Props) {
+export default function DestinationBadges({ destinationIds, showIcon }: Props) {
   const destinations = useDestinationStore((state) => state.destinations)
 
   return (
     <div className='flex items-center'>
-      <FaMapMarkerAlt className='text-yellow-500 mr-2' />
+      {showIcon && <FaMapMarkerAlt className='text-yellow-500 mr-2' />}
       <span className='flex gap-2'>
         {destinations
           .filter((des) => destinationIds.includes(des.id))

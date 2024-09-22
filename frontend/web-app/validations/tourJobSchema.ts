@@ -53,14 +53,26 @@ export const tourJobSchema = yup.object({
   expiredDate: yup
     .date()
     .required('Expired date is required.')
-    .min(new Date(), 'Expired date must be in the future.'),
+    .min(
+      new Date(new Date().getTime() + 60 * 60 * 1000),
+      'Expired date must be in the future.'
+    ),
 
   startDate: yup
     .date()
     .required('Start date is required.')
     .when('expiredDate', (expiredDate, schema) =>
       expiredDate
-        ? schema.min(expiredDate, 'Start date must be after the expired date.')
+        ? schema.test(
+            'is-after-expiredDate',
+            'Start date must be after the expired date.',
+            function (value) {
+              const expDate = Array.isArray(expiredDate)
+                ? expiredDate[0]
+                : expiredDate
+              return value && expiredDate && new Date(value) > new Date(expDate)
+            }
+          )
         : schema
     ),
 
@@ -69,7 +81,14 @@ export const tourJobSchema = yup.object({
     .required('End date is required')
     .when('startDate', (startDate, schema) =>
       startDate
-        ? schema.min(startDate, 'End date must be after the start date.')
+        ? schema.test(
+            'is-after-startDate',
+            'End date must be after the start date.',
+            function (value) {
+              const sDate = Array.isArray(startDate) ? startDate[0] : startDate
+              return value && startDate && new Date(value) > new Date(sDate)
+            }
+          )
         : schema
     ),
   countries: yup.array().required('Country are required.'),
