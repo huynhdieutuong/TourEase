@@ -28,7 +28,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (
         pathname === '/tourjobs/list' ||
         pathname === '/tourjobs/create' ||
-        pathname.startsWith('/tourjobs/details/') ||
         pathname.startsWith('/tourjobs/update/')
       ) {
         if (!auth?.user?.roles.includes(Role.TRAVELAGENCY)) {
@@ -39,7 +38,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (
         pathname === '/destinations/list' ||
         pathname === '/destinations/create' ||
-        pathname.startsWith('/destinations/details/') ||
         pathname.startsWith('/destinations/update/')
       ) {
         if (!auth?.user?.roles.includes(Role.ADMIN)) {

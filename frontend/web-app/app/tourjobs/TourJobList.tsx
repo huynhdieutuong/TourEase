@@ -2,7 +2,6 @@
 
 import { useParamsStore } from '@/hooks/useParamsStore'
 import { MetaData, TourJob } from '@/types'
-import { Spinner } from 'flowbite-react'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/shallow'
@@ -12,6 +11,7 @@ import EmptyFilter from './EmptyFilter'
 import TourJobCard from './TourJobCard'
 import TourJobFilter from './TourJobFilter'
 import TourJobOrder from './TourJobOrder'
+import AppSpinner from '../components/AppSpinner'
 
 export default function TourJobList() {
   const [tourJobs, setTourJobs] = useState<TourJob[]>()
@@ -39,12 +39,7 @@ export default function TourJobList() {
     })
   }, [query])
 
-  if (!tourJobs)
-    return (
-      <div className='text-center mt-5'>
-        <Spinner size='xl' color='yellow' />
-      </div>
-    )
+  if (!tourJobs) return <AppSpinner />
 
   function renderTourJobs() {
     if (!tourJobs || tourJobs.length === 0) return <EmptyFilter />

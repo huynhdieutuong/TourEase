@@ -80,7 +80,7 @@ export default function TourJobForm() {
       if (res.error) {
         throw res.error
       }
-      router.push(`/tourjobs/details/${res.id}`)
+      router.push('/tourjobs/list')
     } catch (error: any) {
       toast.error(error.status + ' ' + error.message)
     }

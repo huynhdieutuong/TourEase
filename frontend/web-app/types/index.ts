@@ -2,7 +2,7 @@ import { IconType } from 'react-icons'
 import { DestinationType } from './enums'
 
 export type ApiResult<T> = {
-  data: T[]
+  data: T
   message: string
   isSucceeded: boolean
 }

@@ -1,13 +1,19 @@
 'use server'
 
 import { fetchWrapper } from '@/lib/fetchWrapper'
-import { ApiPageResult, TourJob } from '@/types'
+import { ApiPageResult, ApiResult, TourJob } from '@/types'
 import { FieldValues } from 'react-hook-form'
 
 export async function getTourJobs(
   query: string
-): Promise<ApiPageResult<TourJob>> {
+): Promise<ApiPageResult<TourJob[]>> {
   return await fetchWrapper.get(`/tourjobs?${query}`)
+}
+
+export async function getTourJobBySlug(
+  slug: string
+): Promise<ApiResult<TourJob>> {
+  return await fetchWrapper.get(`/tourjobs/${slug}`)
 }
 
 export async function authTourJobTest() {
@@ -18,4 +24,8 @@ export async function authTourJobTest() {
 
 export async function createTourJob(body: FieldValues) {
   return await fetchWrapper.post('/auth/tourjobs', body)
+}
+
+export async function getMyTourJob(): Promise<ApiResult<TourJob[]>> {
+  return await fetchWrapper.get('/auth/tourjobs')
 }

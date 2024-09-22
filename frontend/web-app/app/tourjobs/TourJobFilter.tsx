@@ -37,7 +37,7 @@ export default function Filters() {
   const [cityOptions, setCityOptions] = useState<FilterOption[]>([])
   const destinations = useDestinationStore((state) => state.destinations)
   const countryOptions: FilterOption[] = destinations
-    .filter((x) => !x.parentId && x.type === DestinationType.COUNTRY)
+    ?.filter((x) => !x.parentId && x.type === DestinationType.COUNTRY)
     .map((des) => ({ label: des.name, value: des.id }))
 
   useEffect(() => {

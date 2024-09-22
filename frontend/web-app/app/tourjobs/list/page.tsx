@@ -1,5 +1,10 @@
 import React from 'react'
+import { MyTourJobList } from './TourJobList'
 
 export default function List() {
-  return <div>List</div>
+  return (
+    <div>
+      <MyTourJobList />
+    </div>
+  )
 }
