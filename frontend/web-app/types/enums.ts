@@ -3,6 +3,11 @@ export enum DestinationType {
   CITY = 'City',
 }
 
+export enum DesType {
+  Country = 0,
+  City = 1,
+}
+
 export enum Role {
   ADMIN = 'Admin',
   TRAVELAGENCY = 'TravelAgency',

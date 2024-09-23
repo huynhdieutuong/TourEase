@@ -35,11 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       }
 
-      if (
-        pathname === '/destinations/list' ||
-        pathname === '/destinations/create' ||
-        pathname.startsWith('/destinations/update/')
-      ) {
+      if (pathname === '/destinations/list') {
         if (!auth?.user?.roles.includes(Role.ADMIN)) {
           return NextResponse.redirect(new URL('/api/403', request.url))
         }

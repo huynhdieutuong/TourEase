@@ -18,8 +18,8 @@ export function MyTourJobList({ tourJobs }: Props) {
   const router = useRouter()
   const [jobList, setjobList] = useState<TourJob[]>(tourJobs)
 
-  function updateJobList(id: string) {
-    setjobList(jobList.filter((job) => job.id !== id))
+  function updateJobList(removedId: string) {
+    setjobList(jobList.filter((job) => job.id !== removedId))
   }
 
   function getStatusColor(status: string) {

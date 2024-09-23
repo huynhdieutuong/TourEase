@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BuildingBlocks.Messaging.Destination;
-using BuildingBlocks.Shared.Exceptions;
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -44,18 +43,19 @@ public class DeleteDestinationCommandHandler : IRequestHandler<DeleteDestination
         _logger.Information($"BEGIN {MethodName} Id: {request.Id}");
 
         var destination = await _destinationRepository.FindByIdAsync(request.Id);
-        if (destination == null) throw new NotFoundException(nameof(Destination), request.Id);
-
-        var destinations = await _tourCacheService.GetOrCreateDestinationsCacheAsync(
+        if (destination != null)
+        {
+            var destinations = await _tourCacheService.GetOrCreateDestinationsCacheAsync(
                 async () => await _destinationRepository.FindAll().ToListAsync()
             );
 
-        var lookup = destinations.ToLookup(d => d.ParentId);
-        RecursiveRemoveChildren(lookup, destination.Id);
+            var lookup = destinations.ToLookup(d => d.ParentId);
+            RecursiveRemoveChildren(lookup, destination.Id);
 
-        _destinationRepository.Remove(destination);
+            _destinationRepository.Remove(destination);
+        }
 
-        await _publishEndpoint.Publish<DestinationDeleted>(new { destination.Id });
+        await _publishEndpoint.Publish<DestinationDeleted>(new { request.Id });
 
         await _tourUnitOfWork.SaveChangesAsync();
 

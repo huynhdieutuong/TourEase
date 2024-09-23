@@ -9,6 +9,7 @@ const controlStyles = {
   base: 'border rounded-lg bg-white hover:cursor-pointer',
   focus: 'border-yellow-400 ring-1 ring-yellow-300',
   nonFocus: 'border-gray-500 hover:border-gray-600',
+  disabled: 'opacity-50',
 }
 const placeholderStyles = 'text-gray-500 pl-1 py-0.5'
 const selectInputStyles = 'pl-1 py-0.5'
@@ -43,6 +44,7 @@ type Props<T extends FieldValues> = {
   isSearchable?: boolean
   isMulti?: boolean
   closeMenuOnSelect?: boolean
+  isDisabled?: boolean
 } & UseControllerProps<T>
 
 export default function FormEnhancedDropdown<T extends FieldValues>(
@@ -54,7 +56,10 @@ export default function FormEnhancedDropdown<T extends FieldValues>(
     <div>
       {props.label && (
         <div className='mb-2 block'>
-          <Label htmlFor={field.name} value={props.label} />
+          <Label
+            htmlFor={field.name}
+            value={`${props.label} ${props.isDisabled ? '(Disabled)' : ''}`}
+          />
         </div>
       )}
       <Select<SelectOption>
@@ -81,9 +86,10 @@ export default function FormEnhancedDropdown<T extends FieldValues>(
           }),
         }}
         classNames={{
-          control: ({ isFocused }) =>
+          control: ({ isFocused, isDisabled }) =>
             clsx(
               isFocused ? controlStyles.focus : controlStyles.nonFocus,
+              isDisabled && controlStyles.disabled,
               controlStyles.base
             ),
           placeholder: () => placeholderStyles,

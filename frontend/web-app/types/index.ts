@@ -50,7 +50,8 @@ export type Destination = {
   slug: string
   type: DestinationType
   imageUrl?: string
-  parentId?: string
+  parentId?: string | null
+  subDestinations: Destination[]
 }
 
 export type FilterOption = {
@@ -60,6 +61,6 @@ export type FilterOption = {
 }
 
 export type SelectOption = {
-  value: string | number
+  value: string | number | null
   label: string
 }

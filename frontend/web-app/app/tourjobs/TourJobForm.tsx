@@ -17,7 +17,7 @@ import FormTextarea from '../components/FormTextarea'
 import { createTourJob, updateTourJob } from '../actions/tourJobActions'
 import toast from 'react-hot-toast'
 import { usePathname, useRouter } from 'next/navigation'
-import { currencies, languages } from '@/types/constants'
+import { currencies } from '@/types/constants'
 import { AiOutlineLoading } from 'react-icons/ai'
 
 type Props = {
@@ -102,7 +102,8 @@ export default function TourJobForm({ tourJob }: Props) {
         title,
         currency: currencies[currency].value,
         salaryPerDay,
-        languageSpoken: languages[languageSpoken],
+        languageSpoken:
+          LanguageSpoken[languageSpoken as keyof typeof LanguageSpoken],
         itinerary,
         participants,
         expiredDate: new Date(expiredDate),

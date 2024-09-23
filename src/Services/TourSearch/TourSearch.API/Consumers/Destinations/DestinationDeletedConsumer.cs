@@ -35,8 +35,11 @@ public class DestinationDeletedConsumer : IConsumer<DestinationDeleted>
         _logger.Information("2. Update the DestinationIds of the tour jobs that contain the list of deleted destinations");
         //var tourJobs = await _tourJobRepository.FindAllAsync(tj => tj.DestinationIds.Any(id => deletedDestinationIds.Contains(id)));
         var tourJobs = await _tourJobRepository.GetTourJobsByDestinationIds(deletedDestinationIds);
-        var updatedCount = await _tourJobRepository.UpdateDeletedDestinationsInTourJobs(tourJobs, deletedDestinationIds);
-        _logger.Information($"Updated {updatedCount} TourJobs.");
+        if (tourJobs.Any())
+        {
+            var updatedCount = await _tourJobRepository.UpdateDeletedDestinationsInTourJobs(tourJobs, deletedDestinationIds);
+            _logger.Information($"Updated {updatedCount} TourJobs.");
+        }
 
         _logger.Information("3. Delete the list of descendant destinations and the destination");
         await _destinationRepository.DeleteManyAsync(x => deletedDestinationIds.Contains(x.Id));

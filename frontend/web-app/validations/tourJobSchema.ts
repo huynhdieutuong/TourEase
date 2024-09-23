@@ -43,7 +43,7 @@ export const tourJobSchema = yup.object({
   itinerary: yup
     .string()
     .required('Itinerary is required.')
-    .min(5, 'Title must be at least 5 characters.'),
+    .min(5, 'Itinerary must be at least 5 characters.'),
 
   participants: yup
     .number()
