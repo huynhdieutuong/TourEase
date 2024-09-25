@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from 'flowbite-react'
 import { signIn } from 'next-auth/react'
 import React from 'react'
 
@@ -14,15 +15,15 @@ export default function SignIn({
         You need to be logged in to do that
       </h3>
       <span className='mt-2'>Please click below to login</span>
-      <button
+      <Button
         onClick={() =>
           signIn('id-server', { redirectTo: searchParams.callbackUrl })
         }
-        className='mt-4 border-2 border-yellow-400 rounded-md py-2 px-4 text-sm font-bold
-                    hover:bg-yellow-400 hover:text-white transition duration-300 ease-in-out'
+        className='mt-4 text-sm font-bold'
+        color='yellow'
       >
         Login
-      </button>
+      </Button>
     </div>
   )
 }

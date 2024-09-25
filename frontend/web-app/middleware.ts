@@ -2,7 +2,15 @@ export { auth as middleware } from '@/auth'
 
 export const config = {
   // protect routes
-  matcher: ['/session'],
+  matcher: [
+    '/session',
+
+    '/tourjobs/list',
+    '/tourjobs/create',
+    '/tourjobs/update/:path*',
+
+    '/destinations/list',
+  ],
 
   // override pages
   pages: { signIn: '/api/auth/signin' },

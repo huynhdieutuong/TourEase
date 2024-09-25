@@ -52,6 +52,27 @@ TourEase is a website specifically designed to connect tour guides with travel a
 - When User selects a Country, Search Term will be reset
 - Clicking the Logo will reset all Search Term and Filters
 
+#### 3. CRUD TourJobs and Destinations UI:
+- Create and Update TourJob validation:
+	- For VND Currency, salary must not have decimal places.
+	- Expired date must be in the future (at least 2 hours).
+	- Start date must be after the expired date.
+	- End date must be after the start date.
+- Create Root Destination: User can select a Parent Destination
+- Create Child Destination: the Parent Dropdown is disabled
+- Update Destiantion: the Parent Dropdown is hidden
+
+- Public pages:
+	- /tourjobs: Display tour jobs
+	- /tourjobs/[slug]: Display tour job details that TourGuide Role can apply for (login required)
+- Pages only TravelAgency Role: 
+	- /tourjobs/list : Display the tour jobs of this agency
+	- /tourjobs/create: Allows agency to create tour job
+	- /tourjobs/update/[id]: Allows agency to update tour job
+- Pages only Admin Role:
+	- /destinations/list: Display destination list, including options create, update, delete destinations
+
+
 ## Useful commands
 - Migration commands for Tour API:
 ```

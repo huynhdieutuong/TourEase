@@ -2,7 +2,7 @@ import { IconType } from 'react-icons'
 import { DestinationType } from './enums'
 
 export type ApiResult<T> = {
-  data: T[]
+  data: T
   message: string
   isSucceeded: boolean
 }
@@ -50,11 +50,17 @@ export type Destination = {
   slug: string
   type: DestinationType
   imageUrl?: string
-  parentId?: string
+  parentId?: string | null
+  subDestinations: Destination[]
 }
 
 export type FilterOption = {
   icon?: IconType
   label: string
   value: string
+}
+
+export type SelectOption = {
+  value: string | number | null
+  label: string
 }

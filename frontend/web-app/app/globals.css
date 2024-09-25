@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+[type='text']:focus,
+[type='email']:focus,
+[type='url']:focus,
+[type='password']:focus,
+[type='number']:focus,
+[type='date']:focus,
+[type='datetime-local']:focus,
+[type='month']:focus,
+[type='search']:focus,
+[type='tel']:focus,
+[type='time']:focus,
+[type='week']:focus,
+[multiple]:focus,
+textarea:focus,
+select:focus {
+  --tw-ring-color: #e3a008;
+  border-color: #e3a008;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__input-container .react-datepicker__calendar-icon {
+  right: 5px;
+  top: 3px;
+}
+
+.react-datepicker__view-calendar-icon input {
+  padding: 6px 10px !important;
+}

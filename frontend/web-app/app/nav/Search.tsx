@@ -28,7 +28,7 @@ export default function Search() {
   }
 
   return (
-    <div className='flex w-[30%] items-center border-2 rounded-full shadow-sm'>
+    <div className='flex w-[30%] items-center border-2 border-white rounded-full shadow-sm'>
       <input
         className='w-full bg-transparent border-transparent
         focus:ring-0 focus:border-transparent focus:outline-none

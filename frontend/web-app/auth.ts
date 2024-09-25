@@ -2,6 +2,8 @@ import { jwtDecode } from 'jwt-decode'
 import NextAuth, { Profile } from 'next-auth'
 import { OIDCConfig } from 'next-auth/providers'
 import DuendeIDS6Provider from 'next-auth/providers/duende-identity-server6'
+import { Role } from './types/enums'
+import { NextResponse } from 'next/server'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
@@ -18,8 +20,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     } as OIDCConfig<Profile>),
   ],
   callbacks: {
-    async authorized({ auth }) {
-      return !!auth
+    authorized({ auth, request }) {
+      const { pathname } = request.nextUrl
+
+      if (!auth) return false
+
+      if (
+        pathname === '/tourjobs/list' ||
+        pathname === '/tourjobs/create' ||
+        pathname.startsWith('/tourjobs/update/')
+      ) {
+        if (!auth?.user?.roles.includes(Role.TRAVELAGENCY)) {
+          return NextResponse.redirect(new URL('/api/403', request.url))
+        }
+      }
+
+      if (pathname === '/destinations/list') {
+        if (!auth?.user?.roles.includes(Role.ADMIN)) {
+          return NextResponse.redirect(new URL('/api/403', request.url))
+        }
+      }
+
+      return true
     },
     async jwt({ token, account }) {
       if (account && account.access_token) {

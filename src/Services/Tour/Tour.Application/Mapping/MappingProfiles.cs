@@ -22,12 +22,16 @@ public class MappingProfiles : Profile
 
         CreateMap<CreateTourJobCommand, TourJob>()
             .BeforeMap<SlugResolver<CreateTourJobCommand>>()
-            .ForMember(dest => dest.Detail, opt => opt.MapFrom(src => src));
+            .ForMember(dest => dest.Detail, opt => opt.MapFrom(src => src))
+            .ForMember(dest => dest.Days, opt =>
+                opt.MapFrom(src => (src.EndDate - src.StartDate).Days));
         CreateMap<CreateTourJobCommand, TourDetail>();
 
         CreateMap<UpdateTourJobCommand, TourJob>()
             .BeforeMap<SlugResolver<UpdateTourJobCommand>>()
-            .ForMember(dest => dest.Detail, opt => opt.MapFrom(src => src));
+            .ForMember(dest => dest.Detail, opt => opt.MapFrom(src => src))
+            .ForMember(dest => dest.Days, opt =>
+                opt.MapFrom(src => (src.EndDate - src.StartDate).Days)); ;
         CreateMap<UpdateTourJobCommand, TourDetail>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 

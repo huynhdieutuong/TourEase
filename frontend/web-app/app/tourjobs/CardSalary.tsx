@@ -1,14 +1,6 @@
 import React from 'react'
-
-type Currency = {
-  locale: string
-  name: string
-}
-
-const currencies: { [key: string]: Currency } = {
-  $: { locale: 'en-US', name: 'USD' },
-  đ: { locale: 'vi-VN', name: 'VND' },
-}
+import { Color } from '../components/CustomTheme'
+import { formatCurrency } from '@/utils'
 
 type Props = {
   salary: number
@@ -16,12 +8,9 @@ type Props = {
 }
 
 export default function CardSalary({ salary, currency }: Props) {
-  const value = new Intl.NumberFormat(currencies[currency].locale, {
-    style: 'currency',
-    currency: currencies[currency].name,
-  }).format(salary)
-
   return (
-    <div className='text-yellow-600 bg-white rounded-xl px-2 py-1'>{value}</div>
+    <div className={`text-${Color.TEXT} bg-white rounded-xl px-2 py-1`}>
+      {formatCurrency(currency, salary)}
+    </div>
   )
 }

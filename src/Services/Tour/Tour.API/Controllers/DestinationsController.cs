@@ -25,9 +25,9 @@ public class DestinationsController : ControllerBase
     /// <returns></returns>
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ActionResult<ApiResult<List<DestinationDto>>>> GetDestinations()
+    public async Task<ActionResult<ApiResult<List<DestinationDto>>>> GetDestinations([FromQuery] string mode = "flat")
     {
-        var query = new GetDestinationsQuery();
+        var query = new GetDestinationsQuery(mode);
         var result = await _mediator.Send(query);
         return Ok(result);
     }
