@@ -6,7 +6,7 @@ import { User } from 'next-auth'
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { AiOutlineLogout } from 'react-icons/ai'
-import { FaMapMarked, FaMapMarker } from 'react-icons/fa'
+import { FaMapMarked } from 'react-icons/fa'
 import { HiCog } from 'react-icons/hi2'
 import { MdTour, MdWork, MdWorkOutline } from 'react-icons/md'
 
@@ -21,9 +21,6 @@ export default function UserActions({ user }: Props) {
         <>
           <Link href='/destinations/list'>
             <Dropdown.Item icon={FaMapMarked}>Destinations</Dropdown.Item>
-          </Link>
-          <Link href='/destinations/create'>
-            <Dropdown.Item icon={FaMapMarker}>Create Destination</Dropdown.Item>
           </Link>
         </>
       )}
