@@ -1,0 +1,58 @@
+﻿using BuildingBlocks.Shared.Configurations;
+using BuildingBlocks.Shared.Extensions;
+using MassTransit;
+using System.Reflection;
+using TourApplication.API.Persistence;
+using TourApplication.API.Persistence.Interfaces;
+using TourApplication.API.Repositories;
+using TourApplication.API.Repositories.Interfaces;
+using TourApplication.API.Services;
+using TourApplication.API.Services.Interfaces;
+
+namespace TourApplication.API.Extensions;
+
+public static class ServiceExtensions
+{
+    public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddSingleton<IDbConnectionFactory>(sp =>
+        {
+            var connectionString = configuration.GetConnectionString("MySqlConnection") ?? throw new ArgumentNullException("Tour Application connection string is not configured.");
+            return new MySqlConnectionFactory(connectionString);
+        });
+
+        services.AddScoped<IDbMigrationService, DbMigrationService>();
+        services.AddScoped<IApplicationRepository, ApplicationRepository>();
+    }
+
+    public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+        services.AddScoped<IApplicationService, ApplicationService>();
+
+        services.ConfigureMassTransit();
+    }
+
+    public static void ConfigureMassTransit(this IServiceCollection services)
+    {
+        var settings = services.GetOptions<EventBusSettings>(nameof(EventBusSettings));
+        if (settings == null || string.IsNullOrEmpty(settings.HostAddress))
+        {
+            throw new ArgumentException("EventBusSetting is not configured");
+        }
+
+        services.AddMassTransit(x =>
+        {
+            //x.AddConsumersFromNamespaceContaining<TourJobCreatedConsumer>();
+
+            x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("application"));
+
+            x.UsingRabbitMq((ctx, cfg) =>
+            {
+                cfg.Host(new Uri(settings.HostAddress));
+                cfg.ConfigureEndpoints(ctx);
+            });
+        });
+    }
+}

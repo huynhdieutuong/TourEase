@@ -36,6 +36,20 @@ services:
         volumes:
             - /var/lib/mongodb/data
 
+    #TourApplicationDB: mysql
+    tourapplicationdb:
+        image: mysql
+        container_name: tourapplicationdb
+        environment:
+            MYSQL_ROOT_PASSWORD: "Passw0rd!"
+            MYSQL_TCP_PORT: 3306
+            MYSQL_DATABASE: TourApplication
+        restart: always
+        volumes:
+            - /var/lib/mysql
+        ports:
+            - "3307:3306"
+
     #IdentityServerDB: postgres
     identitydb:
         image: postgres
