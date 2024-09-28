@@ -1,6 +1,9 @@
-﻿using BuildingBlocks.Shared.Configurations;
+﻿using BuildingBlocks.Shared.Behaviors;
+using BuildingBlocks.Shared.Configurations;
 using BuildingBlocks.Shared.Extensions;
+using FluentValidation;
 using MassTransit;
+using MediatR;
 using System.Reflection;
 using TourApplication.API.Persistence;
 using TourApplication.API.Persistence.Interfaces;
@@ -28,6 +31,12 @@ public static class ServiceExtensions
     public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         services.AddScoped<IApplicationService, ApplicationService>();
 

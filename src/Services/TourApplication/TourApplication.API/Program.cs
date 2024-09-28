@@ -1,4 +1,5 @@
 using BuildingBlocks.Logging;
+using BuildingBlocks.Shared.Middlewares;
 using Serilog;
 using TourApplication.API.Extensions;
 using TourApplication.API.Persistence.Interfaces;
@@ -20,10 +21,12 @@ try
     builder.Services.AddControllers();
 
     builder.Services.AddInfrastructureServices(builder.Configuration);
+    builder.Services.AddApplicationServices(builder.Configuration);
 
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
+    app.UseMiddleware<ErrorWrappingMiddleware>();
 
     app.UseAuthorization();
 

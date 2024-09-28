@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5" />
     <PackageReference Include="MySql.Data" Version="9.0.0" />
   </ItemGroup>

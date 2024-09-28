@@ -1,5 +1,6 @@
 using BuildingBlocks.Logging;
 using BuildingBlocks.Shared.Extensions;
+using BuildingBlocks.Shared.Middlewares;
 using Serilog;
 using Tour.Application;
 using Tour.Infrastructure;
@@ -30,6 +31,8 @@ try
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
+    app.UseMiddleware<ErrorWrappingMiddleware>();
+
     app.UseAuthentication();
     app.UseAuthorization();
 
