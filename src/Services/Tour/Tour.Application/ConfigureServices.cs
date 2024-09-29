@@ -23,5 +23,7 @@ public static class ConfigureServices
 
         services.AddScoped<ISlugService, SlugService>();
         services.AddScoped<IDestinationService, DestinationService>();
+
+        services.AddGrpc();
     }
 }

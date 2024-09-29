@@ -4,6 +4,7 @@ using BuildingBlocks.Shared.Exceptions;
 using MediatR;
 using TourApplication.API.Models;
 using TourApplication.API.Repositories.Interfaces;
+using TourApplication.API.Services.Interfaces;
 using ILogger = Serilog.ILogger;
 
 namespace TourApplication.API.UseCases.V1;
@@ -13,19 +14,19 @@ public class ReApplyApplicationCommandHandler : IRequestHandler<ReApplyApplicati
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
     private readonly IApplicationRepository _applicationRepository;
-    private readonly ITourJobRepository _tourJobRepository;
+    private readonly ITourJobService _tourJobService;
 
     private const string MethodName = nameof(ReApplyApplicationCommandHandler);
 
     public ReApplyApplicationCommandHandler(IMapper mapper,
                                       ILogger logger,
                                       IApplicationRepository applicationRepository,
-                                      ITourJobRepository tourJobRepository)
+                                      ITourJobService tourJobService)
     {
         _mapper = mapper;
         _logger = logger;
         _applicationRepository = applicationRepository;
-        _tourJobRepository = tourJobRepository;
+        _tourJobService = tourJobService;
     }
 
     public async Task<ApiResult<bool>> Handle(ReApplyApplicationCommand request, CancellationToken cancellationToken)
@@ -33,6 +34,24 @@ public class ReApplyApplicationCommandHandler : IRequestHandler<ReApplyApplicati
         _logger.Information($"BEGIN {MethodName} - Username: {request.Username}, ApplicationId: {request.ApplicationId}");
 
         var application = await _applicationRepository.GetApplicationByIdAsync(request.ApplicationId);
+        CheckValidApplication(application, request);
+
+        var tourJob = await _tourJobService.GetOrSaveTourJobAsync(application.TourJobId);
+        _tourJobService.CheckValidTourJob(tourJob);
+
+        var result = await _applicationRepository.ReApplyApplicationAsync(request.ApplicationId);
+        if (!result)
+        {
+            throw new BadRequestException($"Failed to reapply the application with ID: {request.ApplicationId}");
+        }
+
+        _logger.Information($"END {MethodName} - Username: {request.Username}, ApplicationId: {request.ApplicationId}");
+
+        return new ApiSuccessResult<bool>(result);
+    }
+
+    private static void CheckValidApplication(Application? application, ReApplyApplicationCommand request)
+    {
         if (application == null)
         {
             throw new BadRequestException($"The application not found for ID: {request.ApplicationId}.");
@@ -47,27 +66,5 @@ public class ReApplyApplicationCommandHandler : IRequestHandler<ReApplyApplicati
         {
             throw new BadRequestException("You can only reapply the canceled application.");
         }
-
-        var tourJob = await _tourJobRepository.GetTourJobByIdAsync(application.TourJobId);
-        if (tourJob == null)
-        {
-            _logger.Warning($"Tour job not found for ID: {application.TourJobId}. Fetching from Tour Service...");
-            // call to Tour Service to get and store
-        }
-
-        if (tourJob.IsFinished || tourJob.ExpiredDate < DateTime.UtcNow)
-        {
-            throw new BadRequestException("The tour job has expired or finished.");
-        }
-
-        var result = await _applicationRepository.ReApplyApplicationAsync(request.ApplicationId);
-        if (!result)
-        {
-            throw new BadRequestException($"Failed to reapply the application with ID: {request.ApplicationId}");
-        }
-
-        _logger.Information($"END {MethodName} - Username: {request.Username}, ApplicationId: {request.ApplicationId}");
-
-        return new ApiSuccessResult<bool>(result);
     }
 }

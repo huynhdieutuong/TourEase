@@ -4,6 +4,7 @@ using BuildingBlocks.Shared.Exceptions;
 using MediatR;
 using TourApplication.API.DTOs;
 using TourApplication.API.Repositories.Interfaces;
+using TourApplication.API.Services.Interfaces;
 using ILogger = Serilog.ILogger;
 
 namespace TourApplication.API.UseCases.V1;
@@ -13,47 +14,34 @@ public class ApplyTourJobCommandHandler : IRequestHandler<ApplyTourJobCommand, A
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
     private readonly IApplicationRepository _applicationRepository;
-    private readonly ITourJobRepository _tourJobRepository;
+    private readonly ITourJobService _tourJobService;
 
     private const string MethodName = nameof(ApplyTourJobCommandHandler);
 
     public ApplyTourJobCommandHandler(IMapper mapper,
                                       ILogger logger,
                                       IApplicationRepository applicationRepository,
-                                      ITourJobRepository tourJobRepository)
+                                      ITourJobService tourJobService)
     {
         _mapper = mapper;
         _logger = logger;
         _applicationRepository = applicationRepository;
-        _tourJobRepository = tourJobRepository;
+        _tourJobService = tourJobService;
     }
 
     public async Task<ApiResult<ApplicationDto>> Handle(ApplyTourJobCommand request, CancellationToken cancellationToken)
     {
         _logger.Information($"BEGIN {MethodName} - Username: {request.Username}, TourJobId: {request.TourJobId}");
 
-        var tourJob = await _tourJobRepository.GetTourJobByIdAsync(request.TourJobId);
-        if (tourJob == null)
-        {
-            _logger.Warning($"Tour job not found for ID: {request.TourJobId}. Fetching from Tour Service...");
-            // call to Tour Service to get and store
-        }
+        var tourJob = await _tourJobService.GetOrSaveTourJobAsync(request.TourJobId);
+        _tourJobService.CheckValidTourJob(tourJob);
 
         if (tourJob.Owner == request.Username)
         {
             throw new ForBidException("You cannot apply for your own job.");
         }
 
-        if (tourJob.IsFinished || tourJob.ExpiredDate < DateTime.UtcNow)
-        {
-            throw new BadRequestException("The tour job has expired or finished.");
-        }
-
-        var hasAlreadyApplied = await HasTourGuideAlreadyApplied(request.TourJobId, request.Username);
-        if (hasAlreadyApplied)
-        {
-            throw new BadRequestException("You can only apply for this job once.");
-        }
+        await HasTourGuideAlreadyApplied(request.TourJobId, request.Username);
 
         var id = await _applicationRepository.CreateApplicationAsync(request);
 
@@ -65,10 +53,13 @@ public class ApplyTourJobCommandHandler : IRequestHandler<ApplyTourJobCommand, A
         return new ApiSuccessResult<ApplicationDto>(applicationDto);
     }
 
-    private async Task<bool> HasTourGuideAlreadyApplied(Guid tourJobId, string username)
+    private async Task HasTourGuideAlreadyApplied(Guid tourJobId, string username)
     {
         var application = await _applicationRepository.GetApplicationByTourJobIdAndUsernameAsync(tourJobId, username);
 
-        return application != null;
+        if (application != null)
+        {
+            throw new BadRequestException("You can only apply for this job once.");
+        }
     }
 }

@@ -27,4 +27,18 @@ public class TourJobRepository : ITourJobRepository
 
         return result;
     }
+
+    public async Task<bool> SaveTourJobAsync(TourJob tourJob)
+    {
+        using var connection = _connectionFactory.Create();
+
+        var sql = @"INSERT INTO TourJob (Id, ExpiredDate, Owner, IsFinished)
+                    VALUES (@Id, @ExpiredDate, @Owner, @IsFinished)";
+
+        var result = await connection.ExecuteAsync(
+            sql,
+            new { tourJob.Id, tourJob.ExpiredDate, tourJob.Owner, tourJob.IsFinished });
+
+        return result > 0;
+    }
 }

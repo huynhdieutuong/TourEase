@@ -26,6 +26,7 @@ public static class ServiceExtensions
 
         services.AddScoped<IDbMigrationService, DbMigrationService>();
         services.AddScoped<IApplicationRepository, ApplicationRepository>();
+        services.AddScoped<ITourJobRepository, TourJobRepository>();
     }
 
     public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
@@ -39,6 +40,8 @@ public static class ServiceExtensions
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         services.AddScoped<IApplicationService, ApplicationService>();
+        services.AddScoped<ITourJobService, TourJobService>();
+        services.AddScoped<IGrpcTourJobClient, GrpcTourJobClient>();
 
         services.ConfigureMassTransit();
     }

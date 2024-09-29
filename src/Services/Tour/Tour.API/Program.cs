@@ -3,6 +3,7 @@ using BuildingBlocks.Shared.Extensions;
 using BuildingBlocks.Shared.Middlewares;
 using Serilog;
 using Tour.Application;
+using Tour.Application.Services;
 using Tour.Infrastructure;
 using Tour.Infrastructure.Persistence;
 using Tour.Infrastructure.Redis;
@@ -38,6 +39,7 @@ try
 
     app.MapControllers();
     //app.MapCarter();
+    app.MapGrpcService<GrpcTourJobService>();
 
     // Initialize and Seed database
     using (var scope = app.Services.CreateScope())

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.66.0" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.1.2" />
   </ItemGroup>
@@ -20,5 +21,9 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\Shared\BuildingBlocks.Shared.csproj" />
     <ProjectReference Include="..\Tour.Domain\Tour.Domain.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<Protobuf Include="protos/tourjobs.proto" GrpcServices="Server" />
+	</ItemGroup>
 
 </Project>

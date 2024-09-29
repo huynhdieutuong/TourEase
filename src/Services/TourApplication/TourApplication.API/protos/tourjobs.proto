@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "Tour.Application";
+
+service GrpcTourJob {
+	rpc GetTourJob (GetTourJobRequest) returns (GrpcTourJobResponse);
+}
+
+message GetTourJobRequest {
+	string id = 1;
+}
+
+message GrpcTourJobModel {
+	string id = 1;
+	string expiredDate = 2;
+	string owner = 3;
+}
+
+message GrpcTourJobResponse {
+	GrpcTourJobModel tourjob = 1;
+}
