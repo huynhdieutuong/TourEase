@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Contracts.Domains;
+using BuildingBlocks.Shared.Constants;
 using Microsoft.EntityFrameworkCore;
 using Tour.Domain.Entities.Enums;
 
@@ -15,7 +16,7 @@ public class TourJob : EntityAuditBase<Guid>
     public string? TourGuide { get; set; }
     public int? TotalApplicants { get; set; }
     public DateTimeOffset ExpiredDate { get; set; }
-    public Status Status { get; set; }
+    public TourJobStatus Status { get; set; }
 
     public TourDetail Detail { get; set; }
 

@@ -36,6 +36,8 @@ public class ApplicationsController : ControllerBase
         // In case user have 2 role (TourGuide and TravelAgency), need check Owner can't apply
         // Can't apply for a expired or finished job
         // Default Status of Application is Pending
+
+        // Publish event to Tour and TourSearch to update TotalApplicants (only count <> Cancel)
         command.Username = User.Identity.Name;
         var result = await _mediator.Send(command);
         return Ok(result);
@@ -57,6 +59,8 @@ public class ApplicationsController : ControllerBase
         // Ony the TourGuide can cancel their Applications
         // Only Pending Status can change to Cancel
         // need check TourJob Status is complete or not
+
+        // Publish event to Tour and TourSearch to update TotalApplicants
         var command = new CancelApplicationCommand(applicationId, User.Identity.Name);
         var result = await _mediator.Send(command);
         return Ok(result);
@@ -69,6 +73,8 @@ public class ApplicationsController : ControllerBase
         // Ony the TourGuide can re-apply their Applications
         // Only Cancel Status can change to Pending (ReApply)
         // need check TourJob Status is complete or not
+
+        // Publish event to Tour and TourSearch to update TotalApplicants
         var command = new ReApplyApplicationCommand(applicationId, User.Identity.Name);
         var result = await _mediator.Send(command);
         return Ok(result);

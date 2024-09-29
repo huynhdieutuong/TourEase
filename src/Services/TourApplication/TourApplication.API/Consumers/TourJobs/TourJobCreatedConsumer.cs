@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using BuildingBlocks.Messaging.TourJob;
 using MassTransit;
-using TourSearch.API.Entities;
-using TourSearch.API.Repositories.Interfaces;
+using TourApplication.API.Models;
+using TourApplication.API.Repositories.Interfaces;
 using ILogger = Serilog.ILogger;
 
-namespace TourSearch.API.Consumers.TourJobs;
+namespace TourApplication.API.Consumers.TourJobs;
 
 public class TourJobCreatedConsumer : IConsumer<TourJobCreated>
 {
@@ -22,12 +22,10 @@ public class TourJobCreatedConsumer : IConsumer<TourJobCreated>
 
     public async Task Consume(ConsumeContext<TourJobCreated> context)
     {
-        _logger.Information("--> TourSearch: Consuming tour job created: " + context.Message.Id);
+        _logger.Information("--> TourApplication: Consuming tour job created - Id: " + context.Message.Id);
 
         var tourJob = _mapper.Map<TourJob>(context.Message);
 
-        if (tourJob.Title == "Tour job demo") throw new ArgumentException("Cannot add tourjob with title of Tour job demo");
-
-        await _tourJobRepository.InsertAsync(tourJob);
+        await _tourJobRepository.SaveTourJobAsync(tourJob);
     }
 }

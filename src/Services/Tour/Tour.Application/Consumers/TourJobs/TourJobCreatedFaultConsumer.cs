@@ -24,7 +24,7 @@ public class TourJobCreatedFaultConsumer : IConsumer<Fault<TourJobCreated>>
 
     public async Task Consume(ConsumeContext<Fault<TourJobCreated>> context)
     {
-        _logger.Information("--> Consuming faulty creation");
+        _logger.Information("-->Tour: Consuming faulty creation");
 
         var exception = context.Message.Exceptions.First();
         if (exception.ExceptionType == "System.ArgumentException")

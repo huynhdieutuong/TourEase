@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using BuildingBlocks.Messaging.Application;
 using BuildingBlocks.Shared.ApiResult;
 using BuildingBlocks.Shared.Exceptions;
+using MassTransit;
 using MediatR;
 using TourApplication.API.Models;
 using TourApplication.API.Repositories.Interfaces;
@@ -15,18 +17,21 @@ public class ChooseTourGuideCommandHandler : IRequestHandler<ChooseTourGuideComm
     private readonly ILogger _logger;
     private readonly IApplicationRepository _applicationRepository;
     private readonly ITourJobService _tourJobService;
+    private readonly IPublishEndpoint _publishEndpoint;
 
     private const string MethodName = nameof(ChooseTourGuideCommandHandler);
 
     public ChooseTourGuideCommandHandler(IMapper mapper,
                                       ILogger logger,
                                       IApplicationRepository applicationRepository,
-                                      ITourJobService tourJobService)
+                                      ITourJobService tourJobService,
+                                      IPublishEndpoint publishEndpoint)
     {
         _mapper = mapper;
         _logger = logger;
         _applicationRepository = applicationRepository;
         _tourJobService = tourJobService;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<ApiResult<bool>> Handle(ChooseTourGuideCommand request, CancellationToken cancellationToken)
@@ -46,7 +51,11 @@ public class ChooseTourGuideCommandHandler : IRequestHandler<ChooseTourGuideComm
 
         await _applicationRepository.ChooseTourGuideAsync(request.ApplicationId, tourJob.Id);
 
-        // Todo: Update TourGuide in TourJob (Tour Service and Search Service)
+        await _publishEndpoint.Publish(new TourJobFinished
+        {
+            TourJobId = tourJob.Id,
+            TourGuide = application.TourGuide
+        });
 
         _logger.Information($"END {MethodName} - Owner: {request.Owner}, ApplicationId: {request.ApplicationId}");
 

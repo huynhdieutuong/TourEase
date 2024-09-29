@@ -15,18 +15,21 @@ public class ReApplyApplicationCommandHandler : IRequestHandler<ReApplyApplicati
     private readonly ILogger _logger;
     private readonly IApplicationRepository _applicationRepository;
     private readonly ITourJobService _tourJobService;
+    private readonly IApplicationService _applicationService;
 
     private const string MethodName = nameof(ReApplyApplicationCommandHandler);
 
     public ReApplyApplicationCommandHandler(IMapper mapper,
                                       ILogger logger,
                                       IApplicationRepository applicationRepository,
-                                      ITourJobService tourJobService)
+                                      ITourJobService tourJobService,
+                                      IApplicationService applicationService)
     {
         _mapper = mapper;
         _logger = logger;
         _applicationRepository = applicationRepository;
         _tourJobService = tourJobService;
+        _applicationService = applicationService;
     }
 
     public async Task<ApiResult<bool>> Handle(ReApplyApplicationCommand request, CancellationToken cancellationToken)
@@ -44,6 +47,8 @@ public class ReApplyApplicationCommandHandler : IRequestHandler<ReApplyApplicati
         {
             throw new BadRequestException($"Failed to reapply the application with ID: {request.ApplicationId}");
         }
+
+        await _applicationService.PublishTotalApplicantsUpdated(tourJob.Id);
 
         _logger.Information($"END {MethodName} - Username: {request.Username}, ApplicationId: {request.ApplicationId}");
 

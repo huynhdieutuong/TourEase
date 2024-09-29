@@ -2,4 +2,5 @@
 
 public interface IApplicationService
 {
+    Task PublishTotalApplicantsUpdated(Guid tourJobId);
 }

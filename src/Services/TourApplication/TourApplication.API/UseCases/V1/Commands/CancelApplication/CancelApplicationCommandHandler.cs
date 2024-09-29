@@ -15,18 +15,21 @@ public class CancelApplicationCommandHandler : IRequestHandler<CancelApplication
     private readonly ILogger _logger;
     private readonly IApplicationRepository _applicationRepository;
     private readonly ITourJobService _tourJobService;
+    private readonly IApplicationService _applicationService;
 
     private const string MethodName = nameof(CancelApplicationCommandHandler);
 
     public CancelApplicationCommandHandler(IMapper mapper,
                                       ILogger logger,
                                       IApplicationRepository applicationRepository,
-                                      ITourJobService tourJobService)
+                                      ITourJobService tourJobService,
+                                      IApplicationService applicationService)
     {
         _mapper = mapper;
         _logger = logger;
         _applicationRepository = applicationRepository;
         _tourJobService = tourJobService;
+        _applicationService = applicationService;
     }
 
     public async Task<ApiResult<bool>> Handle(CancelApplicationCommand request, CancellationToken cancellationToken)
@@ -44,6 +47,8 @@ public class CancelApplicationCommandHandler : IRequestHandler<CancelApplication
         {
             throw new BadRequestException($"Failed to cancel the application with ID: {request.ApplicationId}");
         }
+
+        await _applicationService.PublishTotalApplicantsUpdated(tourJob.Id);
 
         _logger.Information($"END {MethodName} - Username: {request.Username}, ApplicationId: {request.ApplicationId}");
 

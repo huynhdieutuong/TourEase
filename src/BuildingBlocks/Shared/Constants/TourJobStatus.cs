@@ -1,5 +1,5 @@
-﻿namespace Tour.Domain.Entities.Enums;
-public enum Status
+﻿namespace BuildingBlocks.Shared.Constants;
+public enum TourJobStatus
 {
     Live,
     Finished, // If Agency click Choose, update TourGuide, Status to Finished

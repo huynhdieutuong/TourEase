@@ -41,4 +41,33 @@ public class TourJobRepository : ITourJobRepository
 
         return result > 0;
     }
+
+    public async Task<bool> UpdateTourJobAsync(TourJob tourJob)
+    {
+        using var connection = _connectionFactory.Create();
+
+        var sql = @"UPDATE TourJob
+                    SET ExpiredDate = @ExpiredDate, @IsFinished = IsFinished
+                    WHERE Id = @Id";
+
+        var result = await connection.ExecuteAsync(
+            sql,
+            new { tourJob.Id, tourJob.ExpiredDate, tourJob.IsFinished });
+
+        return result > 0;
+    }
+
+    public async Task<bool> DeleteTourJobAsync(Guid id)
+    {
+        using var connection = _connectionFactory.Create();
+
+        var sql = @"DELETE FROM TourJob
+                    WHERE Id = @Id";
+
+        var result = await connection.ExecuteAsync(
+            sql,
+            new { Id = id });
+
+        return result > 0;
+    }
 }

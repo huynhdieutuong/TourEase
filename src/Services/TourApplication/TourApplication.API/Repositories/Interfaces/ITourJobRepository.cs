@@ -6,4 +6,6 @@ public interface ITourJobRepository
 {
     Task<TourJob?> GetTourJobByIdAsync(Guid id);
     Task<bool> SaveTourJobAsync(TourJob tourJob);
+    Task<bool> UpdateTourJobAsync(TourJob tourJob);
+    Task<bool> DeleteTourJobAsync(Guid id);
 }

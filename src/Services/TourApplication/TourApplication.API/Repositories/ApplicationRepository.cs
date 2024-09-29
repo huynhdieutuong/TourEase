@@ -137,6 +137,7 @@ public class ApplicationRepository : IApplicationRepository
 
         try
         {
+            // 1. Update the application status to Accepted
             var sqlAccept = @"
                 UPDATE Application
                 SET Status = @AcceptedStatus
@@ -157,6 +158,7 @@ public class ApplicationRepository : IApplicationRepository
                 throw new BadRequestException("No application was accepted. The application may have already been processed or does not exist.");
             }
 
+            // 2. Update the rest applications status to Rejected
             var sqlRejectOthers = @"
                 UPDATE Application
                 SET Status = @RejectedStatus
@@ -173,6 +175,20 @@ public class ApplicationRepository : IApplicationRepository
                 },
                 transaction);
 
+            // 3. Update tour job status to Finished
+            var sqlTourJobFinished = @"
+                UPDATE TourJob
+                SET IsFinished = 1
+                WHERE Id = @TourJobId";
+
+            await connection.ExecuteAsync(
+                sqlTourJobFinished,
+                new
+                {
+                    Id = tourJobId,
+                },
+                transaction);
+
             transaction.Commit();
         }
         catch (Exception ex)
@@ -180,5 +196,19 @@ public class ApplicationRepository : IApplicationRepository
             transaction.Rollback();
             throw;
         }
+    }
+
+    public async Task<int> CountTotalApplicantsAsync(Guid tourJobId)
+    {
+        using var connection = _dbConnectionFactory.Create();
+
+        var sql = @"SELECT COUNT(*) FROM Application 
+                    WHERE TourJobId = @TourJobId AND Status <> @CanceledStatus";
+
+        var result = await connection.ExecuteScalarAsync<int>(
+            sql,
+            new { TourJobId = tourJobId, CanceledStatus = Status.Canceled });
+
+        return result;
     }
 }

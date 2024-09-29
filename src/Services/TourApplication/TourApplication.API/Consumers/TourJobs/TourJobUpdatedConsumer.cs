@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using BuildingBlocks.Messaging.TourJob;
 using MassTransit;
-using TourSearch.API.Entities;
-using TourSearch.API.Repositories.Interfaces;
+using TourApplication.API.Models;
+using TourApplication.API.Repositories.Interfaces;
 using ILogger = Serilog.ILogger;
 
-namespace TourSearch.API.Consumers.TourJobs;
+namespace TourApplication.API.Consumers.TourJobs;
 
 public class TourJobUpdatedConsumer : IConsumer<TourJobUpdated>
 {
@@ -22,10 +22,10 @@ public class TourJobUpdatedConsumer : IConsumer<TourJobUpdated>
 
     public async Task Consume(ConsumeContext<TourJobUpdated> context)
     {
-        _logger.Information("--> TourSearch: Consuming tour job updated: " + context.Message.Id);
+        _logger.Information("--> TourApplication: Consuming tour job updated - Id: " + context.Message.Id);
 
         var tourJob = _mapper.Map<TourJob>(context.Message);
 
-        await _tourJobRepository.UpdateAsync(tourJob);
+        await _tourJobRepository.UpdateTourJobAsync(tourJob);
     }
 }

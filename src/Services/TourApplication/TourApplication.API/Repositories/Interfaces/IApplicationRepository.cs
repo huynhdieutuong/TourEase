@@ -13,5 +13,5 @@ public interface IApplicationRepository
     Task<bool> CancelApplicationAsync(Guid applicationId);
     Task<bool> ReApplyApplicationAsync(Guid applicationId);
     Task ChooseTourGuideAsync(Guid applicationId, Guid tourJobId);
-
+    Task<int> CountTotalApplicantsAsync(Guid tourJobId);
 }

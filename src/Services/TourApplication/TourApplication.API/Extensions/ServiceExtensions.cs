@@ -5,6 +5,7 @@ using FluentValidation;
 using MassTransit;
 using MediatR;
 using System.Reflection;
+using TourApplication.API.Consumers.TourJobs;
 using TourApplication.API.Persistence;
 using TourApplication.API.Persistence.Interfaces;
 using TourApplication.API.Repositories;
@@ -56,7 +57,7 @@ public static class ServiceExtensions
 
         services.AddMassTransit(x =>
         {
-            //x.AddConsumersFromNamespaceContaining<TourJobCreatedConsumer>();
+            x.AddConsumersFromNamespaceContaining<TourJobCreatedConsumer>();
 
             x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("application"));
 

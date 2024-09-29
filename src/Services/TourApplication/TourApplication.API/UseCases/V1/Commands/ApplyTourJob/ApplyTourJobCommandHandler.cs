@@ -13,20 +13,24 @@ public class ApplyTourJobCommandHandler : IRequestHandler<ApplyTourJobCommand, A
 {
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
-    private readonly IApplicationRepository _applicationRepository;
     private readonly ITourJobService _tourJobService;
+    private readonly IApplicationService _applicationService;
+    private readonly IApplicationRepository _applicationRepository;
 
     private const string MethodName = nameof(ApplyTourJobCommandHandler);
 
     public ApplyTourJobCommandHandler(IMapper mapper,
                                       ILogger logger,
                                       IApplicationRepository applicationRepository,
-                                      ITourJobService tourJobService)
+                                      ITourJobService tourJobService,
+
+                                      IApplicationService applicationService)
     {
         _mapper = mapper;
         _logger = logger;
         _applicationRepository = applicationRepository;
         _tourJobService = tourJobService;
+        _applicationService = applicationService;
     }
 
     public async Task<ApiResult<ApplicationDto>> Handle(ApplyTourJobCommand request, CancellationToken cancellationToken)
@@ -44,6 +48,8 @@ public class ApplyTourJobCommandHandler : IRequestHandler<ApplyTourJobCommand, A
         await HasTourGuideAlreadyApplied(request.TourJobId, request.Username);
 
         var id = await _applicationRepository.CreateApplicationAsync(request);
+
+        await _applicationService.PublishTotalApplicantsUpdated(tourJob.Id);
 
         var application = await _applicationRepository.GetApplicationByIdAsync(id);
         var applicationDto = _mapper.Map<ApplicationDto>(application);
