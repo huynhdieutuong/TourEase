@@ -18,7 +18,7 @@ public class TourJobDeletedConsumer : IConsumer<TourJobDeleted>
 
     public async Task Consume(ConsumeContext<TourJobDeleted> context)
     {
-        _logger.Information("--> Consuming tour job deleted: " + context.Message.Id);
+        _logger.Information("--> TourSearch: Consuming tour job deleted: " + context.Message.Id);
 
         await _tourJobRepository.DeleteByIdAsync(context.Message.Id);
     }

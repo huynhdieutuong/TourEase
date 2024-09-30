@@ -22,7 +22,7 @@ public class TourJobCreatedConsumer : IConsumer<TourJobCreated>
 
     public async Task Consume(ConsumeContext<TourJobCreated> context)
     {
-        _logger.Information("--> Consuming tour job created: " + context.Message.Id);
+        _logger.Information("--> TourSearch: Consuming tour job created: " + context.Message.Id);
 
         var tourJob = _mapper.Map<TourJob>(context.Message);
 

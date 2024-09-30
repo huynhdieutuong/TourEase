@@ -24,7 +24,7 @@ public class DestinationDeletedConsumer : IConsumer<DestinationDeleted>
 
     public async Task Consume(ConsumeContext<DestinationDeleted> context)
     {
-        _logger.Information("--> Consuming destination deleted: " + context.Message.Id);
+        _logger.Information("--> TourSearch: Consuming destination deleted: " + context.Message.Id);
 
         _logger.Information("1. Get a list of descendant destinations to delete");
         var destinations = await _destinationRepository.FindAllAsync();

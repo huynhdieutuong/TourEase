@@ -22,7 +22,7 @@ public class DestinationUpdatedConsumer : IConsumer<DestinationUpdated>
 
     public async Task Consume(ConsumeContext<DestinationUpdated> context)
     {
-        _logger.Information("--> Consuming destination updated: " + context.Message.Id);
+        _logger.Information("--> TourSearch: Consuming destination updated: " + context.Message.Id);
 
         var destination = _mapper.Map<Destination>(context.Message);
 

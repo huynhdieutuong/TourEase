@@ -1,7 +1,9 @@
 using BuildingBlocks.Logging;
 using BuildingBlocks.Shared.Extensions;
+using BuildingBlocks.Shared.Middlewares;
 using Serilog;
 using Tour.Application;
+using Tour.Application.Services;
 using Tour.Infrastructure;
 using Tour.Infrastructure.Persistence;
 using Tour.Infrastructure.Redis;
@@ -30,11 +32,14 @@ try
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
+    app.UseMiddleware<ErrorWrappingMiddleware>();
+
     app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();
     //app.MapCarter();
+    app.MapGrpcService<GrpcTourJobService>();
 
     // Initialize and Seed database
     using (var scope = app.Services.CreateScope())

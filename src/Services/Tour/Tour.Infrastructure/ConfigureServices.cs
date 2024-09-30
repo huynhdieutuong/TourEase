@@ -3,6 +3,7 @@ using BuildingBlocks.Shared.Extensions;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Tour.Application.Consumers.Applications;
 using Tour.Application.Consumers.TourJobs;
 using Tour.Application.Interfaces;
 using Tour.Infrastructure.Persistence;
@@ -56,6 +57,7 @@ public static class ConfigureServices
         {
             x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("tour"));
             x.AddConsumersFromNamespaceContaining<TourJobCreatedFaultConsumer>();
+            x.AddConsumersFromNamespaceContaining<TotalApplicantsUpdatedConsumer>();
 
             x.AddEntityFrameworkOutbox<TourDbContext>(o =>
             {
