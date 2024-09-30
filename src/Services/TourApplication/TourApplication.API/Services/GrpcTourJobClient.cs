@@ -31,8 +31,7 @@ public class GrpcTourJobClient : IGrpcTourJobClient
             {
                 Id = Guid.Parse(reply.Tourjob.Id),
                 ExpiredDate = DateTime.Parse(reply.Tourjob.ExpiredDate),
-                Owner = reply.Tourjob.Owner,
-                IsFinished = DateTime.Parse(reply.Tourjob.ExpiredDate) < DateTime.UtcNow
+                Owner = reply.Tourjob.Owner
             };
             return tourJob;
         }

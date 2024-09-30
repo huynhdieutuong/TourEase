@@ -51,12 +51,14 @@ public class ErrorWrappingMiddleware
         if (!context.Response.HasStarted && (context.Response.StatusCode == StatusCodes.Status403Forbidden || context.Response.StatusCode == StatusCodes.Status401Unauthorized))
         {
             context.Response.ContentType = "application/json";
+            if (string.IsNullOrEmpty(errorMsg))
+            {
+                var response = new ApiErrorResult<bool>("You are not authorized!");
 
-            var response = new ApiErrorResult<bool>("You are not authorized!");
+                var json = JsonSerializer.Serialize(response);
 
-            var json = JsonSerializer.Serialize(response);
-
-            await context.Response.WriteAsync(json);
+                await context.Response.WriteAsync(json);
+            }
         }
 
         if (!context.Response.HasStarted && context.Response.StatusCode != StatusCodes.Status204NoContent &&

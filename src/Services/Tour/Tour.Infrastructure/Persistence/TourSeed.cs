@@ -2,6 +2,7 @@
 using Serilog;
 using Tour.Domain.Entities;
 using Tour.Domain.Entities.Enums;
+using Status = BuildingBlocks.Shared.Constants.TourJobStatus;
 
 namespace Tour.Infrastructure.Persistence;
 public class TourSeed

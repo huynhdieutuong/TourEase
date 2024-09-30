@@ -32,12 +32,12 @@ public class TourJobRepository : ITourJobRepository
     {
         using var connection = _connectionFactory.Create();
 
-        var sql = @"INSERT INTO TourJob (Id, ExpiredDate, Owner, IsFinished)
-                    VALUES (@Id, @ExpiredDate, @Owner, @IsFinished)";
+        var sql = @"INSERT INTO TourJob (Id, ExpiredDate, Owner)
+                    VALUES (@Id, @ExpiredDate, @Owner)";
 
         var result = await connection.ExecuteAsync(
             sql,
-            new { tourJob.Id, tourJob.ExpiredDate, tourJob.Owner, tourJob.IsFinished });
+            new { tourJob.Id, tourJob.ExpiredDate, tourJob.Owner });
 
         return result > 0;
     }
@@ -47,12 +47,12 @@ public class TourJobRepository : ITourJobRepository
         using var connection = _connectionFactory.Create();
 
         var sql = @"UPDATE TourJob
-                    SET ExpiredDate = @ExpiredDate, @IsFinished = IsFinished
+                    SET ExpiredDate = @ExpiredDate
                     WHERE Id = @Id";
 
         var result = await connection.ExecuteAsync(
             sql,
-            new { tourJob.Id, tourJob.ExpiredDate, tourJob.IsFinished });
+            new { tourJob.Id, tourJob.ExpiredDate });
 
         return result > 0;
     }
@@ -69,5 +69,35 @@ public class TourJobRepository : ITourJobRepository
             new { Id = id });
 
         return result > 0;
+    }
+
+    public async Task<List<Guid>> GetExpiredTourJobIdsAsync()
+    {
+        using var connection = _connectionFactory.Create();
+
+        var sql = @"SELECT Id FROM TourJob
+                    WHERE ExpiredDate <= @Now AND IsFinished = 0";
+
+        var result = await connection.QueryAsync<Guid>(
+            sql,
+            new { Now = DateTime.UtcNow });
+
+        return result.ToList();
+    }
+
+    public async Task<int> SetExpiredTourJobsToFinishedAsync(List<Guid> tourJobIds)
+    {
+        using var connection = _connectionFactory.Create();
+
+        var sqlTourJobFinished = @"
+                UPDATE TourJob
+                SET IsFinished = 1
+                WHERE Id IN @TourJobIds";
+
+        var result = await connection.ExecuteAsync(
+            sqlTourJobFinished,
+            new { TourJobIds = tourJobIds });
+
+        return result;
     }
 }

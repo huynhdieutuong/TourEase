@@ -8,4 +8,6 @@ public interface ITourJobRepository
     Task<bool> SaveTourJobAsync(TourJob tourJob);
     Task<bool> UpdateTourJobAsync(TourJob tourJob);
     Task<bool> DeleteTourJobAsync(Guid id);
+    Task<List<Guid>> GetExpiredTourJobIdsAsync();
+    Task<int> SetExpiredTourJobsToFinishedAsync(List<Guid> tourJobIds);
 }

@@ -49,6 +49,11 @@ public abstract class MongoRepositoryBase<T, K> : IMongoRepositoryBase<T, K> whe
         await _collection.ReplaceOneAsync(filter, entity);
     }
 
+    public async Task UpdateManyAsync(FilterDefinition<T> filter, UpdateDefinition<T> update)
+    {
+        await _collection.UpdateManyAsync(filter, update);
+    }
+
     public async Task DeleteByIdAsync(K id)
     {
         var filter = Builders<T>.Filter.Eq(doc => doc.Id, id);

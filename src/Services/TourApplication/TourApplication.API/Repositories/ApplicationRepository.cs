@@ -185,7 +185,7 @@ public class ApplicationRepository : IApplicationRepository
                 sqlTourJobFinished,
                 new
                 {
-                    Id = tourJobId,
+                    TourJobId = tourJobId,
                 },
                 transaction);
 

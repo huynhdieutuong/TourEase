@@ -39,7 +39,7 @@ public class TourJobService : ITourJobService
 
     public void CheckValidTourJob(TourJob tourJob)
     {
-        if (tourJob.IsFinished || tourJob.ExpiredDate < DateTime.UtcNow)
+        if (tourJob.IsFinished || tourJob.ExpiredDate <= DateTime.UtcNow)
         {
             throw new BadRequestException("The tour job has expired or finished.");
         }

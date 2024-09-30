@@ -44,6 +44,8 @@ public static class ServiceExtensions
         services.AddScoped<ITourJobService, TourJobService>();
         services.AddScoped<IGrpcTourJobClient, GrpcTourJobClient>();
 
+        services.AddHostedService<CheckTourJobExpired>();
+
         services.ConfigureMassTransit();
     }
 
