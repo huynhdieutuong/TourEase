@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BuildingBlocks.Messaging.Enums;
 using BuildingBlocks.Shared.ApiResult;
 using BuildingBlocks.Shared.Exceptions;
 using MediatR;
@@ -48,7 +49,7 @@ public class CancelApplicationCommandHandler : IRequestHandler<CancelApplication
             throw new BadRequestException($"Failed to cancel the application with ID: {request.ApplicationId}");
         }
 
-        await _applicationService.PublishTotalApplicantsUpdated(tourJob.Id);
+        await _applicationService.PublishTotalApplicantsUpdated(tourJob.Id, ApplicationTypes.Cancel);
 
         _logger.Information($"END {MethodName} - Username: {request.Username}, ApplicationId: {request.ApplicationId}");
 

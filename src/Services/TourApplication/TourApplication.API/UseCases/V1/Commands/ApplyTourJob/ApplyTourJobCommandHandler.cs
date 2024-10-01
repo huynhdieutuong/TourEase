@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BuildingBlocks.Messaging.Enums;
 using BuildingBlocks.Shared.ApiResult;
 using BuildingBlocks.Shared.Exceptions;
 using MediatR;
@@ -49,7 +50,7 @@ public class ApplyTourJobCommandHandler : IRequestHandler<ApplyTourJobCommand, A
 
         var id = await _applicationRepository.CreateApplicationAsync(request);
 
-        await _applicationService.PublishTotalApplicantsUpdated(tourJob.Id);
+        await _applicationService.PublishTotalApplicantsUpdated(tourJob.Id, ApplicationTypes.New);
 
         var application = await _applicationRepository.GetApplicationByIdAsync(id);
         var applicationDto = _mapper.Map<ApplicationDto>(application);

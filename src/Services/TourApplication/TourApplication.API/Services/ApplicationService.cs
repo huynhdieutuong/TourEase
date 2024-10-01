@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Messaging.Application;
+using BuildingBlocks.Messaging.Enums;
 using MassTransit;
 using TourApplication.API.Repositories.Interfaces;
 using TourApplication.API.Services.Interfaces;
@@ -16,13 +17,14 @@ public class ApplicationService : IApplicationService
         _publishEndpoint = publishEndpoint;
     }
 
-    public async Task PublishTotalApplicantsUpdated(Guid tourJobId)
+    public async Task PublishTotalApplicantsUpdated(Guid tourJobId, ApplicationTypes type)
     {
         var totalApplicants = await _applicationRepository.CountTotalApplicantsAsync(tourJobId);
         await _publishEndpoint.Publish(new TotalApplicantsUpdated
         {
             TourJobId = tourJobId,
-            TotalApplicants = totalApplicants
+            TotalApplicants = totalApplicants,
+            Type = type
         });
     }
 }

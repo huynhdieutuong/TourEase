@@ -142,6 +142,22 @@ services:
             - tourapplicationdb
             - rabbitmq
 
+    # Notification
+    notifyapi:
+        image: tuonghuynh/notifyapi:latest
+        container_name: notify.api
+        build:
+            context: .
+            dockerfile: src/Services/Notification/SignalR/Dockerfile
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:80
+            - EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq
+        ports:
+            - 7004:80
+        depends_on:
+            - rabbitmq
+
     # IdentityServer
     identityserver:
         image: tuonghuynh/identityserver:latest
