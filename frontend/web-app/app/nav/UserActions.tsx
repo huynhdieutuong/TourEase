@@ -37,7 +37,7 @@ export default function UserActions({ user }: Props) {
       )}
 
       {user.roles.includes(Role.TOURGUIDE) && (
-        <Link href='/'>
+        <Link href='/applications'>
           <Dropdown.Item icon={MdTour}>Applied TourJobs</Dropdown.Item>
         </Link>
       )}

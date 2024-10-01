@@ -25,8 +25,11 @@ export default function TourJobCard({ tourJob }: Props) {
           <CardSalary salary={tourJob.salary} currency={tourJob.currency} />
         </div>
       </div>
-      <div className='mt-4'>
+      <div className='mt-4 flex justify-between items-center'>
         <h3 className='text-gray-700'>{tourJob.title}</h3>
+        <p className='text-gray-700 text-sm'>
+          {tourJob.totalApplicants && `${tourJob.totalApplicants} applicants`}
+        </p>
       </div>
     </Link>
   )

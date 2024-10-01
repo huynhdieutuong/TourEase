@@ -1,4 +1,4 @@
-import { TourJob } from '@/types'
+import { Application, TourJob } from '@/types'
 import { formatCurrency, formatDate } from '@/utils'
 import { Button, Card } from 'flowbite-react'
 import {
@@ -12,16 +12,19 @@ import CardImage from '../CardImage'
 import DestinationBadges from '../../components/DestinationBadges'
 import Itineray from './Itineray'
 import CountdownTimer from '../CountdownTimer'
+import ApplicationList from './ApplicationList'
+import ApplyButton from './ApplyButton'
 
 type Props = {
   tourJob: TourJob
+  applications: Application[]
 }
 
-const TourJobDetails = ({ tourJob }: Props) => {
+const TourJobDetails = ({ tourJob, applications }: Props) => {
   return (
     <Card className='hover:shadow-xl transition-shadow duration-300'>
-      <div className='grid grid-cols-2 gap-6 mt-3'>
-        <div className='relative h-80'>
+      <div className='grid grid-cols-2 gap-6 mt-3 h-96'>
+        <div className='relative'>
           <div className='w-full bg-gray-200 aspect-h-10 aspect-w-16 rounded-lg overflow-hidden'>
             <CardImage imageUrl={tourJob.imageUrl} title={tourJob.title} />
           </div>
@@ -33,9 +36,10 @@ const TourJobDetails = ({ tourJob }: Props) => {
           </div>
         </div>
 
-        <div className='border-2 rounded-lg p-2 bg-gray-100'>
-          <h3>Bid</h3>
-        </div>
+        <ApplicationList
+          applications={applications}
+          tourGuide={tourJob.tourGuide}
+        />
       </div>
 
       <div className='p-6'>
@@ -73,7 +77,7 @@ const TourJobDetails = ({ tourJob }: Props) => {
         <Itineray itinerary={tourJob.itinerary} />
 
         <div className='flex justify-between items-center'>
-          <Button color='warning'>Apply Now</Button>
+          <ApplyButton tourJobId={tourJob.id} />
           <Button color='light'>Save for Later</Button>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { IconType } from 'react-icons'
-import { DestinationType } from './enums'
+import { ApplicationStatus, DestinationType } from './enums'
 
 export type ApiResult<T> = {
   data: T
@@ -52,6 +52,15 @@ export type Destination = {
   imageUrl?: string
   parentId?: string | null
   subDestinations: Destination[]
+}
+
+export type Application = {
+  id: string
+  tourJobId: string
+  tourGuide: string
+  comment: string
+  appliedDate: string
+  status: ApplicationStatus
 }
 
 export type FilterOption = {

@@ -10,6 +10,8 @@ export const config = {
     '/tourjobs/update/:path*',
 
     '/destinations/list',
+
+    '/applications',
   ],
 
   // override pages

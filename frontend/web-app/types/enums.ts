@@ -23,3 +23,10 @@ export enum LanguageSpoken {
   English = 0,
   Vietnamese = 1,
 }
+
+export enum ApplicationStatus {
+  Pending = 'Pending',
+  Canceled = 'Canceled',
+  Rejected = 'Rejected',
+  Accepted = 'Accepted',
+}

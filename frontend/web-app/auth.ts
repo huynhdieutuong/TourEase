@@ -41,6 +41,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       }
 
+      if (pathname === '/applications') {
+        if (!auth?.user?.roles.includes(Role.TOURGUIDE)) {
+          return NextResponse.redirect(new URL('/api/403', request.url))
+        }
+      }
+
       return true
     },
     async jwt({ token, account }) {

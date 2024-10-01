@@ -1,7 +1,6 @@
 'use client'
 
 import { useParamsStore } from '@/hooks/useParamsStore'
-import { MetaData, TourJob } from '@/types'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/shallow'
@@ -12,10 +11,17 @@ import TourJobCard from './TourJobCard'
 import TourJobFilter from './TourJobFilter'
 import TourJobOrder from './TourJobOrder'
 import AppSpinner from '../components/AppSpinner'
+import { useTourJobStore } from '@/hooks/useTourJobStore'
 
 export default function TourJobList() {
-  const [tourJobs, setTourJobs] = useState<TourJob[]>()
-  const [metaData, setMetaData] = useState<MetaData>()
+  const [loading, setLoading] = useState(true)
+  const setData = useTourJobStore((state) => state.setData)
+  const data = useTourJobStore(
+    useShallow((state) => ({
+      tourJobs: state.tourJobs,
+      totalPages: state.totalPages,
+    }))
+  )
 
   const params = useParamsStore(
     useShallow((state) => ({
@@ -34,27 +40,27 @@ export default function TourJobList() {
 
   useEffect(() => {
     getTourJobs(query).then((res) => {
-      setTourJobs(res.data)
-      setMetaData(res.metaData)
+      setData(res)
+      setLoading(false)
     })
   }, [query])
 
-  if (!tourJobs) return <AppSpinner />
+  if (loading) return <AppSpinner />
 
   function renderTourJobs() {
-    if (!tourJobs || tourJobs.length === 0) return <EmptyFilter />
+    if (!data.tourJobs || data.tourJobs.length === 0) return <EmptyFilter />
 
     return (
       <>
         <div className='grid grid-cols-4 gap-6'>
-          {tourJobs.map((tourjob) => (
+          {data.tourJobs.map((tourjob) => (
             <TourJobCard tourJob={tourjob} key={tourjob.id} />
           ))}
         </div>
-        {metaData && (
+        {data.totalPages && (
           <AppPagination
             currentPage={params.pageIndex}
-            totalPages={metaData?.totalPages}
+            totalPages={data.totalPages}
             pageChange={(pageIndex) => setParams({ pageIndex })}
             pageSize={params.pageSize}
             sizeChange={(pageSize) => setParams({ pageSize })}
