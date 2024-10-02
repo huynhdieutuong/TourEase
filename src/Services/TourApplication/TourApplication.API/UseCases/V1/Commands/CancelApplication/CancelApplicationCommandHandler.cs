@@ -51,6 +51,8 @@ public class CancelApplicationCommandHandler : IRequestHandler<CancelApplication
 
         await _applicationService.PublishTotalApplicantsUpdated(tourJob.Id, ApplicationTypes.Cancel);
 
+        await _applicationService.PublishApplicationAction(application, tourJob, ApplicationTypes.Cancel);
+
         _logger.Information($"END {MethodName} - Username: {request.Username}, ApplicationId: {request.ApplicationId}");
 
         return new ApiSuccessResult<bool>(result);

@@ -5,6 +5,7 @@ import ToasterProvider from './providers/ToasterProvider'
 import WrapperProvider from './providers/WrapperProvider'
 import { getDestinations } from './actions/destinationActions'
 import CustomTheme from './components/CustomTheme'
+import SignalRProvider from './providers/SignalRProvider'
 
 export const metadata: Metadata = {
   title: 'TourEase',
@@ -25,7 +26,9 @@ export default async function RootLayout({
           <WrapperProvider destinations={res.data} />
           <ToasterProvider />
           <Navbar />
-          <main className='container mx-auto px-5 py-10'>{children}</main>
+          <main className='container mx-auto px-5 py-10'>
+            <SignalRProvider>{children}</SignalRProvider>
+          </main>
         </body>
       </html>
     </CustomTheme>

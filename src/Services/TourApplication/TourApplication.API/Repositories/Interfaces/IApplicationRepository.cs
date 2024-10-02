@@ -7,8 +7,8 @@ public interface IApplicationRepository
 {
     Task<Application?> GetApplicationByIdAsync(Guid id);
     Task<Application?> GetApplicationByTourJobIdAndUsernameAsync(Guid tourJobId, string username);
-    Task<List<Application>> GetApplicationsByTourJobIdAsync(Guid tourJobId);
-    Task<List<Application>> GetMyApplications(string username);
+    Task<IEnumerable<Application>> GetApplicationsByTourJobIdAsync(Guid tourJobId);
+    Task<IEnumerable<ApplicationWithTourJob>> GetMyApplications(string username);
     Task<Guid> CreateApplicationAsync(ApplyTourJobCommand command);
     Task<bool> CancelApplicationAsync(Guid applicationId);
     Task<bool> ReApplyApplicationAsync(Guid applicationId);

@@ -32,12 +32,12 @@ public class TourJobRepository : ITourJobRepository
     {
         using var connection = _connectionFactory.Create();
 
-        var sql = @"INSERT INTO TourJob (Id, ExpiredDate, Owner)
-                    VALUES (@Id, @ExpiredDate, @Owner)";
+        var sql = @"INSERT INTO TourJob (Id, Title, Slug, ExpiredDate, Owner)
+                    VALUES (@Id, @Title, @Slug, @ExpiredDate, @Owner)";
 
         var result = await connection.ExecuteAsync(
             sql,
-            new { tourJob.Id, tourJob.ExpiredDate, tourJob.Owner });
+            new { tourJob.Id, tourJob.Title, tourJob.Slug, tourJob.ExpiredDate, tourJob.Owner });
 
         return result > 0;
     }

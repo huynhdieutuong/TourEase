@@ -32,6 +32,8 @@ public class GrpcTourJobService : GrpcTourJob.GrpcTourJobBase
                 Id = tourJob.Id.ToString(),
                 ExpiredDate = tourJob.ExpiredDate.DateTime.ToString(),
                 Owner = tourJob.CreatedBy,
+                Title = tourJob.Title,
+                Slug = tourJob.Slug,
             }
         };
 

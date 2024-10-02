@@ -45,12 +45,13 @@ public class ApplicationRepository : IApplicationRepository
         return result;
     }
 
-    public async Task<List<Application>> GetApplicationsByTourJobIdAsync(Guid tourJobId)
+    public async Task<IEnumerable<Application>> GetApplicationsByTourJobIdAsync(Guid tourJobId)
     {
         using var connection = _dbConnectionFactory.Create();
 
         var sql = @"SELECT * FROM Application 
-                    WHERE TourJobId = @TourJobId AND Status <> @CanceledStatus";
+                    WHERE TourJobId = @TourJobId AND Status <> @CanceledStatus
+                    ORDER BY AppliedDate DESC";
 
         var result = await connection.QueryAsync<Application>(
             sql,
@@ -59,14 +60,26 @@ public class ApplicationRepository : IApplicationRepository
         return result.ToList();
     }
 
-    public async Task<List<Application>> GetMyApplications(string username)
+    public async Task<IEnumerable<ApplicationWithTourJob>> GetMyApplications(string username)
     {
         using var connection = _dbConnectionFactory.Create();
 
-        var sql = @"SELECT * FROM Application
-                    WHERE TourGuide = @TourGuide";
+        var sql = @"SELECT * FROM Application ap
+                    LEFT JOIN TourJob tj ON ap.TourJobId = tj.Id
+                    WHERE TourGuide = @TourGuide
+                    ORDER BY AppliedDate DESC";
 
-        var result = await connection.QueryAsync<Application>(sql, new { TourGuide = username });
+        var result = await connection.QueryAsync<Application, TourJob, ApplicationWithTourJob>(
+            sql,
+            (application, tourJob) =>
+            {
+                return new ApplicationWithTourJob
+                {
+                    Application = application,
+                    TourJob = tourJob
+                };
+            },
+            new { TourGuide = username });
 
         return result.ToList();
     }

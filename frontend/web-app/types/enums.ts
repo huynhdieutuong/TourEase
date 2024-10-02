@@ -30,3 +30,9 @@ export enum ApplicationStatus {
   Rejected = 'Rejected',
   Accepted = 'Accepted',
 }
+
+export enum ApplicationTypes {
+  New,
+  Cancel,
+  ReApply,
+}

@@ -24,9 +24,9 @@ public class TourJobFinishedConsumer : IConsumer<TourJobFinished>
 
     public async Task Consume(ConsumeContext<TourJobFinished> context)
     {
-        _logger.Information("--> TourSearch: Consuming tour job finished - TourJobId: " + context.Message.TourJobId);
+        _logger.Information("--> TourSearch: Consuming tour job finished - TourJobId: " + context.Message.TourJob.Id);
 
-        var tourJobId = context.Message.TourJobId;
+        var tourJobId = context.Message.TourJob.Id;
         var tourJob = await _tourJobRepository.FindByIdAsync(tourJobId);
         if (tourJob == null) throw new NotFoundException(nameof(TourJob), tourJobId);
 

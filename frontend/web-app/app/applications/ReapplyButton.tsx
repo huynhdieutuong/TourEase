@@ -5,21 +5,32 @@ import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { reapplyApplication } from '../actions/applicationActions'
+import { AiOutlineLoading } from 'react-icons/ai'
 
 type Props = {
   applicationId: string
+  isFinished: boolean
+  updateStatus: () => void
 }
 
-export default function ReapplyButton({ applicationId }: Props) {
+export default function ReapplyButton({
+  applicationId,
+  isFinished,
+  updateStatus,
+}: Props) {
   const [openModal, setOpenModal] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  async function handleCancelApplication(applicationId: string) {
+  async function handleReapplyApplication(applicationId: string) {
     try {
+      setLoading(true)
       await reapplyApplication(applicationId)
+      updateStatus()
       setOpenModal(false)
     } catch (error: any) {
       toast.error(error.message)
     }
+    setLoading(false)
   }
 
   return (
@@ -28,6 +39,7 @@ export default function ReapplyButton({ applicationId }: Props) {
         size='xs'
         color='green'
         title='Reapply Application'
+        disabled={isFinished}
         onClick={() => setOpenModal(true)}
       >
         Reapply
@@ -48,7 +60,11 @@ export default function ReapplyButton({ applicationId }: Props) {
             <div className='flex justify-center gap-4'>
               <Button
                 color='success'
-                onClick={() => handleCancelApplication(applicationId)}
+                isProcessing={loading}
+                processingSpinner={
+                  <AiOutlineLoading className='h-6 w-6 animate-spin' />
+                }
+                onClick={() => handleReapplyApplication(applicationId)}
               >
                 {"Yes, I'm sure"}
               </Button>

@@ -1,9 +1,8 @@
-﻿using BuildingBlocks.Contracts.Domains;
+﻿namespace TourApplication.API.DTOs;
 
-namespace TourApplication.API.Models;
-
-public class TourJob : EntityBase<Guid>
+public class TourJobDto
 {
+    public Guid Id { get; set; }
     public string Title { get; set; }
     public string Slug { get; set; }
     public DateTime ExpiredDate { get; set; }

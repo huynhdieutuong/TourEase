@@ -5,21 +5,32 @@ import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { cancelApplication } from '../actions/applicationActions'
+import { AiOutlineLoading } from 'react-icons/ai'
 
 type Props = {
   applicationId: string
+  isFinished: boolean
+  updateStatus: () => void
 }
 
-export default function CancelButton({ applicationId }: Props) {
+export default function CancelButton({
+  applicationId,
+  isFinished,
+  updateStatus,
+}: Props) {
   const [openModal, setOpenModal] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   async function handleCancelApplication(applicationId: string) {
     try {
+      setLoading(true)
       await cancelApplication(applicationId)
+      updateStatus()
       setOpenModal(false)
     } catch (error: any) {
       toast.error(error.message)
     }
+    setLoading(false)
   }
 
   return (
@@ -28,6 +39,7 @@ export default function CancelButton({ applicationId }: Props) {
         size='xs'
         color='red'
         title='Cancel Application'
+        disabled={isFinished}
         onClick={() => setOpenModal(true)}
       >
         Cancel
@@ -48,6 +60,10 @@ export default function CancelButton({ applicationId }: Props) {
             <div className='flex justify-center gap-4'>
               <Button
                 color='failure'
+                isProcessing={loading}
+                processingSpinner={
+                  <AiOutlineLoading className='h-6 w-6 animate-spin' />
+                }
                 onClick={() => handleCancelApplication(applicationId)}
               >
                 {"Yes, I'm sure"}

@@ -19,7 +19,7 @@ public class TourJobCreatedConsumer : IConsumer<TourJobCreated>
 
     public async Task Consume(ConsumeContext<TourJobCreated> context)
     {
-        _logger.Information("--> tour job created message received");
+        _logger.Information("--> Tour job created message received");
 
         await _hubContext.Clients.All.SendAsync("TourJobCreated", context.Message);
     }

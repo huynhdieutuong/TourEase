@@ -1,5 +1,5 @@
 import { IconType } from 'react-icons'
-import { ApplicationStatus, DestinationType } from './enums'
+import { ApplicationStatus, ApplicationTypes, DestinationType } from './enums'
 
 export type ApiResult<T> = {
   data: T
@@ -42,6 +42,7 @@ export type TourJob = {
   updatedBy?: string
   isDeleted: boolean
   deletedDate?: string
+  isFinished: boolean
 }
 
 export type Destination = {
@@ -57,6 +58,7 @@ export type Destination = {
 export type Application = {
   id: string
   tourJobId: string
+  tourJob?: TourJob
   tourGuide: string
   comment: string
   appliedDate: string
@@ -72,4 +74,21 @@ export type FilterOption = {
 export type SelectOption = {
   value: string | number | null
   label: string
+}
+
+export type TotalApplicantsUpdatedMessage = {
+  tourJobId: string
+  totalApplicants: number
+  type: ApplicationTypes
+}
+
+export type ApplicationActionMessage = {
+  application: Application
+  tourJob: TourJob
+  type: ApplicationTypes
+}
+
+export type TourJobFinishedMessage = {
+  tourJob: TourJob
+  tourGuide: string
 }

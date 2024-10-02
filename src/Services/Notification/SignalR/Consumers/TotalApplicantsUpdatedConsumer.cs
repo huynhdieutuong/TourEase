@@ -19,7 +19,7 @@ public class TotalApplicantsUpdatedConsumer : IConsumer<TotalApplicantsUpdated>
 
     public async Task Consume(ConsumeContext<TotalApplicantsUpdated> context)
     {
-        _logger.Information("--> total applicants updated message received. Type: " + context.Message.Type.ToString());
+        _logger.Information("--> Total applicants updated message received. Type: " + context.Message.Type.ToString());
 
         await _hubContext.Clients.All.SendAsync("TotalApplicantsUpdated", context.Message);
     }

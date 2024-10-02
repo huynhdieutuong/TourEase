@@ -13,7 +13,7 @@ export default async function MyApplications() {
       >
         My Applications
       </h1>
-      <ApplicationTable applications={res.data} />
+      <ApplicationTable applicationsData={res.data} />
     </div>
   )
 }

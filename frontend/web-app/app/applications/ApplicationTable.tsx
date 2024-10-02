@@ -3,18 +3,38 @@
 import { Application } from '@/types'
 import { Badge, Button, Table } from 'flowbite-react'
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import noImage from '../no-image.jpg'
 import { formatDate } from '@/utils'
 import CancelButton from './CancelButton'
 import ReapplyButton from './ReapplyButton'
 import { ApplicationStatus } from '@/types/enums'
+import Link from 'next/link'
 
 type Props = {
-  applications: Application[]
+  applicationsData: Application[]
 }
 
-export default function ApplicationTable({ applications }: Props) {
+export default function ApplicationTable({ applicationsData }: Props) {
+  const [applications, setApplications] = useState<Application[]>([])
+
+  useEffect(() => {
+    setApplications(applicationsData)
+  }, [])
+
+  function updateApplicationStatus(
+    applicationId: string,
+    status: ApplicationStatus
+  ) {
+    setApplications(
+      applications.map((application) =>
+        application.id === applicationId
+          ? { ...application, status }
+          : application
+      )
+    )
+  }
+
   function renderBadgeColor(status: ApplicationStatus) {
     switch (status) {
       case ApplicationStatus.Pending:
@@ -44,14 +64,9 @@ export default function ApplicationTable({ applications }: Props) {
             <Table.Row key={application.id} className='hover:bg-yellow-50'>
               <Table.Cell>
                 <div className='flex items-center space-x-2'>
-                  <Image
-                    src={noImage}
-                    alt={application.tourJobId}
-                    width={40}
-                    height={40}
-                    className='object-cover rounded'
-                  />
-                  <span>{application.tourJobId}</span>
+                  <Link href={`/tourjobs/${application.tourJob?.slug}`}>
+                    {application.tourJob?.title}
+                  </Link>
                 </div>
               </Table.Cell>
               <Table.Cell>{application.comment}</Table.Cell>
@@ -64,10 +79,28 @@ export default function ApplicationTable({ applications }: Props) {
               <Table.Cell>
                 <div className='flex space-x-2'>
                   {application.status === ApplicationStatus.Pending && (
-                    <CancelButton applicationId={application.id} />
+                    <CancelButton
+                      applicationId={application.id}
+                      isFinished={application.tourJob?.isFinished || false}
+                      updateStatus={() =>
+                        updateApplicationStatus(
+                          application.id,
+                          ApplicationStatus.Canceled
+                        )
+                      }
+                    />
                   )}
                   {application.status === ApplicationStatus.Canceled && (
-                    <ReapplyButton applicationId={application.id} />
+                    <ReapplyButton
+                      applicationId={application.id}
+                      isFinished={application.tourJob?.isFinished || false}
+                      updateStatus={() =>
+                        updateApplicationStatus(
+                          application.id,
+                          ApplicationStatus.Pending
+                        )
+                      }
+                    />
                   )}
                 </div>
               </Table.Cell>

@@ -51,6 +51,8 @@ public class ReApplyApplicationCommandHandler : IRequestHandler<ReApplyApplicati
 
         await _applicationService.PublishTotalApplicantsUpdated(tourJob.Id, ApplicationTypes.ReApply);
 
+        await _applicationService.PublishApplicationAction(application, tourJob, ApplicationTypes.ReApply);
+
         _logger.Information($"END {MethodName} - Username: {request.Username}, ApplicationId: {request.ApplicationId}");
 
         return new ApiSuccessResult<bool>(result);

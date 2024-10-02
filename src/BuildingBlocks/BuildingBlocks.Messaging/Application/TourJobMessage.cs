@@ -1,9 +1,7 @@
-﻿using BuildingBlocks.Contracts.Domains;
-
-namespace TourApplication.API.Models;
-
-public class TourJob : EntityBase<Guid>
+﻿namespace BuildingBlocks.Messaging.Application;
+public class TourJobMessage
 {
+    public Guid Id { get; set; }
     public string Title { get; set; }
     public string Slug { get; set; }
     public DateTime ExpiredDate { get; set; }

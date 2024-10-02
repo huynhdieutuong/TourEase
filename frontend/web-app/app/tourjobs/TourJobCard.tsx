@@ -5,6 +5,7 @@ import CountdownTimer from './CountdownTimer'
 import CardDays from './CardDays'
 import CardSalary from './CardSalary'
 import Link from 'next/link'
+import { Badge } from 'flowbite-react'
 
 type Props = {
   tourJob: TourJob
@@ -28,7 +29,9 @@ export default function TourJobCard({ tourJob }: Props) {
       <div className='mt-4 flex justify-between items-center'>
         <h3 className='text-gray-700'>{tourJob.title}</h3>
         <p className='text-gray-700 text-sm'>
-          {tourJob.totalApplicants && `${tourJob.totalApplicants} applicants`}
+          <Badge color='info'>
+            {tourJob.totalApplicants ? tourJob.totalApplicants : 0} applicants
+          </Badge>
         </p>
       </div>
     </Link>

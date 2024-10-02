@@ -30,6 +30,8 @@ public class GrpcTourJobClient : IGrpcTourJobClient
             var tourJob = new TourJob
             {
                 Id = Guid.Parse(reply.Tourjob.Id),
+                Title = reply.Tourjob.Title,
+                Slug = reply.Tourjob.Slug,
                 ExpiredDate = DateTime.Parse(reply.Tourjob.ExpiredDate),
                 Owner = reply.Tourjob.Owner
             };

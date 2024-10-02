@@ -53,7 +53,7 @@ public class ChooseTourGuideCommandHandler : IRequestHandler<ChooseTourGuideComm
 
         await _publishEndpoint.Publish(new TourJobFinished
         {
-            TourJobId = tourJob.Id,
+            TourJob = _mapper.Map<TourJobMessage>(tourJob),
             TourGuide = application.TourGuide
         });
 

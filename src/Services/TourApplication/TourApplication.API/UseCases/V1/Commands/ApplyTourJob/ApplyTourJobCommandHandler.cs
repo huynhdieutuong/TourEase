@@ -53,11 +53,12 @@ public class ApplyTourJobCommandHandler : IRequestHandler<ApplyTourJobCommand, A
         await _applicationService.PublishTotalApplicantsUpdated(tourJob.Id, ApplicationTypes.New);
 
         var application = await _applicationRepository.GetApplicationByIdAsync(id);
-        var applicationDto = _mapper.Map<ApplicationDto>(application);
+
+        await _applicationService.PublishApplicationAction(application, tourJob, ApplicationTypes.New);
 
         _logger.Information($"END {MethodName} - Username: {request.Username}, TourJobId: {request.TourJobId}");
 
-        return new ApiSuccessResult<ApplicationDto>(applicationDto);
+        return new ApiSuccessResult<ApplicationDto>(_mapper.Map<ApplicationDto>(application));
     }
 
     private async Task HasTourGuideAlreadyApplied(Guid tourJobId, string username)
