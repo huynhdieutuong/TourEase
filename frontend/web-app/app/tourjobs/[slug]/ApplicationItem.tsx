@@ -1,11 +1,10 @@
 'use client'
 
 import { Application } from '@/types'
-import Image from 'next/image'
-import React, { useState } from 'react'
-import noImage from '../../no-image.jpg'
 import { formatDate } from '@/utils'
-import { Button } from 'flowbite-react'
+import Image from 'next/image'
+import { useState } from 'react'
+import noImage from '../../no-image.jpg'
 import ChooseButton from './ChooseButton'
 
 type Props = {

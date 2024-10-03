@@ -15,12 +15,13 @@ export default function ChooseButton({ applicationId, tourGuide }: Props) {
   const [openModal, setOpenModal] = useState(false)
 
   async function handleCancelApplication(applicationId: string) {
-    try {
-      await chooseTourGuide(applicationId)
-      setOpenModal(false)
-    } catch (error: any) {
-      toast.error(error.message)
+    const res = await chooseTourGuide(applicationId)
+    if (!res.isSucceeded) {
+      toast.error(res.message)
+    } else {
+      // update state
     }
+    setOpenModal(false)
   }
 
   return (

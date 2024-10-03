@@ -17,13 +17,13 @@ export function DeleteButton({ title, id, updateJobList }: Props) {
   const [openModal, setOpenModal] = useState(false)
 
   async function handleDeleteTourJob(id: string) {
-    try {
-      await deleteTourJob(id)
-      setOpenModal(false)
+    const res = await deleteTourJob(id)
+    if (!res.isSucceeded) {
+      toast.error(res.message)
+    } else {
       updateJobList(id)
-    } catch (error: any) {
-      toast.error(error.message)
     }
+    setOpenModal(false)
   }
 
   return (

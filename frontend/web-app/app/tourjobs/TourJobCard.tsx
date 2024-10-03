@@ -17,7 +17,10 @@ export default function TourJobCard({ tourJob }: Props) {
       <div className='relative aspect-[16/10] rounded-lg overflow-hidden'>
         <CardImage imageUrl={tourJob.imageUrl} title={tourJob.title} />
         <div className='absolute bottom-2 right-2'>
-          <CountdownTimer expireDate={tourJob.expiredDate} />
+          <CountdownTimer
+            expireDate={tourJob.expiredDate}
+            forceCompleted={!!tourJob.tourGuide}
+          />
         </div>
         <div className='absolute top-2 left-2'>
           <CardDays days={tourJob.days} />

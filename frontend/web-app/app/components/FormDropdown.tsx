@@ -39,6 +39,7 @@ export default function FormDropdown<T extends FieldValues>(props: Props<T>) {
       >
         <option value=''>{props.placeholder || 'Choose an option'}</option>
         {props.options.map((opt) => (
+          //@ts-expect-error
           <option key={opt.value} value={opt.value}>
             {opt.label}
           </option>

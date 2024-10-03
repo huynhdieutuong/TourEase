@@ -19,6 +19,12 @@ public class ErrorWrappingMiddleware
     public async Task Invoke(HttpContext context)
     {
         var errorMsg = string.Empty;
+        var jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = false
+        };
+
         try
         {
             await _next.Invoke(context);
@@ -55,7 +61,7 @@ public class ErrorWrappingMiddleware
             {
                 var response = new ApiErrorResult<bool>("You are not authorized!");
 
-                var json = JsonSerializer.Serialize(response);
+                var json = JsonSerializer.Serialize(response, jsonOptions);
 
                 await context.Response.WriteAsync(json);
             }
@@ -68,7 +74,7 @@ public class ErrorWrappingMiddleware
 
             var response = new ApiErrorResult<bool>(errorMsg);
 
-            var json = JsonSerializer.Serialize(response);
+            var json = JsonSerializer.Serialize(response, jsonOptions);
 
             await context.Response.WriteAsync(json);
         }

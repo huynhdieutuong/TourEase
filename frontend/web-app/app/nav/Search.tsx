@@ -2,14 +2,12 @@
 
 import { useFiltersStore } from '@/hooks/useFiltersStore'
 import { useParamsStore } from '@/hooks/useParamsStore'
-import { useEffect } from 'react'
 import { FaSearch } from 'react-icons/fa'
 
 export default function Search() {
   const setParams = useParamsStore((state) => state.setParams)
   const searchValue = useParamsStore((state) => state.searchValue)
   const setSearchValue = useParamsStore((state) => state.setSearchValue)
-  const resetParams = useParamsStore((state) => state.resetParams)
   const resetFilters = useFiltersStore((state) => state.resetFilters)
 
   function handleChange(e: any) {

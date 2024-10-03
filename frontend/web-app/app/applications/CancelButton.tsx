@@ -22,14 +22,14 @@ export default function CancelButton({
   const [loading, setLoading] = useState(false)
 
   async function handleCancelApplication(applicationId: string) {
-    try {
-      setLoading(true)
-      await cancelApplication(applicationId)
+    setLoading(true)
+    const res = await cancelApplication(applicationId)
+    if (!res.isSucceeded) {
+      toast.error(res.message)
+    } else {
       updateStatus()
-      setOpenModal(false)
-    } catch (error: any) {
-      toast.error(error.message)
     }
+    setOpenModal(false)
     setLoading(false)
   }
 

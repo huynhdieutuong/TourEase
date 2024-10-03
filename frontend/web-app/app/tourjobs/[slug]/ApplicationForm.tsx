@@ -29,19 +29,10 @@ export default function ApplicationForm({ tourJobId, onCloseModal }: Props) {
       tourJobId,
       comment: data.comment,
     }
-    try {
-      const res = await applyTourJob(body)
-      // if (!res.isSucceeded) {
-      //   toast.error(res.message)
-      // }
-      if (res.error) {
-        toast.error(res.error.message || res.error.message.Message)
-      }
-      reset()
-      onCloseModal()
-    } catch (error: any) {
-      toast.error(error.status + ' ' + error.message)
-    }
+    const res = await applyTourJob(body)
+    if (!res.isSucceeded) toast.error(res.message)
+    reset()
+    onCloseModal()
   }
 
   return (

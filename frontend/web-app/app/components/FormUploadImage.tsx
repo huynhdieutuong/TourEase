@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import { Label } from 'flowbite-react'
+import { useState } from 'react'
+import { useController, UseControllerProps } from 'react-hook-form'
 import { FaUpload } from 'react-icons/fa'
 import { Color } from './CustomTheme'
-import { useController, UseControllerProps } from 'react-hook-form'
-import { Label } from 'flowbite-react'
 
 type Props = {
   label?: string

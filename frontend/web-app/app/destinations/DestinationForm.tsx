@@ -2,10 +2,12 @@
 
 import { useDestinationStore } from '@/hooks/useDestinationStore'
 import { Destination } from '@/types'
+import { DesType } from '@/types/enums'
 import { destinationSchema } from '@/validations/destinationSchema'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Button } from 'flowbite-react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { AiOutlineLoading } from 'react-icons/ai'
@@ -16,8 +18,6 @@ import {
 import FormDropdown from '../components/FormDropdown'
 import FormEnhancedDropdown from '../components/FormEnhancedDropdown'
 import FormInput from '../components/FormInput'
-import { useEffect } from 'react'
-import { DesType } from '@/types/enums'
 
 type Props = {
   destination?: Destination
@@ -34,7 +34,6 @@ export default function DestinationForm({
   addDestinationInState,
   onCloseModal,
 }: Props) {
-  const router = useRouter()
   const pathname = usePathname()
   const destinations = useDestinationStore((state) => state.destinations)
 
@@ -90,25 +89,22 @@ export default function DestinationForm({
       type: data.type,
       parentId: data.parent.value,
     }
-    try {
-      let res
-      if (!destination) {
-        res = await createDestination(body)
-        if (typeof addDestinationInState === 'function')
-          addDestinationInState(res.data)
-      } else {
-        res = await updateDestination(destination.id, body)
-        if (typeof updateDestinationInState === 'function')
-          updateDestinationInState(res.data)
-      }
-      if (!res.isSucceeded) {
-        toast.error(res.message)
-      }
-      onCloseModal()
-      router.push('/destinations/list')
-    } catch (error: any) {
-      toast.error(error.status + ' ' + error.message)
+
+    let res
+    if (!destination) {
+      res = await createDestination(body)
+      if (!res.isSucceeded) return toast.error(res.message)
+
+      if (typeof addDestinationInState === 'function')
+        addDestinationInState(res.data)
+    } else {
+      res = await updateDestination(destination.id, body)
+      if (!res.isSucceeded) return toast.error(res.message)
+
+      if (typeof updateDestinationInState === 'function')
+        updateDestinationInState(res.data)
     }
+    onCloseModal()
   }
 
   return (

@@ -55,28 +55,9 @@ async function getHeaders() {
 }
 
 async function handleResponse(response: Response) {
-  const contentType = response.headers.get('Content-Type') || ''
-
-  // Check if the content type is JSON
-  let data
-  if (contentType.includes('application/json')) {
-    const text = await response.text()
-    data = text ? JSON.parse(text) : null
-  } else {
-    // Fallback to raw text for non-JSON responses
-    data = await response.text()
-  }
-
-  if (response.ok) {
-    return data || response.statusText
-  } else {
-    const error = {
-      status: response.status,
-      message: data || response.statusText,
-    }
-    console.log(error)
-    return { error }
-  }
+  const text = await response.text()
+  const data = JSON.parse(text)
+  return data
 }
 
 export const fetchWrapper = {

@@ -14,13 +14,15 @@ import Itineray from './Itineray'
 import CountdownTimer from '../CountdownTimer'
 import ApplicationList from './ApplicationList'
 import ApplyButton from './ApplyButton'
+import { User } from 'next-auth'
 
 type Props = {
   tourJob: TourJob
   applications: Application[]
+  user: User | null
 }
 
-const TourJobDetails = ({ tourJob, applications }: Props) => {
+const TourJobDetails = ({ tourJob, applications, user }: Props) => {
   return (
     <Card className='hover:shadow-xl transition-shadow duration-300'>
       <div className='grid grid-cols-2 gap-6 mt-3 h-96'>
@@ -32,7 +34,10 @@ const TourJobDetails = ({ tourJob, applications }: Props) => {
             {tourJob.title}
           </h2>
           <div className='absolute top-2 right-2'>
-            <CountdownTimer expireDate={tourJob.expiredDate} />
+            <CountdownTimer
+              expireDate={tourJob.expiredDate}
+              forceCompleted={!!tourJob.tourGuide}
+            />
           </div>
         </div>
 
@@ -77,7 +82,11 @@ const TourJobDetails = ({ tourJob, applications }: Props) => {
         <Itineray itinerary={tourJob.itinerary} />
 
         <div className='flex justify-between items-center'>
-          <ApplyButton tourJobId={tourJob.id} />
+          <ApplyButton
+            tourJobId={tourJob.id}
+            user={user}
+            tourJobSlug={tourJob.slug}
+          />
           <Button color='light'>Save for Later</Button>
         </div>
       </div>

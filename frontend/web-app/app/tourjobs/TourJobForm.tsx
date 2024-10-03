@@ -21,7 +21,7 @@ import { currencies } from '@/types/constants'
 import { AiOutlineLoading } from 'react-icons/ai'
 
 type Props = {
-  tourJob: TourJob
+  tourJob?: TourJob
 }
 
 export default function TourJobForm({ tourJob }: Props) {
@@ -124,20 +124,16 @@ export default function TourJobForm({ tourJob }: Props) {
       ],
       ...restData,
     }
-    try {
-      let res
-      if (pathname === '/tourjobs/create') {
-        res = await createTourJob(body)
-      } else {
-        res = await updateTourJob(tourJob.id, body)
-      }
-      if (res.error) {
-        throw res.error
-      }
-      router.push('/tourjobs/list')
-    } catch (error: any) {
-      toast.error(error.status + ' ' + error.message)
+
+    let res
+    if (pathname === '/tourjobs/create') {
+      res = await createTourJob(body)
+    } else {
+      res = await updateTourJob(tourJob!.id, body)
     }
+
+    if (!res.isSucceeded) toast.error(res.message)
+    router.push('/tourjobs/list')
   }
 
   return (

@@ -66,6 +66,8 @@ export default function FormEnhancedDropdown<T extends FieldValues>(
         {...props}
         {...field}
         unstyled
+        //@ts-expect-error
+        isMulti={props.isMulti}
         styles={{
           input: (base) => ({
             ...base,

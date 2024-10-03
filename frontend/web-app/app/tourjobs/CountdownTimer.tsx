@@ -4,6 +4,7 @@ import Countdown, { zeroPad } from 'react-countdown'
 
 type Props = {
   expireDate: string
+  forceCompleted?: boolean
 }
 
 type Date = {
@@ -14,8 +15,12 @@ type Date = {
   completed: boolean
 }
 
-const renderer = ({ days, hours, minutes, seconds, completed }: Date) => {
-  const backgroundColor = completed
+const renderer = (
+  { days, hours, minutes, seconds, completed }: Date,
+  forceCompleted?: boolean
+) => {
+  const isCompleted = completed || forceCompleted
+  const backgroundColor = isCompleted
     ? 'bg-red-600'
     : days === 0 && hours < 10
     ? 'bg-amber-600'
@@ -25,7 +30,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }: Date) => {
     <div
       className={`border-2 border-white text-white py-1 px-2 rounded-lg flex justify-center ${backgroundColor}`}
     >
-      {completed ? (
+      {isCompleted ? (
         <span>Completed</span>
       ) : (
         <span suppressHydrationWarning={true}>
@@ -36,6 +41,11 @@ const renderer = ({ days, hours, minutes, seconds, completed }: Date) => {
   )
 }
 
-export default function CountdownTimer({ expireDate }: Props) {
-  return <Countdown date={expireDate} renderer={renderer} />
+export default function CountdownTimer({ expireDate, forceCompleted }: Props) {
+  return (
+    <Countdown
+      date={expireDate}
+      renderer={(props) => renderer(props, forceCompleted)}
+    />
+  )
 }

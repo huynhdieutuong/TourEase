@@ -1,15 +1,13 @@
 'use client'
 
 import { Application } from '@/types'
-import { Badge, Button, Table } from 'flowbite-react'
-import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
-import noImage from '../no-image.jpg'
+import { ApplicationStatus } from '@/types/enums'
 import { formatDate } from '@/utils'
+import { Badge, Table } from 'flowbite-react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import CancelButton from './CancelButton'
 import ReapplyButton from './ReapplyButton'
-import { ApplicationStatus } from '@/types/enums'
-import Link from 'next/link'
 
 type Props = {
   applicationsData: Application[]

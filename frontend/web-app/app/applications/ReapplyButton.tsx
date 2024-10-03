@@ -22,14 +22,14 @@ export default function ReapplyButton({
   const [loading, setLoading] = useState(false)
 
   async function handleReapplyApplication(applicationId: string) {
-    try {
-      setLoading(true)
-      await reapplyApplication(applicationId)
+    setLoading(true)
+    const res = await reapplyApplication(applicationId)
+    if (!res.isSucceeded) {
+      toast.error(res.message)
+    } else {
       updateStatus()
-      setOpenModal(false)
-    } catch (error: any) {
-      toast.error(error.message)
     }
+    setOpenModal(false)
     setLoading(false)
   }
 

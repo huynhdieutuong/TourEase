@@ -20,14 +20,14 @@ export default function DeleteButton({
 }: Props) {
   const [openModal, setOpenModal] = useState(false)
 
-  async function handleDeleteTourJob(id: string) {
-    try {
-      await deleteDestination(id)
-      setOpenModal(false)
+  async function handleDeleteDestination(id: string) {
+    const res = await deleteDestination(id)
+    if (!res.isSucceeded) {
+      toast.error(res.message)
+    } else {
       removeDestinationInState(id)
-    } catch (error: any) {
-      toast.error(error.message)
     }
+    setOpenModal(false)
   }
 
   return (
@@ -54,7 +54,10 @@ export default function DeleteButton({
               Delete {title}?
             </h3>
             <div className='flex justify-center gap-4'>
-              <Button color='failure' onClick={() => handleDeleteTourJob(id)}>
+              <Button
+                color='failure'
+                onClick={() => handleDeleteDestination(id)}
+              >
                 {"Yes, I'm sure"}
               </Button>
               <Button color='gray' onClick={() => setOpenModal(false)}>
