@@ -1,4 +1,5 @@
 using BuildingBlocks.Logging;
+using BuildingBlocks.Shared.Middlewares;
 using Serilog;
 using TourSearch.API.Extensions;
 using TourSearch.API.Persistence;
@@ -24,6 +25,8 @@ try
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
+    app.UseMiddleware<ErrorWrappingMiddleware>();
+
     app.UseAuthorization();
 
     app.MapControllers();

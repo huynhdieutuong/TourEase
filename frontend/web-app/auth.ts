@@ -55,13 +55,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.username = decoded.username
         token.roles = decoded.roles
         token.accessToken = account.access_token
+        token.expiresAt = decoded.exp
       }
+
+      // Check if the token has expired, force re-authentication
+      if (token.expiresAt && Date.now() > Number(token.expiresAt) * 1000) {
+        token.error = 'TokenExpired'
+      }
+
       return token
     },
     async session({ session, token }) {
       if (token) {
         session.user.username = token.username
         session.user.roles = token.roles
+        session.user.error = token.error
         session.accessToken = token.accessToken
       }
       return session

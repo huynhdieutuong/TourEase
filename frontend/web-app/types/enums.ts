@@ -36,3 +36,9 @@ export enum ApplicationTypes {
   Cancel,
   ReApply,
 }
+
+export enum TourJobStatus {
+  Live = 'Live',
+  Finished = 'Finished',
+  Expired = 'Expired',
+}

@@ -14,13 +14,9 @@ type Props = {
 export default function ChooseButton({ applicationId, tourGuide }: Props) {
   const [openModal, setOpenModal] = useState(false)
 
-  async function handleCancelApplication(applicationId: string) {
+  async function handleChooseTourGuide(applicationId: string) {
     const res = await chooseTourGuide(applicationId)
-    if (!res.isSucceeded) {
-      toast.error(res.message)
-    } else {
-      // update state
-    }
+    if (!res.isSucceeded) toast.error(res.message)
     setOpenModal(false)
   }
 
@@ -45,7 +41,7 @@ export default function ChooseButton({ applicationId, tourGuide }: Props) {
             <div className='flex justify-center gap-4'>
               <Button
                 color='success'
-                onClick={() => handleCancelApplication(applicationId)}
+                onClick={() => handleChooseTourGuide(applicationId)}
               >
                 {"Yes, I'm sure"}
               </Button>

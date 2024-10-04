@@ -63,6 +63,13 @@ TourEase is a website specifically designed to connect tour guides with travel a
 - Publish TourJobsExpired event to update TourJob status to Expired in Tour Service and TourSearch Service
 
 ### 4. Notification Service (SignalR):
+#### Real-time Notification flow:
+![realtime-notification-diagram](./resources/realtime-notification.png "Real-time Notification Diagram")
+
+#### Use Cases:
+1. When the travel agency publishes a new tour job, all tour guides will receive a notification.
+2. When a tour guide performs application actions (apply, cancel, reapply), the tour job owner (travel agency) will receive a notification.
+3. When the tour job owner (travel agency) selects a tour guide, the chosen tour guide will receive a notification.
 
 ### 5. Identity Service (Duende IdentityServer + PostgreSQL):
 

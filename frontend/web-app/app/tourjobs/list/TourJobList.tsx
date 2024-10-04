@@ -9,6 +9,7 @@ import { FaInfoCircle, FaPencilAlt } from 'react-icons/fa'
 import { DeleteButton } from './DeleteButton'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { TourJobStatus } from '@/types/enums'
 
 type Props = {
   tourJobs: TourJob[]
@@ -22,14 +23,14 @@ export function MyTourJobList({ tourJobs }: Props) {
     setjobList(jobList.filter((job) => job.id !== removedId))
   }
 
-  function getStatusColor(status: string) {
+  function getStatusColor(status: TourJobStatus) {
     switch (status) {
-      case 'Live':
+      case TourJobStatus.Live:
+        return 'warning'
+      case TourJobStatus.Expired:
+        return 'failure'
+      case TourJobStatus.Finished:
         return 'success'
-      case 'Expired':
-        return 'danger'
-      case 'Finished':
-        return 'info'
       default:
         return 'gray'
     }
@@ -104,16 +105,20 @@ export function MyTourJobList({ tourJobs }: Props) {
                       <FaInfoCircle />
                     </Button>
                   </Link>
-                  <Link href={`/tourjobs/update/${tourJob.id}`}>
-                    <Button size='xs' color='blue' title='Update'>
-                      <FaPencilAlt />
-                    </Button>
-                  </Link>
-                  <DeleteButton
-                    title={tourJob.title}
-                    id={tourJob.id}
-                    updateJobList={updateJobList}
-                  />
+                  {tourJob.status === TourJobStatus.Live && (
+                    <>
+                      <Link href={`/tourjobs/update/${tourJob.id}`}>
+                        <Button size='xs' color='blue' title='Update'>
+                          <FaPencilAlt />
+                        </Button>
+                      </Link>
+                      <DeleteButton
+                        title={tourJob.title}
+                        id={tourJob.id}
+                        updateJobList={updateJobList}
+                      />
+                    </>
+                  )}
                 </div>
               </Table.Cell>
             </Table.Row>

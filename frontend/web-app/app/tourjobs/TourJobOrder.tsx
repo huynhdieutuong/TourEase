@@ -6,6 +6,7 @@ import { useParamsStore } from '@/hooks/useParamsStore'
 
 const orderOptions: FilterOption[] = [
   { label: 'End date', value: 'end' },
+  { label: 'Hot', value: 'hot' },
   { label: 'Recently added', value: 'new' },
   { label: 'Ascending salary', value: 'ascSalary', icon: HiSortAscending },
   { label: 'Descending salary', value: 'dscSalary', icon: HiSortDescending },

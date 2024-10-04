@@ -1,4 +1,5 @@
 import { ApiPageResult, TourJob } from '@/types'
+import { TourJobStatus } from '@/types/enums'
 import { create } from 'zustand'
 
 type State = {
@@ -9,6 +10,7 @@ type State = {
 type Actions = {
   setData: (data: ApiPageResult<TourJob[]>) => void
   setTotalApplicants: (tourJobId: string, totalApplicants: number) => void
+  setTourJobStatus: (tourJobId: string, status: TourJobStatus) => void
 }
 
 const initialState: State = {
@@ -28,6 +30,13 @@ export const useTourJobStore = create<State & Actions>((set) => ({
     set((state) => ({
       tourJobs: state.tourJobs.map((tourJob) =>
         tourJob.id === tourJobId ? { ...tourJob, totalApplicants } : tourJob
+      ),
+    }))
+  },
+  setTourJobStatus: (tourJobId: string, status: TourJobStatus) => {
+    set((state) => ({
+      tourJobs: state.tourJobs.map((tourJob) =>
+        tourJob.id === tourJobId ? { ...tourJob, status } : tourJob
       ),
     }))
   },

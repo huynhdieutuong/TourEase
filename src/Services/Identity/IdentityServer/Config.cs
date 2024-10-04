@@ -40,7 +40,7 @@ public static class Config
                 RequirePkce = false,
                 RedirectUris = {"http://localhost:3000/api/auth/callback/id-server"},
                 AllowedScopes = { "openid", "profile", "tourEaseApp" },
-                AccessTokenLifetime = 60 * 60 * 2,
+                AccessTokenLifetime = 60 * 60 * 24 * 30,
                 AllowOfflineAccess = true,
             }
         };

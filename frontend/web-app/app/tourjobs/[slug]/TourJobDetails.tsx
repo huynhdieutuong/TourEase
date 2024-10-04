@@ -1,6 +1,8 @@
 import { Application, TourJob } from '@/types'
+import { Role, TourJobStatus } from '@/types/enums'
 import { formatCurrency, formatDate } from '@/utils'
 import { Button, Card } from 'flowbite-react'
+import { User } from 'next-auth'
 import {
   FaCalendar,
   FaClock,
@@ -8,13 +10,12 @@ import {
   FaLanguage,
   FaUsers,
 } from 'react-icons/fa'
-import CardImage from '../CardImage'
 import DestinationBadges from '../../components/DestinationBadges'
-import Itineray from './Itineray'
+import CardImage from '../CardImage'
 import CountdownTimer from '../CountdownTimer'
 import ApplicationList from './ApplicationList'
 import ApplyButton from './ApplyButton'
-import { User } from 'next-auth'
+import Itineray from './Itineray'
 
 type Props = {
   tourJob: TourJob
@@ -36,7 +37,7 @@ const TourJobDetails = ({ tourJob, applications, user }: Props) => {
           <div className='absolute top-2 right-2'>
             <CountdownTimer
               expireDate={tourJob.expiredDate}
-              forceCompleted={!!tourJob.tourGuide}
+              forceCompleted={tourJob.status !== TourJobStatus.Live}
             />
           </div>
         </div>
@@ -44,6 +45,9 @@ const TourJobDetails = ({ tourJob, applications, user }: Props) => {
         <ApplicationList
           applications={applications}
           tourGuide={tourJob.tourGuide}
+          user={user}
+          tourJobOwner={tourJob.createdBy}
+          tourJobStatus={tourJob.status}
         />
       </div>
 
@@ -81,14 +85,17 @@ const TourJobDetails = ({ tourJob, applications, user }: Props) => {
 
         <Itineray itinerary={tourJob.itinerary} />
 
-        <div className='flex justify-between items-center'>
-          <ApplyButton
-            tourJobId={tourJob.id}
-            user={user}
-            tourJobSlug={tourJob.slug}
-          />
-          <Button color='light'>Save for Later</Button>
-        </div>
+        {!user?.roles.includes(Role.TRAVELAGENCY) && (
+          <div className='flex justify-between items-center'>
+            <ApplyButton
+              tourJobId={tourJob.id}
+              user={user}
+              tourJobSlug={tourJob.slug}
+              isDisabled={!!tourJob.tourGuide}
+            />
+            <Button color='light'>Save for Later</Button>
+          </div>
+        )}
       </div>
     </Card>
   )

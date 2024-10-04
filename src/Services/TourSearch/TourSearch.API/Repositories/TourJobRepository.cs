@@ -69,7 +69,10 @@ public class TourJobRepository : MongoRepositoryBase<TourJob, Guid>, ITourJobRep
         // IncludeFinished
         if (!searchParams.IncludeFinished)
         {
-            filters.Add(filterBuilder.Gt(t => t.ExpiredDate, DateTime.UtcNow));
+            filters.Add(filterBuilder.And(
+                filterBuilder.Gt(t => t.ExpiredDate, DateTime.UtcNow),
+                filterBuilder.Eq(t => t.TourGuide, null)
+                ));
         }
 
         var combinedFilter = filters.Count > 0 ? filterBuilder.And(filters) : filterBuilder.Empty;
@@ -77,6 +80,7 @@ public class TourJobRepository : MongoRepositoryBase<TourJob, Guid>, ITourJobRep
         // Sorting
         var sort = searchParams.OrderBy switch
         {
+            "hot" => sortBuilder.Descending(t => t.TotalApplicants),
             "ascSalary" => sortBuilder.Ascending(t => t.Salary),
             "dscSalary" => sortBuilder.Descending(t => t.Salary),
             "new" => sortBuilder.Descending(t => t.CreatedDate),

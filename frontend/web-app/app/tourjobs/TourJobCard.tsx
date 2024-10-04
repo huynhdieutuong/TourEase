@@ -6,6 +6,7 @@ import CardDays from './CardDays'
 import CardSalary from './CardSalary'
 import Link from 'next/link'
 import { Badge } from 'flowbite-react'
+import { TourJobStatus } from '@/types/enums'
 
 type Props = {
   tourJob: TourJob
@@ -19,7 +20,7 @@ export default function TourJobCard({ tourJob }: Props) {
         <div className='absolute bottom-2 right-2'>
           <CountdownTimer
             expireDate={tourJob.expiredDate}
-            forceCompleted={!!tourJob.tourGuide}
+            forceCompleted={tourJob.status !== TourJobStatus.Live}
           />
         </div>
         <div className='absolute top-2 left-2'>

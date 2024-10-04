@@ -9,9 +9,15 @@ import ChooseButton from './ChooseButton'
 
 type Props = {
   application: Application
+  isOwner: boolean | undefined
+  isCompleted: boolean
 }
 
-export default function ApplicationItem({ application }: Props) {
+export default function ApplicationItem({
+  application,
+  isOwner,
+  isCompleted,
+}: Props) {
   const [showChooseButton, setShowChooseButton] = useState(false)
 
   return (
@@ -40,7 +46,7 @@ export default function ApplicationItem({ application }: Props) {
         </div>
         <p className='text-sm line-clamp-3'>{application.comment}</p>
       </div>
-      {showChooseButton && (
+      {!isCompleted && isOwner && showChooseButton && (
         <ChooseButton
           applicationId={application.id}
           tourGuide={application.tourGuide}

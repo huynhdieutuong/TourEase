@@ -10,14 +10,24 @@ type Props = {
   tourJobId: string
   tourJobSlug: string
   user: User | null
+  isDisabled: boolean
 }
 
-export default function ApplyButton({ tourJobId, tourJobSlug, user }: Props) {
+export default function ApplyButton({
+  tourJobId,
+  tourJobSlug,
+  user,
+  isDisabled,
+}: Props) {
   const [openModal, setOpenModal] = useState(false)
 
   return (
     <>
-      <Button color='warning' onClick={() => setOpenModal(true)}>
+      <Button
+        color='warning'
+        disabled={isDisabled}
+        onClick={() => setOpenModal(true)}
+      >
         Apply Now
       </Button>
       <Modal

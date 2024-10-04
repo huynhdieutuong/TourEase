@@ -1,5 +1,10 @@
 import { IconType } from 'react-icons'
-import { ApplicationStatus, ApplicationTypes, DestinationType } from './enums'
+import {
+  ApplicationStatus,
+  ApplicationTypes,
+  DestinationType,
+  TourJobStatus,
+} from './enums'
 
 export type ApiResult<T> = {
   data: T
@@ -28,7 +33,7 @@ export type TourJob = {
   tourGuide?: string
   totalApplicants?: number
   expiredDate: string
-  status: string
+  status: TourJobStatus
   itinerary: string
   imageUrl?: string
   participants: number
@@ -43,6 +48,7 @@ export type TourJob = {
   isDeleted: boolean
   deletedDate?: string
   isFinished: boolean
+  owner: string
 }
 
 export type Destination = {
