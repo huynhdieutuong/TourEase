@@ -4,6 +4,8 @@ TourEase is a website specifically designed to connect tour guides with travel a
 # Phase 1:
 ## I. Features:
 ![usecases](./resources/usecases.png "Use cases")
+TODO: video demo
+
 - **Authentication & Authorization:** Login, Logout, Register
 - **Admin:** Manage destinations (Create, Read, Update, Delete)
 - **Travel Agency:** Add, update, and delete tour jobs; select tour guides
@@ -19,6 +21,7 @@ TourEase is a website specifically designed to connect tour guides with travel a
 
 ### Architecture
 ![architecture-diagram](./resources/tourease-diagram.png "Architecture Diagram")
+Postman API: https://documenter.getpostman.com/view/6870044/2sAXxPAYHM
 
 ### 1. Tour Service (SQL Server + Entity Framework):
 - Handles write operations (like creating, updating and deleting tour jobs).
@@ -39,22 +42,18 @@ TourEase is a website specifically designed to connect tour guides with travel a
 
 ### 3. TourApplication Service (MySQL + Dapper):
 #### 3.1 Apply Tour Job (Only Tour Guide Role):
-![apply-tour-job-diagram](./resources/apply-tour-job.png "Apply Tour Job Diagram")
 - A TourGuide submits an application after passing role and status checks.
 - The status of the application is set to Pending.
 - The total number of applicants is updated in both the TourService and TourSearchService.
 #### 3.2 Cancel Application (Only Tour Guide Role):
-![cancel-application-diagram](./resources/cancel-application.png "Cancel Application Diagram")
 - A TourGuide cancels their Pending application.
 - The status of the application is changed to Canceled.
 - Both TourService and TourSearchService are updated.
 #### 3.3 ReApply Application (Only Tour Guide Role):
-![reapply-application-diagram](./resources/reapply-application.png "Reapply Application Diagram")
 - A TourGuide re-applies for a previously canceled application.
 - The status of the application is changed back to Pending.
 - The total number of applicants is updated again in TourService and TourSearchService.
 #### 3.4 Choose Tour Guide (Only Travel Agency Role):
-![choose-tour-guide-diagram](./resources/choose-tour-guide.png "Choose Tour Guide Diagram")
 - A TravelAgency selects a TourGuide from the Pending applications.
 - The selected application is marked as Accepted, while the others are marked as Rejected.
 - Both services update the selected TourGuide and Status for the tour job.
@@ -72,6 +71,7 @@ TourEase is a website specifically designed to connect tour guides with travel a
 3. When the tour job owner (travel agency) selects a tour guide, the chosen tour guide will receive a notification.
 
 ### 5. Identity Service (Duende IdentityServer + PostgreSQL):
+TODO: Draw authentication flow with OAuth2
 
 ### 6. Api Gateway (Yarp.ReverseProxy):
 
@@ -125,7 +125,10 @@ dotnet ef database update -p Tour.Infrastructure --startup-project Tour.API
 - **Reviews:** Both tour guides and travel agencies can leave reviews for each other.
 - **Tour Management for Guides:** Helps tour guides easily organize their calendars and manage their tours.
 - **Tour Advertising:** Agencies can promote their tours by pushing notifications to selected tour guides.
-
+- Soft Delete Tour, after 30 days, auto delete
+- API Versioning
+- Apply Trie to search autocomplete Tour Job
+- Upload Image
 # Phase 3:
 - **Chat Feature:** Allows communication between users.
 - **New Role: Traveler:** Introduce a traveler role to the platform.
