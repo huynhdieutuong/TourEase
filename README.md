@@ -71,7 +71,8 @@ Postman API: https://documenter.getpostman.com/view/6870044/2sAXxPAYHM
 3. When the tour job owner (travel agency) selects a tour guide, the chosen tour guide will receive a notification.
 
 ### 5. Identity Service (Duende IdentityServer + PostgreSQL):
-TODO: Draw authentication flow with OAuth2
+Authentication flow with OAuth2
+![oath2-diagram](./resources/oath2.png "OAuth2 Diagram")
 
 ### 6. Api Gateway (Yarp.ReverseProxy):
 
